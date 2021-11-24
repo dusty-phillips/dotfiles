@@ -26,21 +26,23 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
-
+    zdharma-continuum/zinit-annex-rust 
 ### End of Zinit's installer chunk
 
 
- export FZF_DEFAULT_COMMAND="fd --exclude Library"
- export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
- export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type directory"
+
+
+
+export FZF_DEFAULT_COMMAND="fd --exclude Library"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type directory"
 
 zinit snippet  OMZ::plugins/copydir/copydir.plugin.zsh
 zinit snippet  OMZ::plugins/copyfile/copyfile.plugin.zsh
 zinit snippet  OMZ::plugins/dirhistory/dirhistory.plugin.zsh
-zinit snippet  OMZ::plugins/fzf/fzf.plugin.zsh
 zinit snippet  OMZ::plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 zinit light zdharma-continuum/fast-syntax-highlighting
+zinit pack"bgn-binary+keys" for fzf
 zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
 
