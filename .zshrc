@@ -41,7 +41,6 @@ zinit snippet  OMZ::plugins/dirhistory/dirhistory.plugin.zsh
 zinit snippet  OMZ::plugins/fzf/fzf.plugin.zsh
 zinit snippet  OMZ::plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 zinit light zdharma-continuum/fast-syntax-highlighting
-
 zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
 
@@ -50,8 +49,6 @@ export EDITOR='nvim'
 
 unalias rd 2>/dev/null
 unalias l 2>/dev/null
-alias rm=grm
-alias cp=gcp
 alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
@@ -120,4 +117,5 @@ if [ -e .zshrc-local ] ; then
   source ~/.zshrc-local
 fi
 
+# Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
 alias config='/usr/bin/git --git-dir=/Users/dustyphillips/.cfg/ --work-tree=/Users/dustyphillips'
