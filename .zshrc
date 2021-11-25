@@ -85,6 +85,14 @@ function i {
   inv $@
 }
 
+function key {
+  if [ $1 ] ; then
+    ssh-keygen -t ed25519 -C $1
+  else
+    ssh-keygen -t ed25519 -C 'dusty.phillips@tophatmonocle.com'
+  fi
+}
+
 
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
