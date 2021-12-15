@@ -128,4 +128,4 @@ if [ -e .zshrc-local ] ; then
 fi
 
 # Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
-alias config='/usr/bin/git --git-dir=/Users/dustyphillips/.cfg/ --work-tree=/Users/dustyphillips'
+alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
