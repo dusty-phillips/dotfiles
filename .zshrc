@@ -127,6 +127,7 @@ if [ -e $HOME/.zshrc-local ] ; then
 fi
 
 # Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
+# curl -Lks https://gist.github.com/dusty-phillips/176339573b15c381436136aa3cf619ac | /bin/bash
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 
