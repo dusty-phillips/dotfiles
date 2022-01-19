@@ -199,6 +199,7 @@ Plug 'kana/vim-textobj-entire'
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug '0styx0/abbreinder.nvim'
 
 " Search and navigation
 Plug 'ggandor/lightspeed.nvim'
@@ -208,6 +209,7 @@ Plug 'bkad/CamelCaseMotion'
 " Git
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'rhysd/conflict-marker.vim'
+Plug 'rhysd/committia.vim'
 Plug 'ruanyl/vim-gh-line'
 
 " Visual
