@@ -54,6 +54,7 @@ unalias l 2>/dev/null
 alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
+alias ghs="gh codespace ssh"
 
 
 function v {
