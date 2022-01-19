@@ -119,13 +119,14 @@ export PATH=$PYENV_ROOT/bin:$PATH
 eval "$(pyenv init --path)"
 # END pyenv MANAGED BLOCK
 
-# Created by `userpath` on 2021-11-05 16:50:19
-export PATH="$PATH:$HOME/.local/bin:/Users/dustyphillips/Library/Python/3.8/bin"
 
 # config not visible in public dotfiles repo
-if [ -e .zshrc-local ] ; then
+if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
 fi
 
 # Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+
+eval "$(direnv hook zsh)"
