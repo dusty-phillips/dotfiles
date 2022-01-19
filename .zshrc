@@ -1,3 +1,8 @@
+# Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
+# curl -Lks https://gist.github.com/dusty-phillips/176339573b15c381436136aa3cf619ac/raw | /bin/bash
+alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+
 # zmodload zsh/zprof # for when things get too slow
 
 export CLICOLOR=1
@@ -126,9 +131,6 @@ if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
 fi
 
-# Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
-# curl -Lks https://gist.github.com/dusty-phillips/176339573b15c381436136aa3cf619ac | /bin/bash
-alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 
 eval "$(direnv hook zsh)"
