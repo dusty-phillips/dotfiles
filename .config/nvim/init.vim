@@ -1,6 +1,6 @@
-let g:python_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
-let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
-let g:node_host_prog='/usr/local/bin/neovim-node-host'
+"let g:python_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
+"let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
+"let g:node_host_prog='/usr/local/bin/neovim-node-host'
 
 let g:neoformat_try_node_exe = 1
 
