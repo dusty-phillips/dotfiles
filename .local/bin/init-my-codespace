@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function add_delta {
+  if ! delta -v ; then
+	wget https://github.com/dandavison/delta/releases/download/0.11.3/git-delta_0.11.3_amd64.deb
+	sudo dpkg -i git-delta*.deb
+	rm *.deb
+  fi
+}
+
+function patch_docker {
+    if ! grep psFormat .docker/config.json ; then
+        head -n -1 .docker/config.json > .docker/config.json-1
+        echo ', "psFormat": "table {{.ID}}\t{{ .Names }}\t{{.Status}}"}' >> .docker/config.json-1
+        jq < .docker/config.json-1 > .docker/config.json
+        rm .docker/config.json-1
+    fi
+
+}
+
+add_delta
+patch_docker
+
+sudo apt install -y direnv
+sudo apt install -y python3-neovim
+
