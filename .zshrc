@@ -103,27 +103,6 @@ function key {
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion, but it's slow
-
-# Created by `userpath` on 2021-03-16 18:26:12
-export PATH="$PATH:$HOME/.local/bin"
-# BEGIN auto nvm MANAGED BLOCK
-export YVM_BOOTSTRAP_EXEC_PATH=$HOME/.tophat/.yvm-exec.sh
-# END auto nvm MANAGED BLOCK
-
-export YVM_DIR=$HOME/.yvm
-[ -r $YVM_DIR/yvm.sh ] && . $YVM_DIR/yvm.sh
-# BEGIN pyenv OSX MANAGED BLOCK
-export LDFLAGS="-L/usr/local/opt/openssl/lib"
-export CPPFLAGS="-I/usr/local/opt/openssl/include"
-# END pyenv OSX MANAGED BLOCK
-# BEGIN pyenv MANAGED BLOCK
-export PYENV_ROOT=~/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH
-eval "$(pyenv init --path)"
-# END pyenv MANAGED BLOCK
 
 
 # config not visible in public dotfiles repo
