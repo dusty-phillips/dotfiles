@@ -1,5 +1,5 @@
 # Managing dot files (https://www.atlassian.com/git/tutorials/dotfiles)
-# curl -Lks https://gist.github.com/dusty-phillips/176339573b15c381436136aa3cf619ac/raw | /bin/bash
+# curl -Lks https://is.gd/B5GXbi | /bin/bash
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
 
