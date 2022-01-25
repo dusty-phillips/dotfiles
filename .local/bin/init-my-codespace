@@ -23,4 +23,4 @@ patch_docker
 
 sudo apt install -y direnv
 sudo apt install -y python3-neovim
-
+sudo apt install -y lnav
