@@ -164,8 +164,8 @@ nnoremap gX <cmd>Telescope lsp_workspace_diagnostics<CR>
 nnoremap <leader>. <cmd>Telescope lsp_code_actions<CR>
 nnoremap K <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <C-K> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap [d <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
-nnoremap ]d <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+nnoremap [d <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap ]d <cmd>lua vim.diagnostic.goto_next()<CR>
 nnoremap <leader>r <cmd>lua vim.lsp.buf.rename()<CR>
 
 " quickfix
