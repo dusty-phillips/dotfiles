@@ -60,6 +60,7 @@ alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
 alias ghs="gh codespace ssh"
+alias ghp="gh codespace ports forward 443:443 8101:8101 3435:3435"
 
 
 function v {
