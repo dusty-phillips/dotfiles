@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function add_delta {
-  if ! delta -v ; then
+  if ! delta --version ; then
 	wget https://github.com/dandavison/delta/releases/download/0.11.3/git-delta_0.11.3_amd64.deb
 	sudo dpkg -i git-delta*.deb
 	rm *.deb
@@ -18,10 +18,22 @@ function patch_docker {
 
 }
 
+function install_graphite {
+    if ! which gt ; then
+        git clone https://github.com/screenplaydev/graphite-cli
+        cd graphite-cli
+        npm install
+        npm run build
+        npm link
+    fi
+}
+
 add_delta
 patch_docker
+install_graphite
 
-sudo apt install -y direnv
-sudo apt install -y python3-neovim
-sudo apt install -y lnav
-sudo apt install -y fzf
+sudo apt install -y \
+    direnv \
+    python3-neovim \
+    lnav \
+    fzf
