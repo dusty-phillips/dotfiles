@@ -330,8 +330,8 @@ vim.g.symbols_outline= {
   symbol_blacklist = {'Variable', 'Parameter'}
   }
 
-vim.cmd([[autocmd CursorHold   * lua vim.lsp.buf.document_highlight()]])
-vim.cmd([[autocmd CursorHoldI  * lua vim.lsp.buf.document_highlight()]])
+vim.cmd([[autocmd CursorHold   * :silent! lua vim.lsp.buf.document_highlight()]])
+vim.cmd([[autocmd CursorHoldI  * :silent! lua vim.lsp.buf.document_highlight()]])
 vim.cmd([[autocmd CursorMoved  * lua vim.lsp.buf.clear_references()]])
 vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
