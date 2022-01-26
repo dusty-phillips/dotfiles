@@ -38,7 +38,7 @@ zinit light-mode for \
 
 
 
-export FZF_DEFAULT_COMMAND="fd --exclude Library"
+export FZF_DEFAULT_COMMAND="fd --follow --exclude Library"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type directory"
 
