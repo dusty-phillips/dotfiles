@@ -56,6 +56,7 @@ export EDITOR='nvim'
 
 unalias rd 2>/dev/null
 unalias l 2>/dev/null
+alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
