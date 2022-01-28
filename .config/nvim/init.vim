@@ -174,8 +174,10 @@ nnoremap [q <cmd>cprev<CR>
 
 " autoformat on save
 augroup fmt
-  autocmd!
-  autocmd BufWritePre * undojoin | Neoformat
+  autocmd! 
+  " autocmd BufWritePre * undojoin | Neoformat
+  autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
+
 
 " Install plugins
 call plug#begin('~/.config/nvim/plugged')
@@ -226,7 +228,8 @@ Plug 'romgrk/nvim-treesitter-context'
 " IDE
 Plug 'neovim/nvim-lspconfig'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-Plug 'sbdchd/neoformat'
+"Plug 'sbdchd/neoformat'
+Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
 Plug 'farmergreg/vim-lastplace'
@@ -288,6 +291,12 @@ lsp.pyright.setup(coq.lsp_ensure_capabilities())
 lsp.rescriptls.setup(coq.lsp_ensure_capabilities{cmd={'node', '/Users/dustyphillips/.config/nvim/plugged/vim-rescript/server/out/server.js', '--stdio'}})
 lsp.tsserver.setup(coq.lsp_ensure_capabilities())
 lsp.vimls.setup(coq.lsp_ensure_capabilities())
+
+require("null-ls").setup({
+    sources = {
+        require("null-ls").builtins.formatting.black,
+    },
+})
 
 require('gitsigns').setup {
   word_diff = true,
