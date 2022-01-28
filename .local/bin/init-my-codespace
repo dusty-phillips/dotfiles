@@ -29,6 +29,7 @@ function install_graphite {
     fi
 }
 
+
 add_delta
 patch_docker
 install_graphite
@@ -38,3 +39,4 @@ sudo apt install -y \
     python3-neovim \
     lnav \
     fzf
+npm install --global pyright typescript-language-server vim-language-server
