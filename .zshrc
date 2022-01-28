@@ -52,7 +52,7 @@ zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
 
 export EDITOR='nvim'
-export HISTFILE=~/.histfile
+export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=100000
 setopt HIST_IGNORE_ALL_DUPS
