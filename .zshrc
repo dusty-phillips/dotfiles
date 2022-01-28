@@ -120,6 +120,9 @@ export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
 if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
 fi
+if [ -e $HOME/.tophat-devrc ] ; then
+  source ~/.tophat-devrc
+fi
 
 
 
