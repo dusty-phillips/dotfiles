@@ -20,11 +20,12 @@ function patch_docker {
 
 function install_graphite {
     if ! which gt ; then
-        git clone https://github.com/screenplaydev/graphite-cli
-        cd graphite-cli
+        git clone https://github.com/screenplaydev/graphite-cli $HOME/.local/lib/graphite-cli
+        cd .local/lib/graphite-cli
         npm install
         npm run build
-        npm link
+        chmod a+x dist/src/index.js
+        ln -s ~/.local/lib/graphite-cli/dist/src/index.js ~/.local/bin/gt
     fi
 }
 
