@@ -21,18 +21,50 @@ function patch_docker {
 function install_graphite {
     if ! which gt ; then
         git clone https://github.com/screenplaydev/graphite-cli $HOME/.local/lib/graphite-cli
-        cd .local/lib/graphite-cli
+        pushd .local/lib/graphite-cli
         npm install
         npm run build
         chmod a+x dist/src/index.js
         ln -s ~/.local/lib/graphite-cli/dist/src/index.js ~/.local/bin/gt
+        popd
     fi
+}
+
+function clone_my_repos {
+    if [ ! -d "/workspaces/THM" ] ; then
+        pushd /workspaces
+        git clone git@github.com:tophatmonocle/THM
+        git clone git@github.com:tophatmonocle/content-service
+        git clone git@github.com:tophatmonocle/fe-thm
+        popd
+    fi
+}
+
+function checkout_my_branches {
+    pushd /workspaces
+    for directory in * ; do
+        if [ -d "$directory" ]; then
+            pushd $directory
+            branches=$(git branch -r | grep dusty)
+            for remotebranch in $branches ; do
+                localbranch=${remotebranch/origin\//}
+                git fetch origin $localbranch:$localbranch
+                git branch -u $remotebranch $localbranch
+                echo hi $branchname
+            done
+            git checkout main || git checkout master
+            popd
+        fi
+    done
+    popd
 }
 
 
 add_delta
 patch_docker
 install_graphite
+clone_my_repos
+checkout_my_branches
 
 sudo apt install -y \
     direnv \
