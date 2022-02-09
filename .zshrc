@@ -69,9 +69,8 @@ alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
-alias ghs="gh codespace ssh"
+alias ghs='gh codespace ssh -c $(gh codespace list --json name -q ".[0].name")'
 alias ghp="gh codespace ports forward 443:443 8101:8101 3435:3435"
-
 
 function v {
   local VENV="${PWD##*/}.venv"
