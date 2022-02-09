@@ -298,12 +298,13 @@ lsp = require "lspconfig"
 coq = require "coq"
 lsp.pyright.setup(coq.lsp_ensure_capabilities())
 lsp.rescriptls.setup(coq.lsp_ensure_capabilities{cmd={'node', '/Users/dustyphillips/.config/nvim/plugged/vim-rescript/server/out/server.js', '--stdio'}})
-lsp.tsserver.setup(coq.lsp_ensure_capabilities())
+lsp.tsserver.setup(coq.lsp_ensure_capabilities({on_attach=function(client) client.resolved_capabilities.document_formatting=false end,}))
 lsp.vimls.setup(coq.lsp_ensure_capabilities())
 
 require("null-ls").setup({
     sources = {
         require("null-ls").builtins.formatting.black,
+        require("null-ls").builtins.formatting.prettier,
     },
 })
 
