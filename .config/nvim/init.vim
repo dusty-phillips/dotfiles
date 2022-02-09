@@ -2,6 +2,14 @@
 "let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
 "let g:node_host_prog='/usr/local/bin/neovim-node-host'
 
+function SetUpFunction()
+  " to be called after :PlugInstall
+  TSInstall python typescript javascript vim lua
+  COQdeps
+  UpdateRemotePlugins
+endfunction
+:command SetupEnv call SetUpFunction()
+
 let g:neoformat_try_node_exe = 1
 
 " coq for lsp aware autocomplete
