@@ -6,6 +6,7 @@ function SetUpFunction()
   " to be called after :PlugInstall
   TSInstall python typescript javascript vim lua
   COQdeps
+  CHADdeps
   UpdateRemotePlugins
 endfunction
 :command SetupEnv call SetUpFunction()
