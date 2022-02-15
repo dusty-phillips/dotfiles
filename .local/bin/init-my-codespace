@@ -31,7 +31,7 @@ function install_graphite {
 }
 
 function clone_my_repos {
-    if [ ! -d "/workspaces/THM" ] ; then
+    if [ ! -d "/workspaces/content-service" ] ; then
         pushd /workspaces
         git clone git@github.com:tophatmonocle/content-service
         git clone git@github.com:tophatmonocle/fe-admin
