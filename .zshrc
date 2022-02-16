@@ -121,8 +121,11 @@ if [ -e $HOME/.zshrc-local ] ; then
 fi
 if [ -e $HOME/.tophat-devrc ] ; then
   source ~/.tophat-devrc
+  # Above file binds ^R inappropriately, so let's put it back
+  bindkey '^R' fzf-history-widget
 fi
 
 
 
 eval "$(direnv hook zsh)"
+
