@@ -42,8 +42,6 @@ export FZF_DEFAULT_COMMAND="fd --follow --exclude Library"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type directory"
 
-zinit snippet  OMZ::plugins/copydir/copydir.plugin.zsh
-zinit snippet  OMZ::plugins/copyfile/copyfile.plugin.zsh
 zinit snippet  OMZ::plugins/dirhistory/dirhistory.plugin.zsh
 zinit snippet  OMZ::plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 zinit light zdharma-continuum/fast-syntax-highlighting
