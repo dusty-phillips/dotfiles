@@ -1,27 +1,31 @@
 #!/bin/bash
 
 function add_delta {
-  if ! delta --version ; then
+    pushd /tmp
+    if ! delta --version ; then
 	wget https://github.com/dandavison/delta/releases/download/0.11.3/git-delta_0.11.3_amd64.deb
 	sudo dpkg -i git-delta*.deb
 	rm *.deb
-  fi
+    fi
+    popd
 }
 
 function patch_docker {
+    pushd ~
     if ! grep psFormat .docker/config.json ; then
         head -n -1 .docker/config.json > .docker/config.json-1
         echo ', "psFormat": "table {{.ID}}\t{{ .Names }}\t{{.Status}}"}' >> .docker/config.json-1
         jq < .docker/config.json-1 > .docker/config.json
         rm .docker/config.json-1
     fi
+    popd
 
 }
 
 function install_graphite {
     if ! which gt ; then
         git clone https://github.com/screenplaydev/graphite-cli $HOME/.local/lib/graphite-cli
-        pushd .local/lib/graphite-cli
+        pushd ~/.local/lib/graphite-cli
         npm install
         npm run build
         chmod a+x dist/src/index.js
