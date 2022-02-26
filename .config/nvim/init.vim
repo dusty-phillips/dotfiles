@@ -6,7 +6,7 @@ function SetUpFunction()
   " to be called after :PlugInstall
   TSInstall python typescript javascript vim lua
   COQdeps
-  CHADdeps
+  " CHADdeps
   UpdateRemotePlugins
 endfunction
 :command SetupEnv call SetUpFunction()
@@ -93,12 +93,15 @@ nnoremap <C-s> :w<CR>
 inoremap <C-s> <C-o>:w<CR>
 nnoremap <D-s> :w<CR>
 inoremap <D-s> <C-o>:w<CR>
-nnoremap <A-c> <cmd>Telescope git_files<cr>
 nnoremap l <cmd>Telescope git_files<cr>
 nnoremap L <cmd>Telescope find_files<cr>
 nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
-nnoremap <CR><CR> <cmd>CHADopen<CR>
+nnoremap <leader>j <cmd>Telescope jumplist<CR>
+nnoremap <leader>k <cmd>Telescope keymaps<CR>
+nnoremap <leader><CR> <cmd>Telescope resume<CR>
+" nnoremap <CR><CR> <cmd>CHADopen<CR>
+nnoremap <CR><CR> <cmd>Telescope file_browser<CR>
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
@@ -216,6 +219,7 @@ Plug '0styx0/abbreinder.nvim'
 Plug 'ggandor/lightspeed.nvim'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
+Plug 'chentau/marks.nvim'
 
 " Git
 Plug 'lewis6991/gitsigns.nvim'
@@ -237,15 +241,16 @@ Plug 'romgrk/nvim-treesitter-context'
 " IDE
 Plug 'neovim/nvim-lspconfig'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-"Plug 'sbdchd/neoformat'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'simrat39/symbols-outline.nvim'
+Plug 'akinsho/toggleterm.nvim'
 
 " Apps
-Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 Plug 'mbbill/undotree'
 Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 
@@ -284,6 +289,8 @@ require'nvim-treesitter.configs'.setup {
 }
 
 local actions = require('telescope.actions')
+local action_state = require "telescope.actions.state"
+local fb_utils = require "telescope._extensions.file_browser.utils"
 require('telescope').setup{
   defaults = {
     mappings = {
@@ -291,8 +298,30 @@ require('telescope').setup{
         ["<esc>"] = actions.close
       },
     },
+  },
+  extensions = {
+    file_browser = {
+      theme="ivy",
+      mappings = {
+        ["i"] = {
+          ["<C-c>"] = function(prompt_bufnr)
+            -- Copy of fb_actions.change_cwd, but local to current tab
+            local current_picker = action_state.get_current_picker(prompt_bufnr)
+            local finder = current_picker.finder
+            local entry_path = action_state.get_selected_entry().Path
+            finder.path = entry_path:is_dir() and entry_path:absolute() or entry_path:parent():absolute()
+            finder.cwd = finder.path
+            vim.cmd("tcd " .. finder.path)
+
+            actions.close(prompt_bufnr)
+            print(string.format("[telescope] Changed tab working directory to %s", finder.path))
+          end
+        }
+      }
+    }
   }
 }
+require('telescope').load_extension('file_browser')
 
 lsp = require "lspconfig"
 coq = require "coq"
@@ -314,6 +343,14 @@ require('gitsigns').setup {
   current_line_blame_opts = {
     delay = 200,
   },
+}
+
+require('marks').setup {}
+
+require('toggleterm').setup {
+  size = 86,
+  direction = 'vertical',
+  open_mapping = [[<c-p>]],
 }
 
 require('indent_blankline').setup {
