@@ -2,6 +2,8 @@
 # curl -Lks https://is.gd/B5GXbi | /bin/bash
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
+bindkey -v
+
 
 # zmodload zsh/zprof # for when things get too slow
 
@@ -33,10 +35,6 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust 
 ### End of Zinit's installer chunk
-
-
-
-
 
 export FZF_DEFAULT_COMMAND="fd --follow --exclude Library"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -99,19 +97,8 @@ function i {
   inv $@
 }
 
-function key {
-  if [ $1 ] ; then
-    ssh-keygen -t ed25519 -C $1
-  else
-    ssh-keygen -t ed25519 -C 'dusty.phillips@tophatmonocle.com'
-  fi
-}
-
-
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
-
-
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
