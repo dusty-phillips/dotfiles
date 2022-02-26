@@ -22,7 +22,7 @@ let g:coq_settings = {
       \'clients.buffers.enabled': v:false,
       \'clients.tags.enabled': v:false
       \}
-let g:kitty_navigator_no_mappings = 1
+" let g:kitty_navigator_no_mappings = 1
 
 " status line
 let g:bubbly_palette = #{
@@ -146,12 +146,13 @@ nnoremap \6 <C-w>6w
 nnoremap \7 <C-w>7w
 nnoremap \8 <C-w>8w
 " Seamless navigation between kitty and vim windows
-nnoremap <silent> <A-q> :KittyNavigateLeft<cr>
-nnoremap <silent> <A-Left> :KittyNavigateLeft<cr>
-nnoremap <silent> <A-j> :KittyNavigateDown<cr>
-nnoremap <silent> <A-k> :KittyNavigateUp<cr>
-nnoremap <silent> <A-x> :KittyNavigateRight<cr>
-nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
+" nnoremap <silent> <A-Left> :KittyNavigateLeft<cr>
+" nnoremap <silent> <A-j> :KittyNavigateDown<cr>
+" nnoremap <silent> <A-k> :KittyNavigateUp<cr>
+" nnoremap <silent> <A-x> :KittyNavigateRight<cr>
+" nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
+:tnoremap ; <C-\><C-n>
+:tnoremap ;<Space> ;<Space>
 
 " Search
 nmap h <Plug>Lightspeed_s
@@ -252,7 +253,7 @@ Plug 'akinsho/toggleterm.nvim'
 " Apps
 " Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 Plug 'mbbill/undotree'
-Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
+" Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 
 call plug#end()
 
@@ -351,6 +352,7 @@ require('toggleterm').setup {
   size = 86,
   direction = 'vertical',
   open_mapping = [[<c-p>]],
+  shade_terminals = false,
 }
 
 require('indent_blankline').setup {
