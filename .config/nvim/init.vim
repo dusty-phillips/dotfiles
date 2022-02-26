@@ -99,9 +99,8 @@ nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
 nnoremap <leader>j <cmd>Telescope jumplist<CR>
 nnoremap <leader>k <cmd>Telescope keymaps<CR>
-nnoremap <leader><CR> <cmd>Telescope resume<CR>
 " nnoremap <CR><CR> <cmd>CHADopen<CR>
-nnoremap <CR><CR> <cmd>Telescope file_browser<CR>
+nnoremap <leader><space> <cmd>Telescope file_browser<CR>
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
@@ -153,6 +152,13 @@ nnoremap \8 <C-w>8w
 " nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
 :tnoremap ; <C-\><C-n>
 :tnoremap ;<Space> ;<Space>
+:tnoremap ;c <cmd>close<CR>
+nnoremap <CR><CR> <cmd>Telescope buffers<CR>
+nnoremap <CR><Space> <cmd>let $CODESPACE_VSCODE_FOLDER = trim(system('pwd'))<CR><cmd>term<CR>
+nnoremap <CR>l <cmd>term lazygit<CR>
+autocmd TermOpen * startinsert
+autocmd BufWinEnter,WinEnter term://* startinsert
+autocmd BufLeave term://* stopinsert
 
 " Search
 nmap h <Plug>Lightspeed_s
@@ -248,7 +254,6 @@ Plug 'nvim-telescope/telescope-symbols.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'simrat39/symbols-outline.nvim'
-Plug 'akinsho/toggleterm.nvim'
 
 " Apps
 " Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
@@ -348,12 +353,6 @@ require('gitsigns').setup {
 
 require('marks').setup {}
 
-require('toggleterm').setup {
-  size = 86,
-  direction = 'vertical',
-  open_mapping = [[<c-p>]],
-  shade_terminals = false,
-}
 
 require('indent_blankline').setup {
   char="│",
