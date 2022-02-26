@@ -58,6 +58,8 @@ setopt EXTENDED_HISTORY
 setopt INC_APPEND_HISTORY_TIME
 setopt SHARE_HISTORY
 
+bindkey -M vicmd '^R' fzf-history-widget
+
 
 unalias rd 2>/dev/null
 unalias l 2>/dev/null
