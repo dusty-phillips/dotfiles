@@ -155,7 +155,7 @@ nnoremap \8 <C-w>8w
 :tnoremap ;c <cmd>close<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 nnoremap <CR><Space> <cmd>let $CODESPACE_VSCODE_FOLDER = trim(system('pwd'))<CR><cmd>term<CR>
-nnoremap <CR>l <cmd>term lazygit<CR>
+nnoremap <CR>g <cmd>let $CODESPACE_VSCODE_FOLDER = trim(system('pwd'))<CR><cmd>term lazygit<CR>
 autocmd TermOpen * startinsert
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
