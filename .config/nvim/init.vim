@@ -206,6 +206,7 @@ Plug 'glepnir/zephyr-nvim'   " Color scheme
 " Dependencies
 Plug 'nvim-lua/plenary.nvim' " For Lua everything
 Plug 'kana/vim-textobj-user' " For textobj-entire and possibly indent-object
+Plug 'tpope/vim-repeat'       " For lightspeed
 
 " Language support
 Plug 'rescript-lang/vim-rescript' 
