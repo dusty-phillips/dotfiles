@@ -4,9 +4,8 @@
 
 function SetUpFunction()
   " to be called after :PlugInstall
-  TSInstall python typescript javascript vim lua
+  TSInstall python typescript javascript vim
   COQdeps
-  " CHADdeps
   UpdateRemotePlugins
 endfunction
 :command SetupEnv call SetUpFunction()
@@ -104,10 +103,10 @@ nnoremap <leader><space> <cmd>Telescope file_browser<CR>
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
-cnoremap <expr> <up> wildmenumode() ? "\<left>" : "\<up>"
-cnoremap <expr> <down> wildmenumode() ? "\<right>" : "\<down>"
-cnoremap <expr> <left> wildmenumode() ? "\<up>" : "\<left>"
-cnoremap <expr> <right> wildmenumode() ? " \<bs>\<C-Z>" : "\<right>"
+" cnoremap <expr> <up> wildmenumode() ? "\<left>" : "\<up>"
+" cnoremap <expr> <down> wildmenumode() ? "\<right>" : "\<down>"
+" cnoremap <expr> <left> wildmenumode() ? "\<up>" : "\<left>"
+" cnoremap <expr> <right> wildmenumode() ? " \<bs>\<C-Z>" : "\<right>"
 nmap sw saiw
 
 " ; to run a single command in normal mode
@@ -246,6 +245,7 @@ Plug 'mhinz/vim-sayonara', {'on': 'Sayonara'}
 Plug 'jaxbot/semantic-highlight.vim'
 Plug 'luukvbaal/stabilize.nvim'
 Plug 'romgrk/nvim-treesitter-context'
+Plug 'gelguy/wilder.nvim'
 
 " IDE
 Plug 'neovim/nvim-lspconfig'
@@ -263,6 +263,18 @@ Plug 'mbbill/undotree'
 " Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 
 call plug#end()
+
+set wildchar=<Down>
+call wilder#setup({
+  \ 'modes': [':', '/', '?'],
+  \ 'next_key': '<Down>',
+  \ 'previous_key': '<Up>',
+  \ 'accept_key': '<Tab>',
+  \ 'reject_key': '<S-Tab>',
+\ })
+call wilder#set_option('renderer', wilder#popupmenu_renderer({'highlighter': wilder#basic_highlighter(),}))
+call wilder#set_option('noselect', 0)
+
 
 colorscheme zephyr
 
