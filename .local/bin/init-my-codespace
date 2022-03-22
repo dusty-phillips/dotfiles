@@ -73,4 +73,4 @@ sudo apt install -y \
     python3-neovim \
     lnav \
     fzf
-npm install --global pyright typescript-language-server vim-language-server
+# npm install --global pyright typescript-language-server vim-language-server
