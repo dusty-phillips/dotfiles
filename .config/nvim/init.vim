@@ -5,6 +5,7 @@
 function SetUpFunction()
   " to be called after :PlugInstall
   TSInstall python typescript javascript vim
+  LspInstall pyright tsserver vimls
   COQdeps
   UpdateRemotePlugins
 endfunction
