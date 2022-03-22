@@ -208,9 +208,15 @@ Plug 'kana/vim-textobj-user' " For textobj-entire and possibly indent-object
 Plug 'tpope/vim-repeat'       " For lightspeed
 
 " Language support
+Plug 'cstrahan/vim-capnp'
+Plug 'jakwings/vim-pony'
 Plug 'rescript-lang/vim-rescript' 
 Plug 'numirias/semshi', {'do': 'UpdateRemotePlugins'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'jose-elias-alvarez/null-ls.nvim'
 
 " Editing
 Plug 'tpope/vim-sensible'
@@ -248,9 +254,6 @@ Plug 'romgrk/nvim-treesitter-context'
 Plug 'gelguy/wilder.nvim'
 
 " IDE
-Plug 'neovim/nvim-lspconfig'
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
@@ -343,12 +346,18 @@ require('telescope').setup{
 }
 require('telescope').load_extension('file_browser')
 
-lsp = require "lspconfig"
-coq = require "coq"
-lsp.pyright.setup(coq.lsp_ensure_capabilities())
-lsp.rescriptls.setup(coq.lsp_ensure_capabilities{cmd={'node', '/Users/dustyphillips/.config/nvim/plugged/vim-rescript/server/out/server.js', '--stdio'}})
-lsp.tsserver.setup(coq.lsp_ensure_capabilities({on_attach=function(client) client.resolved_capabilities.document_formatting=false end,}))
-lsp.vimls.setup(coq.lsp_ensure_capabilities())
+-- lsp = require "lspconfig"
+-- coq = require "coq"
+-- lsp.pyright.setup(coq.lsp_ensure_capabilities())
+-- lsp.rescriptls.setup(coq.lsp_ensure_capabilities{cmd={'node', '/Users/dustyphillips/.config/nvim/plugged/vim-rescript/server/out/server.js', '--stdio'}})
+-- lsp.tsserver.setup(coq.lsp_ensure_capabilities({on_attach=function(client) client.resolved_capabilities.document_formatting=false end,}))
+-- lsp.vimls.setup(coq.lsp_ensure_capabilities())
+
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+    server:setup(opts)
+end)
 
 require("null-ls").setup({
     sources = {

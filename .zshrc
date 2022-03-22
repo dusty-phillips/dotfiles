@@ -101,6 +101,7 @@ function i {
 
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
+export PATH=$PATH:$HOME/.local/share/ponyup/bin
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
