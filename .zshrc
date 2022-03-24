@@ -46,6 +46,7 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 zinit pack"bgn-binary+keys" for fzf
 zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
+eval "$(fasd --init zsh-hook)"
 
 export EDITOR='nvim'
 export HISTFILE=~/.zsh_history
@@ -67,6 +68,11 @@ alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
+
+function z {
+  cd $(fasd -sdl | fzf --height 10%)
+}
+bindkey -s "^[r" "z\n"
 
 function v {
   local VENV="${PWD##*/}.venv"
@@ -107,6 +113,4 @@ if [ -e $HOME/.zshrc-local ] ; then
 fi
 
 
-
-eval "$(direnv hook zsh)"
 
