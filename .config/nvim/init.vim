@@ -265,6 +265,7 @@ call plug#end()
 set wildchar=<Down>
 call wilder#setup({
   \ 'modes': [':', '/', '?'],
+  \ 'enable_cmdline_enter': 0,
   \ 'next_key': '<Down>',
   \ 'previous_key': '<Up>',
   \ 'accept_key': '<Tab>',
