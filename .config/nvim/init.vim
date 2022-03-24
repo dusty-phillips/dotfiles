@@ -1,5 +1,5 @@
 "let g:python_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
-"let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
+let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
 "let g:node_host_prog='/usr/local/bin/neovim-node-host'
 
 function SetUpFunction()
@@ -22,7 +22,7 @@ let g:coq_settings = {
       \'clients.buffers.enabled': v:false,
       \'clients.tags.enabled': v:false
       \}
-" let g:kitty_navigator_no_mappings = 1
+let g:kitty_navigator_no_mappings = 1
 
 " status line
 let g:bubbly_palette = #{
@@ -145,21 +145,14 @@ nnoremap \6 <C-w>6w
 nnoremap \7 <C-w>7w
 nnoremap \8 <C-w>8w
 " Seamless navigation between kitty and vim windows
-" nnoremap <silent> <A-Left> :KittyNavigateLeft<cr>
-" nnoremap <silent> <A-j> :KittyNavigateDown<cr>
-" nnoremap <silent> <A-k> :KittyNavigateUp<cr>
-" nnoremap <silent> <A-x> :KittyNavigateRight<cr>
-" nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
+nnoremap <silent> <A-Left> :KittyNavigateLeft<cr>
+nnoremap <silent> <A-j> :KittyNavigateDown<cr>
+nnoremap <silent> <A-k> :KittyNavigateUp<cr>
+nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
 :tnoremap ; <C-\><C-n>
 :tnoremap ;<Space> ;<Space>
 :tnoremap ;c <cmd>close<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
-nnoremap <CR><Space> <cmd>let $CODESPACE_VSCODE_FOLDER = trim(system('pwd'))<CR><cmd>term<CR>
-nnoremap <CR>g <cmd>let $CODESPACE_VSCODE_FOLDER = trim(system('pwd'))<CR><cmd>term lazygit<CR>
-autocmd TermOpen * startinsert
-autocmd TermOpen * nnoremap <buffer> <C-c> i<C-c>
-autocmd BufWinEnter,WinEnter term://* startinsert
-autocmd BufLeave term://* stopinsert
 
 " Search
 nmap h <Plug>Lightspeed_s
@@ -235,6 +228,7 @@ Plug 'ggandor/lightspeed.nvim'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'chentau/marks.nvim'
+Plug 'knubie/vim-kitty-navigator'
 
 " Git
 Plug 'lewis6991/gitsigns.nvim'
