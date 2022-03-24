@@ -67,8 +67,6 @@ alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
 alias pt="ptw -- --tb=short"
-alias ghs='gh codespace ssh -c $(gh codespace list --json name -q ".[0].name")'
-alias ghp="gh codespace ports forward 443:443 8101:8101 3435:3435"
 
 function v {
   local VENV="${PWD##*/}.venv"
@@ -106,11 +104,6 @@ export PATH=$PATH:$HOME/.local/share/ponyup/bin
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
-fi
-if [ -e $HOME/.tophat-devrc ] ; then
-  source ~/.tophat-devrc
-  # Above file binds ^R inappropriately, so let's put it back
-  bindkey '^R' fzf-history-widget
 fi
 
 
