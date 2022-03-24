@@ -67,7 +67,6 @@ unalias l 2>/dev/null
 alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
-alias pt="ptw -- --tb=short"
 
 function z {
   cd $(fasd -sdl | fzf --height 10%)
@@ -101,6 +100,11 @@ function lg {
 function i {
   v
   inv $@
+}
+
+function pt {
+  v
+  ptw --tb=short $@
 }
 
 export PY_DEVTOOLS_HIGHLIGHT=1
