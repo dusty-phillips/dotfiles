@@ -104,7 +104,7 @@ function i {
 
 function pt {
   v
-  ptw --tb=short $@
+  ptw -- --tb=short $@
 }
 
 export PY_DEVTOOLS_HIGHLIGHT=1
