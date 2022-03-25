@@ -183,6 +183,19 @@ nnoremap <leader>r <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap ]q <cmd>cnext<CR>
 nnoremap [q <cmd>cprev<CR>
 
+" git
+nnoremap ]c <cmd>Gitsigns next_hunk<CR>
+nnoremap [c <cmd>Gitsigns prev_hunk<CR>
+nnoremap <leader>ha <cmd>Gitsigns stage_buffer<CR>
+nnoremap <leader>hs <cmd>Gitsigns stage_hunk<CR>
+nnoremap <leader>hp <cmd>Gitsigns preview_hunk<CR>
+nnoremap <leader>hd <cmd>Gitsigns diffthis<CR>
+nnoremap <leader>hv <cmd>Gitsigns select_hunk<CR>
+
+
+
+
+
 " autoformat on save
 augroup fmt
   autocmd! 
