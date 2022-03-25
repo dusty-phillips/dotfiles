@@ -153,6 +153,8 @@ nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 
 " Search
+nnoremap n nzz
+nnoremap N Nzz
 nmap h <Plug>Lightspeed_s
 nmap H <Plug>Lightspeed_S
 xmap h <Plug>Lightspeed_x
