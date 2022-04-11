@@ -69,7 +69,7 @@ alias n=nvim
 alias d=deactivate
 
 function z {
-  cd $(fasd -sdl | fzf --height 10%)
+  cd $(fasd -dlR | fzf --no-sort --height 10%)
 }
 bindkey -s "^[r" "z\n"
 
@@ -105,6 +105,11 @@ function i {
 function pt {
   v
   ptw -- --tb=short $@
+}
+
+function dlogs {
+  v
+  i docker.logs | cut -f 2 -d '|'
 }
 
 export PY_DEVTOOLS_HIGHLIGHT=1
