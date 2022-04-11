@@ -115,7 +115,6 @@ inoremap ;<CR> ;<CR>
 inoremap ;; ;
 
 " clipboard
-nnoremap <leader>y "*y
 vnoremap <leader>y "*y
 nnoremap <leader>p "*p
 vnoremap <leader>p "*p
@@ -194,10 +193,6 @@ nnoremap <leader>hp <cmd>Gitsigns preview_hunk<CR>
 nnoremap <leader>hd <cmd>Gitsigns diffthis<CR>
 nnoremap <leader>hv <cmd>Gitsigns select_hunk<CR>
 
-
-
-
-
 " autoformat on save
 augroup fmt
   autocmd! 
@@ -234,7 +229,7 @@ Plug 'kana/vim-textobj-entire'
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug '0styx0/abbreinder.nvim'
+Plug 'gbprod/yanky.nvim'
 
 " Search and navigation
 Plug 'ggandor/lightspeed.nvim'
@@ -280,9 +275,21 @@ colorscheme zephyr
 hi Normal guibg=NONE ctermbg=NONE
 
 lua <<EOF
-require 'colorizer'.setup()
 
-require("stabilize").setup()
+require('colorizer').setup()
+require('stabilize').setup()
+
+require('yanky').setup({})
+vim.api.nvim_set_keymap("n", "p", "<Plug>(YankyPutAfter)", {})
+vim.api.nvim_set_keymap("n", "P", "<Plug>(YankyPutBefore)", {})
+vim.api.nvim_set_keymap("x", "p", "<Plug>(YankyPutAfter)", {})
+vim.api.nvim_set_keymap("x", "P", "<Plug>(YankyPutBefore)", {})
+vim.api.nvim_set_keymap("n", "gp", "<Plug>(YankyGPutAfter)", {})
+vim.api.nvim_set_keymap("n", "gP", "<Plug>(YankyGPutBefore)", {})
+vim.api.nvim_set_keymap("x", "gp", "<Plug>(YankyGPutAfter)", {})
+vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
+vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
+vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
 require'nvim-treesitter.configs'.setup {
   highlight = {enable = true},
@@ -351,14 +358,28 @@ require('telescope').load_extension('file_browser')
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
-    local opts = {}
+    local opts = {
+        on_attach=function(client)
+            if client.name == "tsserver" then
+                client.resolved_capabilities.document_formatting=false
+            end
+        end,
+    }
     server:setup(coq.lsp_ensure_capabilities(opts))
 end)
 
-require("null-ls").setup({
+local null_ls = require("null-ls")
+local command_resolver = require("null-ls.helpers.command_resolver")
+null_ls.setup({
     sources = {
-        require("null-ls").builtins.formatting.black,
-        require("null-ls").builtins.formatting.prettier,
+        null_ls.builtins.formatting.black,
+        null_ls.builtins.formatting.prettier.with({
+            dynamic_command = function(params)
+                return command_resolver.from_yarn_pnp(params)
+                    or command_resolver.from_node_modules(params)
+                    or vim.fn.executable(params.command) == 1 and params.command
+            end,
+        }),
     },
 })
 
@@ -412,6 +433,7 @@ vim.cmd([[autocmd CursorMoved  * lua vim.lsp.buf.clear_references()]])
 vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
 
+
 EOF
 
 highlight LspReferenceText guibg=#2f7366
@@ -428,3 +450,6 @@ highlight GitSignsCurrentLineBlame guifg=#665588 blend=nocombine
 
 highlight IndentBlanklineIndent1 guifg=#444455 guibg=#1f1f1f blend=nocombine
 highlight IndentBlanklineIndent2 guifg=#444455 guibg=#1a1a1a blend=nocombine
+
+autocmd Filetype python :iabbrev ppp print("")<Esc>2<Left>
+autocmd Filetype typescript :iabbrev ppp console.log("")<Esc>2<Left>
