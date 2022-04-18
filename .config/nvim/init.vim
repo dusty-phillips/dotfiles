@@ -1,4 +1,3 @@
-"let g:python_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
 let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
 "let g:node_host_prog='/usr/local/bin/neovim-node-host'
 
@@ -11,8 +10,6 @@ function SetUpFunction()
 endfunction
 :command SetupEnv call SetUpFunction()
 
-let g:neoformat_try_node_exe = 1
-
 " coq for lsp aware autocomplete
 let g:coq_settings = {
       \ 'display.pum.fast_close': v:false,
@@ -24,45 +21,18 @@ let g:coq_settings = {
       \}
 let g:kitty_navigator_no_mappings = 1
 
-" status line
-let g:bubbly_palette = #{
-      \   background: "#13121a",
-      \   foreground: "#c5cdd9",
-      \   black: "#3e4249",
-      \   red: "#ec7279",
-      \   green: "#a0c980",
-      \   yellow: "#deb974",
-      \   blue: "#6cb6eb",
-      \   purple: "#d38aea",
-      \   cyan: "#5dbbc1",
-      \   white: "#c5cdd9",
-      \   lightgrey: "#57595e",
-      \   darkgrey: "#404247",
-      \ }
-let g:bubbly_tags = #{
-      \  mode:  #{
-      \   command: "C",
-      \   insert: "I",
-      \   normal: "N",
-      \   replace: "R",
-      \   terminal: "T",
-      \   visual: "V",
-      \   visualblock: "VB",
-      \  },
-      \}
-
 " accepting and rejecting git changes
 let g:conflict_marker_begin = '^<<<<<<.*$'
 let g:conflict_marker_common_ancestors = '^|||||.*$'
 let g:conflict_marker_separator = '^=====*$'
 let g:conflict_marker_end = '^>>>>>.*$'
-let g:merginal_windowSize = 60
+
 
 
 let mapleader=" "
 
 set termguicolors
-set background=dark
+set background=light
 set mouse=a
 set cursorline
 set nohlsearch
@@ -73,7 +43,7 @@ set splitright
 set nobackup
 set nowritebackup
 set shortmess=acIF
-set cmdheight=3
+set cmdheight=2
 set noshowcmd
 set noshowmode
 set signcolumn=yes
@@ -101,8 +71,8 @@ nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
 nnoremap <leader>j <cmd>Telescope jumplist<CR>
 nnoremap <leader>k <cmd>Telescope keymaps<CR>
-" nnoremap <CR><CR> <cmd>CHADopen<CR>
 nnoremap <leader><space> <cmd>Telescope file_browser<CR>
+nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
@@ -115,6 +85,7 @@ inoremap ;<CR> ;<CR>
 inoremap ;; ;
 
 " clipboard
+nnoremap <leader>y "*y
 vnoremap <leader>y "*y
 nnoremap <leader>p "*p
 vnoremap <leader>p "*p
@@ -146,10 +117,6 @@ nnoremap <silent> <A-Left> :KittyNavigateLeft<cr>
 nnoremap <silent> <A-j> :KittyNavigateDown<cr>
 nnoremap <silent> <A-k> :KittyNavigateUp<cr>
 nnoremap <silent> <A-Right> :KittyNavigateRight<cr>
-:tnoremap ; <C-\><C-n>
-:tnoremap ;<Space> ;<Space>
-:tnoremap ;c <cmd>close<CR>
-nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 
 " Search
 nnoremap n nzz
@@ -192,17 +159,21 @@ nnoremap <leader>hs <cmd>Gitsigns stage_hunk<CR>
 nnoremap <leader>hp <cmd>Gitsigns preview_hunk<CR>
 nnoremap <leader>hd <cmd>Gitsigns diffthis<CR>
 nnoremap <leader>hv <cmd>Gitsigns select_hunk<CR>
+" These are set by plugin vim-gh-line
+" <leader>gh open line on github
+" <leader>gb open blame on github
+" <leader>go open repo on github
 
 " autoformat on save
 augroup fmt
   autocmd! 
-  " autocmd BufWritePre * undojoin | Neoformat
   autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
 
 
 " Install plugins
 call plug#begin('~/.config/nvim/plugged')
-Plug 'glepnir/zephyr-nvim'   " Color scheme
+Plug 'marko-cerovac/material.nvim'
+Plug 'sainnhe/everforest'
 
 " Dependencies
 Plug 'nvim-lua/plenary.nvim' " For Lua everything
@@ -212,6 +183,7 @@ Plug 'tpope/vim-repeat'       " For lightspeed
 " Language support
 Plug 'cstrahan/vim-capnp'
 Plug 'jakwings/vim-pony'
+Plug 'gleam-lang/gleam.vim'
 Plug 'rescript-lang/vim-rescript' 
 Plug 'numirias/semshi', {'do': 'UpdateRemotePlugins'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -245,13 +217,11 @@ Plug 'rhysd/committia.vim'
 Plug 'ruanyl/vim-gh-line'
 
 " Visual
-Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'lukas-reineke/indent-blankline.nvim'
-Plug 'datwaft/bubbly.nvim'
-Plug 'machakann/vim-highlightedyank'
+Plug 'nvim-lualine/lualine.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'mhinz/vim-sayonara', {'on': 'Sayonara'}
-Plug 'jaxbot/semantic-highlight.vim'
 Plug 'luukvbaal/stabilize.nvim'
 Plug 'romgrk/nvim-treesitter-context'
 
@@ -261,20 +231,16 @@ Plug 'nvim-telescope/telescope-symbols.nvim'
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'simrat39/symbols-outline.nvim'
-
-" Apps
-" Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 Plug 'mbbill/undotree'
-" Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 
 call plug#end()
 
 
-colorscheme zephyr
 
 hi Normal guibg=NONE ctermbg=NONE
 
 lua <<EOF
+
 
 require('colorizer').setup()
 require('stabilize').setup()
@@ -290,6 +256,17 @@ vim.api.nvim_set_keymap("x", "gp", "<Plug>(YankyGPutAfter)", {})
 vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
 vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
 vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
+
+require('lualine').setup {
+    options = {theme='everforest'},
+    sections = {
+        lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end }},
+        lualine_b = {'branch',},
+        lualine_c = {{'filename', path=1, symbols = { modified='⭑'}}},
+        lualine_x = {"filetype"},
+        lualine_y = {'diagnostics'},
+    },
+}
 
 require'nvim-treesitter.configs'.setup {
   highlight = {enable = true},
@@ -349,12 +326,6 @@ require('telescope').setup{
 }
 require('telescope').load_extension('file_browser')
 
--- lsp = require "lspconfig"
--- coq = require "coq"
--- lsp.pyright.setup(coq.lsp_ensure_capabilities())
--- lsp.rescriptls.setup(coq.lsp_ensure_capabilities{cmd={'node', '/Users/dustyphillips/.config/nvim/plugged/vim-rescript/server/out/server.js', '--stdio'}})
--- lsp.tsserver.setup(coq.lsp_ensure_capabilities({on_attach=function(client) client.resolved_capabilities.document_formatting=false end,}))
--- lsp.vimls.setup(coq.lsp_ensure_capabilities())
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
@@ -432,24 +403,27 @@ vim.cmd([[autocmd CursorHoldI  * :silent! lua vim.lsp.buf.document_highlight()]]
 vim.cmd([[autocmd CursorMoved  * lua vim.lsp.buf.clear_references()]])
 vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
-
-
 EOF
 
-highlight LspReferenceText guibg=#2f7366
-highlight LspReferenceRead guibg=#2f7366
-highlight LspReferenceWrite guibg=#2f7366
+let g:material_style = "lighter"
+let g:everforest_better_performance=1
+" colorscheme material
+colorscheme everforest
 
-highlight ConflictMarkerBegin guibg=#2f7366
-highlight ConflictMarkerOurs guibg=#2e5049
-highlight ConflictMarkerTheirs guibg=#344f69
-highlight ConflictMarkerEnd guibg=#2f628e
-highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
+highlight LspReferenceText guibg=#ffd3c6
+highlight LspReferenceRead guibg=#ffd3c6
+highlight LspReferenceWrite guibg=#ffd3c6
 
-highlight GitSignsCurrentLineBlame guifg=#665588 blend=nocombine
+highlight ConflictMarkerBegin guibg=#9fc3a6
+highlight ConflictMarkerOurs guibg=#eed0a9
+highlight ConflictMarkerCommonAncestorsHunk guibg=#eacff8
+highlight ConflictMarkerTheirs guibg=#a4dfe9
+highlight ConflictMarkerEnd guibg=#9fc3a6
 
-highlight IndentBlanklineIndent1 guifg=#444455 guibg=#1f1f1f blend=nocombine
-highlight IndentBlanklineIndent2 guifg=#444455 guibg=#1a1a1a blend=nocombine
+highlight GitSignsCurrentLineBlame guifg=#c6c5f8 blend=nocombine
+
+highlight IndentBlanklineIndent1 guifg=#dddded
+highlight IndentBlanklineIndent2 guifg=#dddded
 
 autocmd Filetype python :iabbrev ppp print("")<Esc>2<Left>
 autocmd Filetype typescript :iabbrev ppp console.log("")<Esc>2<Left>
