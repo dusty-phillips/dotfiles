@@ -114,12 +114,11 @@ function dlogs {
 
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
-export PATH=$PATH:$HOME/.local/share/ponyup/bin
+export PYENV_ROOT=~/.pyenv
+export PATH=$PYENV_ROOT/bin:$PATH
+eval "$(pyenv init --path)"
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
 fi
-
-
-
