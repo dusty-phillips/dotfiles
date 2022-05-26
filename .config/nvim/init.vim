@@ -71,6 +71,7 @@ nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
 nnoremap <leader>j <cmd>Telescope jumplist<CR>
 nnoremap <leader>k <cmd>Telescope keymaps<CR>
+nnoremap <leader>b <cmd>Telescope git_branches<CR>
 nnoremap <leader><space> <cmd>Telescope file_browser<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 
@@ -172,8 +173,7 @@ augroup fmt
 
 " Install plugins
 call plug#begin('~/.config/nvim/plugged')
-Plug 'marko-cerovac/material.nvim'
-Plug 'sainnhe/everforest'
+Plug 'sainnhe/edge'
 
 " Dependencies
 Plug 'nvim-lua/plenary.nvim' " For Lua everything
@@ -182,8 +182,8 @@ Plug 'tpope/vim-repeat'       " For lightspeed
 
 " Language support
 Plug 'cstrahan/vim-capnp'
-Plug 'jakwings/vim-pony'
 Plug 'gleam-lang/gleam.vim'
+Plug 'lepture/vim-jinja'
 Plug 'rescript-lang/vim-rescript' 
 Plug 'numirias/semshi', {'do': 'UpdateRemotePlugins'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -207,7 +207,7 @@ Plug 'gbprod/yanky.nvim'
 Plug 'ggandor/lightspeed.nvim'
 Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
-Plug 'chentau/marks.nvim'
+Plug 'chentoast/marks.nvim'
 Plug 'knubie/vim-kitty-navigator'
 
 " Git
@@ -257,8 +257,9 @@ vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
 vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
 vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
+
 require('lualine').setup {
-    options = {theme='everforest'},
+    options = {theme='edge'},
     sections = {
         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end }},
         lualine_b = {'branch',},
@@ -405,10 +406,8 @@ vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
 EOF
 
-let g:material_style = "lighter"
-let g:everforest_better_performance=1
-" colorscheme material
-colorscheme everforest
+let g:edge_better_performance = 1
+colorscheme edge
 
 highlight LspReferenceText guibg=#ffd3c6
 highlight LspReferenceRead guibg=#ffd3c6
