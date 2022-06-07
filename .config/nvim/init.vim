@@ -72,6 +72,7 @@ nnoremap <leader>F <cmd>Telescope grep_string<CR>
 nnoremap <leader>j <cmd>Telescope jumplist<CR>
 nnoremap <leader>k <cmd>Telescope keymaps<CR>
 nnoremap <leader>b <cmd>Telescope git_branches<CR>
+nnoremap <leader>m <cmd>Telescope marks<CR>
 nnoremap <leader><space> <cmd>Telescope file_browser<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 
@@ -141,7 +142,7 @@ nnoremap gr <cmd>Telescope lsp_references<CR>
 nnoremap gd <cmd>Telescope lsp_definitions<CR>
 nnoremap gx <cmd>Telescope lsp_document_diagnostics<CR>
 nnoremap gX <cmd>Telescope lsp_workspace_diagnostics<CR>
-nnoremap <leader>. <cmd>Telescope lsp_code_actions<CR>
+nnoremap <leader>. <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap K <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <C-K> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap [d <cmd>lua vim.diagnostic.goto_prev()<CR>
@@ -173,7 +174,7 @@ augroup fmt
 
 " Install plugins
 call plug#begin('~/.config/nvim/plugged')
-Plug 'sainnhe/edge'
+Plug 'savq/melange'
 
 " Dependencies
 Plug 'nvim-lua/plenary.nvim' " For Lua everything
@@ -185,7 +186,6 @@ Plug 'cstrahan/vim-capnp'
 Plug 'gleam-lang/gleam.vim'
 Plug 'lepture/vim-jinja'
 Plug 'rescript-lang/vim-rescript' 
-Plug 'numirias/semshi', {'do': 'UpdateRemotePlugins'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
@@ -237,7 +237,6 @@ call plug#end()
 
 
 
-hi Normal guibg=NONE ctermbg=NONE
 
 lua <<EOF
 
@@ -259,7 +258,6 @@ vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
 
 require('lualine').setup {
-    options = {theme='edge'},
     sections = {
         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end }},
         lualine_b = {'branch',},
@@ -406,8 +404,7 @@ vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
 EOF
 
-let g:edge_better_performance = 1
-colorscheme edge
+colorscheme melange
 
 highlight LspReferenceText guibg=#ffd3c6
 highlight LspReferenceRead guibg=#ffd3c6
@@ -419,10 +416,14 @@ highlight ConflictMarkerCommonAncestorsHunk guibg=#eacff8
 highlight ConflictMarkerTheirs guibg=#a4dfe9
 highlight ConflictMarkerEnd guibg=#9fc3a6
 
-highlight GitSignsCurrentLineBlame guifg=#c6c5f8 blend=nocombine
+highlight GitSignsCurrentLineBlame guifg=#c6c5f4 blend=nocombine
 
-highlight IndentBlanklineIndent1 guifg=#dddded
+highlight IndentBlanklineIndent1 guifg=#eddded
 highlight IndentBlanklineIndent2 guifg=#dddded
+highlight Normal guibg=NONE ctermbg=NONE
 
 autocmd Filetype python :iabbrev ppp print("")<Esc>2<Left>
 autocmd Filetype typescript :iabbrev ppp console.log("")<Esc>2<Left>
+
+
+
