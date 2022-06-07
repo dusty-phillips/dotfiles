@@ -67,9 +67,12 @@ unalias l 2>/dev/null
 alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
+alias lzd=lazydocker
 
 function z {
-  cd $(fasd -dlR | fzf --no-sort --height 10%)
+  if  selected=$(fasd -dlR | fzf --no-sort --height 10%)  ; then
+      cd $selected
+  fi
 }
 bindkey -s "^[r" "z\n"
 
@@ -114,9 +117,9 @@ function dlogs {
 
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
-export PYENV_ROOT=~/.pyenv
+export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH
-eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
