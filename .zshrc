@@ -2,7 +2,7 @@
 # curl -Lks https://is.gd/B5GXbi | /bin/bash
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-bindkey -v
+# bindkey -v # For vim mode
 
 
 # zmodload zsh/zprof # for when things get too slow
@@ -120,6 +120,7 @@ export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
 export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH
 eval "$(pyenv init -)"
+eval "$(pdm --pep582)"
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
