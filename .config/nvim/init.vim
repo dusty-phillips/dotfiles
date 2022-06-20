@@ -1,5 +1,3 @@
-let g:python3_host_prog='/Users/dustyphillips/.pyenv/versions/3.9.4/bin/python'
-"let g:node_host_prog='/usr/local/bin/neovim-node-host'
 
 function SetUpFunction()
   " to be called after :PlugInstall
@@ -10,15 +8,6 @@ function SetUpFunction()
 endfunction
 :command SetupEnv call SetUpFunction()
 
-" coq for lsp aware autocomplete
-let g:coq_settings = {
-      \ 'display.pum.fast_close': v:false,
-      \ 'auto_start': 'shut-up',
-      \ 'keymap.jump_to_mark': v:null,
-      \ 'clients.snippets.warn': [],
-      \'clients.buffers.enabled': v:false,
-      \'clients.tags.enabled': v:false
-      \}
 let g:kitty_navigator_no_mappings = 1
 
 " accepting and rejecting git changes
@@ -66,7 +55,7 @@ inoremap <C-s> <C-o>:w<CR>
 nnoremap <D-s> :w<CR>
 inoremap <D-s> <C-o>:w<CR>
 nnoremap l <cmd>Telescope git_files<cr>
-nnoremap L <cmd>Telescope find_files<cr>
+nnoremap L <cmd>Telescope find_files no_ignore=true <CR>
 nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
 nnoremap <leader>j <cmd>Telescope jumplist<CR>
@@ -81,6 +70,7 @@ nnoremap <leader>u :UndotreeToggle<CR>
 nmap sw saiw
 
 " ; to run a single command in normal mode
+inoremap <M-.> <C-x><C-o>
 inoremap ; <C-o>
 inoremap ;<Space> ;<Space>
 inoremap ;<CR> ;<CR>
@@ -127,6 +117,7 @@ nmap h <Plug>Lightspeed_s
 nmap H <Plug>Lightspeed_S
 xmap h <Plug>Lightspeed_x
 xmap H <Plug>Lightspeed_H
+omap h <Plug>Lightspeed_x
 omap h <Plug>Lightspeed_x
 omap H <Plug>Lightspeed_H
 nmap / <Plug>(incsearch-forward)
@@ -180,6 +171,7 @@ Plug 'savq/melange'
 Plug 'nvim-lua/plenary.nvim' " For Lua everything
 Plug 'kana/vim-textobj-user' " For textobj-entire and possibly indent-object
 Plug 'tpope/vim-repeat'       " For lightspeed
+Plug 'antoinemadec/FixCursorHold.nvim'
 
 " Language support
 Plug 'cstrahan/vim-capnp'
@@ -189,8 +181,8 @@ Plug 'rescript-lang/vim-rescript'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'kosayoda/nvim-lightbulb'
 
 " Editing
 Plug 'tpope/vim-sensible'
@@ -256,6 +248,8 @@ vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
 vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
 vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
+
+require('nvim-lightbulb').setup({autocmd = {enabled=true}})
 
 require('lualine').setup {
     sections = {
@@ -329,14 +323,17 @@ require('telescope').load_extension('file_browser')
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
     local opts = {
-        on_attach=function(client)
+        on_attach=function(client, bufnr)
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
             if client.name == "tsserver" then
                 client.resolved_capabilities.document_formatting=false
             end
         end,
     }
-    server:setup(coq.lsp_ensure_capabilities(opts))
+    server:setup(opts)
 end)
+
+
 
 local null_ls = require("null-ls")
 local command_resolver = require("null-ls.helpers.command_resolver")
@@ -370,11 +367,8 @@ require('indent_blankline').setup {
         "IndentBlanklineIndent1",
         "IndentBlanklineIndent2",
     },
-    space_char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-    },
 }
+
 require'treesitter-context'.setup{
     enable = true, 
     throttle = true, 
@@ -422,8 +416,6 @@ highlight IndentBlanklineIndent1 guifg=#eddded
 highlight IndentBlanklineIndent2 guifg=#dddded
 highlight Normal guibg=NONE ctermbg=NONE
 
-autocmd Filetype python :iabbrev ppp print("")<Esc>2<Left>
-autocmd Filetype typescript :iabbrev ppp console.log("")<Esc>2<Left>
 
 
 
