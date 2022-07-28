@@ -54,7 +54,7 @@ nnoremap <C-s> :w<CR>
 inoremap <C-s> <C-o>:w<CR>
 nnoremap <D-s> :w<CR>
 inoremap <D-s> <C-o>:w<CR>
-nnoremap l <cmd>Telescope git_files<cr>
+nnoremap l <cmd>Telescope git_files show_untracked=true <CR>
 nnoremap L <cmd>Telescope find_files no_ignore=true <CR>
 nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
@@ -145,11 +145,12 @@ nnoremap ]q <cmd>cnext<CR>
 nnoremap [q <cmd>cprev<CR>
 
 " git
-nnoremap ]c <cmd>Gitsigns next_hunk<CR>
+nnoremap ]h <cmd>Gitsigns next_hunk<CR>
 nnoremap [c <cmd>Gitsigns prev_hunk<CR>
 nnoremap <leader>ha <cmd>Gitsigns stage_buffer<CR>
 nnoremap <leader>hs <cmd>Gitsigns stage_hunk<CR>
 nnoremap <leader>hp <cmd>Gitsigns preview_hunk<CR>
+nnoremap <leader>hr <cmd>Gitsigns reset_hunk<CR>
 nnoremap <leader>hd <cmd>Gitsigns diffthis<CR>
 nnoremap <leader>hv <cmd>Gitsigns select_hunk<CR>
 " These are set by plugin vim-gh-line
@@ -188,7 +189,8 @@ Plug 'kosayoda/nvim-lightbulb'
 Plug 'tpope/vim-sensible'
 Plug 'b3nj5m1n/kommentary'
 Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth'
+Plug 'nmac427/guess-indent.nvim'
 Plug 'kana/vim-textobj-entire' 
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
@@ -261,6 +263,8 @@ require('lualine').setup {
     },
 }
 
+require('guess-indent').setup {}
+
 require'nvim-treesitter.configs'.setup {
   highlight = {enable = true},
   rainbow = {
@@ -294,6 +298,7 @@ require('telescope').setup{
         ["<esc>"] = actions.close
       },
     },
+    layout_strategy='center'
   },
   extensions = {
     file_browser = {
