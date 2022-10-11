@@ -62,8 +62,13 @@ nnoremap <leader>j <cmd>Telescope jumplist<CR>
 nnoremap <leader>k <cmd>Telescope keymaps<CR>
 nnoremap <leader>b <cmd>Telescope git_branches<CR>
 nnoremap <leader>m <cmd>Telescope marks<CR>
-nnoremap <leader><space> <cmd>Telescope file_browser<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
+augroup dirbuf
+  autocmd!
+  nnoremap ~ :Dirbuf ~<CR>
+  nnoremap <leader><Left> <cmd>execute 'lua  require"dirbuf".jump_history(-'v:count1')'<CR>
+  nnoremap <leader><Right> <cmd>execute 'lua  require"dirbuf".jump_history('v:count1')'<CR>
+augroup END
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
@@ -75,6 +80,19 @@ inoremap ; <C-o>
 inoremap ;<Space> ;<Space>
 inoremap ;<CR> ;<CR>
 inoremap ;; ;
+
+" indent-navigation
+let g:vindent_motion_more_prev = '[=' " jump to prev line with more indent.
+let g:vindent_motion_more_next = ']=' " jump to next line with more indent.
+let g:vindent_motion_less_prev = '[-' " jump to prev line with less indent.
+let g:vindent_motion_less_next = ']-' " jump to next line with less indent.
+let g:vindent_motion_diff_prev = '[;' " jump to prev line with different indent.
+let g:vindent_motion_diff_next = '];' " jump to next line with different indent.
+let g:vindent_motion_XX_ss     = '[p' " jump to start of the current block scope.
+let g:vindent_motion_XX_se     = ']p' " jump to end   of the current block scope.
+let g:vindent_object_XX_ii     = 'ii' " select current block.
+let g:vindent_object_XX_ai     = 'ai' " select current block + one extra line  at beginning.
+let g:vindent_object_XX_aI     = 'aI' " select current block + two extra lines at beginning and end.
 
 " clipboard
 nnoremap <leader>y "*y
@@ -146,7 +164,7 @@ nnoremap [q <cmd>cprev<CR>
 
 " git
 nnoremap ]h <cmd>Gitsigns next_hunk<CR>
-nnoremap [c <cmd>Gitsigns prev_hunk<CR>
+nnoremap [h <cmd>Gitsigns prev_hunk<CR>
 nnoremap <leader>ha <cmd>Gitsigns stage_buffer<CR>
 nnoremap <leader>hs <cmd>Gitsigns stage_hunk<CR>
 nnoremap <leader>hp <cmd>Gitsigns preview_hunk<CR>
@@ -177,7 +195,7 @@ Plug 'antoinemadec/FixCursorHold.nvim'
 " Language support
 Plug 'cstrahan/vim-capnp'
 Plug 'gleam-lang/gleam.vim'
-Plug 'lepture/vim-jinja'
+Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'rescript-lang/vim-rescript' 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
@@ -193,7 +211,7 @@ Plug 'tpope/vim-abolish'
 Plug 'nmac427/guess-indent.nvim'
 Plug 'kana/vim-textobj-entire' 
 Plug 'machakann/vim-sandwich'
-Plug 'michaeljsmith/vim-indent-object'
+Plug 'jessekelighine/vindent.vim'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'gbprod/yanky.nvim'
 
@@ -222,7 +240,7 @@ Plug 'romgrk/nvim-treesitter-context'
 " IDE
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
-Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'elihunter173/dirbuf.nvim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'mbbill/undotree'
@@ -237,6 +255,7 @@ lua <<EOF
 
 require('colorizer').setup()
 require('stabilize').setup()
+require('dirbuf').setup{}
 
 require('yanky').setup({})
 vim.api.nvim_set_keymap("n", "p", "<Plug>(YankyPutAfter)", {})
@@ -290,40 +309,6 @@ require'nvim-treesitter.configs'.setup {
 
 local actions = require('telescope.actions')
 local action_state = require "telescope.actions.state"
-local fb_utils = require "telescope._extensions.file_browser.utils"
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close
-      },
-    },
-    layout_strategy='center'
-  },
-  extensions = {
-    file_browser = {
-      theme="ivy",
-      mappings = {
-        ["i"] = {
-          ["<C-c>"] = function(prompt_bufnr)
-            -- Copy of fb_actions.change_cwd, but local to current tab
-            local current_picker = action_state.get_current_picker(prompt_bufnr)
-            local finder = current_picker.finder
-            local entry_path = action_state.get_selected_entry().Path
-            finder.path = entry_path:is_dir() and entry_path:absolute() or entry_path:parent():absolute()
-            finder.cwd = finder.path
-            vim.cmd("tcd " .. finder.path)
-
-            actions.close(prompt_bufnr)
-            print(string.format("[telescope] Changed tab working directory to %s", finder.path))
-          end
-        }
-      }
-    }
-  }
-}
-require('telescope').load_extension('file_browser')
-
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
