@@ -207,7 +207,6 @@ Plug 'kosayoda/nvim-lightbulb'
 Plug 'tpope/vim-sensible'
 Plug 'b3nj5m1n/kommentary'
 Plug 'tpope/vim-abolish'
-" Plug 'tpope/vim-sleuth'
 Plug 'nmac427/guess-indent.nvim'
 Plug 'kana/vim-textobj-entire' 
 Plug 'machakann/vim-sandwich'
@@ -221,6 +220,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'chentoast/marks.nvim'
 Plug 'knubie/vim-kitty-navigator'
+Plug 'smjonas/live-command.nvim'
 
 " Git
 Plug 'lewis6991/gitsigns.nvim'
@@ -256,6 +256,8 @@ lua <<EOF
 require('colorizer').setup()
 require('stabilize').setup()
 require('dirbuf').setup{}
+require('guess-indent').setup {}
+require('nvim-lightbulb').setup({autocmd = {enabled=true}})
 
 require('yanky').setup({})
 vim.api.nvim_set_keymap("n", "p", "<Plug>(YankyPutAfter)", {})
@@ -270,7 +272,6 @@ vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
 vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
 
-require('nvim-lightbulb').setup({autocmd = {enabled=true}})
 
 require('lualine').setup {
     sections = {
@@ -282,7 +283,6 @@ require('lualine').setup {
     },
 }
 
-require('guess-indent').setup {}
 
 require'nvim-treesitter.configs'.setup {
   highlight = {enable = true},
@@ -377,9 +377,16 @@ require'treesitter-context'.setup{
     },
 }
 
+require('live-command').setup {
+  commands = {
+    Norm = {cmd = "norm" },
+    Global = {cmd = "global"},
+  }
+}
+
 vim.g.symbols_outline= {
   symbol_blacklist = {'Variable', 'Parameter'}
-  }
+}
 
 vim.cmd([[autocmd CursorHold   * :silent! lua vim.lsp.buf.document_highlight()]])
 vim.cmd([[autocmd CursorHoldI  * :silent! lua vim.lsp.buf.document_highlight()]])
