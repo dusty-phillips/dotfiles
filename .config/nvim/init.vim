@@ -63,12 +63,13 @@ nnoremap <leader>k <cmd>Telescope keymaps<CR>
 nnoremap <leader>b <cmd>Telescope git_branches<CR>
 nnoremap <leader>m <cmd>Telescope marks<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
-augroup dirbuf
-  autocmd!
-  nnoremap ~ :Dirbuf ~<CR>
-  nnoremap <leader><Left> <cmd>execute 'lua  require"dirbuf".jump_history(-'v:count1')'<CR>
-  nnoremap <leader><Right> <cmd>execute 'lua  require"dirbuf".jump_history('v:count1')'<CR>
-augroup END
+" augroup dirbuf
+  " TODO: Move to filetype
+  " autocmd!
+  " nnoremap ~ :Dirbuf ~<CR>
+  " nnoremap <leader><Left> <cmd>execute 'lua  require"dirbuf".jump_history(-'v:count1')'<CR>
+  " nnoremap <leader><Right> <cmd>execute 'lua  require"dirbuf".jump_history('v:count1')'<CR>
+" augroup END
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
@@ -179,18 +180,23 @@ nnoremap <leader>hv <cmd>Gitsigns select_hunk<CR>
 " autoformat on save
 augroup fmt
   autocmd! 
-  autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
+  autocmd BufWritePre * lua vim.lsp.buf.format()
 
 
 " Install plugins
 call plug#begin('~/.config/nvim/plugged')
-Plug 'savq/melange'
+
+" colorschemes
+" Plug 'savq/melange'
+" Plug 'rafamadriz/neon'
+Plug 'NLKNguyen/papercolor-theme'
 
 " Dependencies
 Plug 'nvim-lua/plenary.nvim' " For Lua everything
 Plug 'kana/vim-textobj-user' " For textobj-entire and possibly indent-object
 Plug 'tpope/vim-repeat'       " For lightspeed
 Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'winston0410/cmd-parser.nvim' " For range-highlight
 
 " Language support
 Plug 'cstrahan/vim-capnp'
@@ -221,6 +227,7 @@ Plug 'bkad/CamelCaseMotion'
 Plug 'chentoast/marks.nvim'
 Plug 'knubie/vim-kitty-navigator'
 Plug 'smjonas/live-command.nvim'
+Plug 'winston0410/range-highlight.nvim'
 
 " Git
 Plug 'lewis6991/gitsigns.nvim'
@@ -258,6 +265,7 @@ require('stabilize').setup()
 require('dirbuf').setup{}
 require('guess-indent').setup {}
 require('nvim-lightbulb').setup({autocmd = {enabled=true}})
+require('range-highlight').setup()
 
 require('yanky').setup({})
 vim.api.nvim_set_keymap("n", "p", "<Plug>(YankyPutAfter)", {})
@@ -274,6 +282,7 @@ vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
 
 require('lualine').setup {
+  options = {theme = 'papercolor_light'},
     sections = {
         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end }},
         lualine_b = {'branch',},
@@ -316,7 +325,7 @@ lsp_installer.on_server_ready(function(server)
         on_attach=function(client, bufnr)
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
             if client.name == "tsserver" then
-                client.resolved_capabilities.document_formatting=false
+                client.server_capabilities.document_formatting=false
             end
         end,
     }
@@ -393,13 +402,18 @@ vim.cmd([[autocmd CursorHoldI  * :silent! lua vim.lsp.buf.document_highlight()]]
 vim.cmd([[autocmd CursorMoved  * lua vim.lsp.buf.clear_references()]])
 vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
+
 EOF
 
-colorscheme melange
 
-highlight LspReferenceText guibg=#ffd3c6
-highlight LspReferenceRead guibg=#ffd3c6
-highlight LspReferenceWrite guibg=#ffd3c6
+" let g:neon_style='light'
+" colorscheme neon
+colorscheme PaperColor
+
+
+highlight LspReferenceText guibg=#dddddd cterm=underdotted,nocombine
+highlight LspReferenceRead guibg=#dddddd cterm=underdotted,nocombine
+highlight LspReferenceWrite guibg=#dddddd cterm=underdotted,nocombine
 
 highlight ConflictMarkerBegin guibg=#9fc3a6
 highlight ConflictMarkerOurs guibg=#eed0a9
@@ -407,11 +421,13 @@ highlight ConflictMarkerCommonAncestorsHunk guibg=#eacff8
 highlight ConflictMarkerTheirs guibg=#a4dfe9
 highlight ConflictMarkerEnd guibg=#9fc3a6
 
-highlight GitSignsCurrentLineBlame guifg=#c6c5f4 blend=nocombine
+highlight GitSignsCurrentLineBlame guifg=#9999bb
+highlight GitSignsAddInline guibg=#aaddbb
+highlight GitSignsChangeInline guibg=#ccccdd
+highlight GitSignsDeleteInline guibg=#ddaaaa
 
-highlight IndentBlanklineIndent1 guifg=#eddded
-highlight IndentBlanklineIndent2 guifg=#dddded
-highlight Normal guibg=NONE ctermbg=NONE
+highlight IndentBlanklineIndent1 guifg=#ddccee
+highlight IndentBlanklineIndent2 guifg=#eeddcc
 
 
 
