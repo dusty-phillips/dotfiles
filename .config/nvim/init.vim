@@ -187,8 +187,6 @@ augroup fmt
 call plug#begin('~/.config/nvim/plugged')
 
 " colorschemes
-" Plug 'savq/melange'
-" Plug 'rafamadriz/neon'
 Plug 'NLKNguyen/papercolor-theme'
 
 " Dependencies
@@ -405,9 +403,18 @@ vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
 
 EOF
 
+" I'm pretty sure PaperColor accidentally inverted bg and fg
+let g:PaperColor_Theme_Options = {
+\  'theme': {
+\    'default.light': {
+\       'override': {
+\         'vertsplit_fg': ['#eeeeee', '232'],
+\         'vertsplit_bg': ['#005faf', '232']
+\       }
+\    }
+\  } 
+\}
 
-" let g:neon_style='light'
-" colorscheme neon
 colorscheme PaperColor
 
 
