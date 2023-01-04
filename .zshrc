@@ -2,8 +2,7 @@
 # curl -Lks https://is.gd/B5GXbi | /bin/bash
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-# bindkey -v # For vim mode
-
+set -o emacs # Don't want zsh in vi mode even if $EDITOR is nvim
 
 # zmodload zsh/zprof # for when things get too slow
 
@@ -76,17 +75,7 @@ function z {
 }
 bindkey -s "^[r" "z\n"
 
-function v {
-  local VENV="${PWD##*/}.venv"
-  if [ -e $VENV ] ; then
-    . $VENV/bin/activate || true
-  elif [ -e "venv_thm_local" ] ; then
-    . venv_thm_local/bin/activate || true
-  fi
-}
-
 function l {
- v
  if [ $1 ] ; then
     nvim $@
   else
@@ -96,23 +85,11 @@ function l {
 }
 
 function lg {
-  v
   lazygit
 }
 
-function i {
-  v
-  inv $@
-}
-
 function pt {
-  v
   ptw -- --tb=short $@
-}
-
-function dlogs {
-  v
-  i docker.logs | cut -f 2 -d '|'
 }
 
 export PY_DEVTOOLS_HIGHLIGHT=1
@@ -120,9 +97,12 @@ export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
 export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH
 eval "$(pyenv init -)"
-eval "$(pdm --pep582)"
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
