@@ -63,13 +63,7 @@ nnoremap <leader>k <cmd>Telescope keymaps<CR>
 nnoremap <leader>b <cmd>Telescope git_branches<CR>
 nnoremap <leader>m <cmd>Telescope marks<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
-" augroup dirbuf
-  " TODO: Move to filetype
-  " autocmd!
-  " nnoremap ~ :Dirbuf ~<CR>
-  " nnoremap <leader><Left> <cmd>execute 'lua  require"dirbuf".jump_history(-'v:count1')'<CR>
-  " nnoremap <leader><Right> <cmd>execute 'lua  require"dirbuf".jump_history('v:count1')'<CR>
-" augroup END
+nnoremap - :lua require("oil").open()<CR>
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
@@ -206,6 +200,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'kosayoda/nvim-lightbulb'
+Plug 'jfecher/vale.vim'
 
 " Editing
 Plug 'tpope/vim-sensible'
@@ -245,7 +240,8 @@ Plug 'romgrk/nvim-treesitter-context'
 " IDE
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
-Plug 'elihunter173/dirbuf.nvim'
+" Plug 'elihunter173/dirbuf.nvim'
+Plug 'stevearc/oil.nvim'
 Plug 'farmergreg/vim-lastplace'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'mbbill/undotree'
@@ -260,7 +256,6 @@ lua <<EOF
 
 require('colorizer').setup()
 require('stabilize').setup()
-require('dirbuf').setup{}
 require('guess-indent').setup {}
 require('nvim-lightbulb').setup({autocmd = {enabled=true}})
 require('range-highlight').setup()
@@ -277,6 +272,15 @@ vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
 vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
 vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
 
+
+require('oil').setup({
+  keymaps = {
+      ["<C-v>"] = "actions.select_vsplit",
+      ["<C-n>"] = "actions.select_split",
+      ["<C-h>"] = false,
+      ["<C-s>"] = false,
+    },
+})
 
 
 require('lualine').setup {
@@ -314,9 +318,6 @@ require'nvim-treesitter.configs'.setup {
   }
 }
 
-local actions = require('telescope.actions')
-local action_state = require "telescope.actions.state"
-
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
     local opts = {
@@ -337,14 +338,7 @@ local command_resolver = require("null-ls.helpers.command_resolver")
 null_ls.setup({
     sources = {
         null_ls.builtins.formatting.black,
-        null_ls.builtins.formatting.prettier.with({
-            dynamic_command = function(params)
-                return command_resolver.from_yarn_pnp(params)
-                    or command_resolver.from_node_modules(params)
-                    or vim.fn.executable(params.command) == 1 and params.command
-            end,
-        }),
-    },
+        null_ls.builtins.formatting.prettier    },
 })
 
 require('gitsigns').setup {
