@@ -139,7 +139,7 @@ nmap g/ <Plug>(incsearch-stay)
 let g:camelcasemotion_key = '\'
 
 " lsp
-nnoremap <leader>o <cmd>Telescope lsp_document_symbols<CR>
+nnoremap <leader>o <cmd>Telescope lsp_document_symbols ignore_symbols=variable<CR>
 nnoremap <leader>O <cmd>SymbolsOutline<CR>
 nnoremap gw <cmd>Telescope lsp_workspace_symbols<CR>
 nnoremap gr <cmd>Telescope lsp_references<CR>
@@ -338,6 +338,7 @@ local command_resolver = require("null-ls.helpers.command_resolver")
 null_ls.setup({
     sources = {
         null_ls.builtins.formatting.black,
+        null_ls.builtins.formatting.reorder_python_imports,
         null_ls.builtins.formatting.prettier    },
 })
 
