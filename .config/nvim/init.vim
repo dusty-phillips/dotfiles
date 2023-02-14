@@ -42,6 +42,8 @@ set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set wildmenu
 set wildmode=longest:list,full
+set expandtab
+set sw=2
 
 
 " Settings Keybindings ('V to open)
@@ -174,7 +176,7 @@ nnoremap <leader>hv <cmd>Gitsigns select_hunk<CR>
 " autoformat on save
 augroup fmt
   autocmd! 
-  autocmd BufWritePre * lua vim.lsp.buf.format()
+  autocmd BufWritePre * lua vim.lsp.buf.format({filter = function(client) return client.name == "null-ls" end})
 
 
 " Install plugins
@@ -196,11 +198,11 @@ Plug 'gleam-lang/gleam.vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'rescript-lang/vim-rescript' 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/nvim-lsp-installer'
 Plug 'jose-elias-alvarez/null-ls.nvim'
-Plug 'kosayoda/nvim-lightbulb'
-Plug 'jfecher/vale.vim'
+Plug 'jay-babu/mason-null-ls.nvim'
 
 " Editing
 Plug 'tpope/vim-sensible'
@@ -257,7 +259,6 @@ lua <<EOF
 require('colorizer').setup()
 require('stabilize').setup()
 require('guess-indent').setup {}
-require('nvim-lightbulb').setup({autocmd = {enabled=true}})
 require('range-highlight').setup()
 
 require('yanky').setup({})
@@ -318,29 +319,22 @@ require'nvim-treesitter.configs'.setup {
   }
 }
 
-local lsp_installer = require("nvim-lsp-installer")
-lsp_installer.on_server_ready(function(server)
-    local opts = {
-        on_attach=function(client, bufnr)
-            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-            if client.name == "tsserver" then
-                client.server_capabilities.document_formatting=false
-            end
-        end,
-    }
-    server:setup(opts)
-end)
+require("mason").setup()
+require("mason-lspconfig").setup()
 
-
+require("lspconfig").pyright.setup{}
+require("lspconfig").tsserver.setup{}
 
 local null_ls = require("null-ls")
-local command_resolver = require("null-ls.helpers.command_resolver")
 null_ls.setup({
     sources = {
         null_ls.builtins.formatting.black,
         null_ls.builtins.formatting.reorder_python_imports,
-        null_ls.builtins.formatting.prettier    },
+        null_ls.builtins.formatting.prettier
+    },
 })
+require("mason-null-ls").setup{automatic_installation = true}
+
 
 require('gitsigns').setup {
   word_diff = true,
