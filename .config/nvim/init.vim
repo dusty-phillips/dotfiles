@@ -1,13 +1,3 @@
-
-function SetUpFunction()
-  " to be called after :PlugInstall
-  TSInstall python typescript javascript vim
-  LspInstall pyright tsserver vimls
-  COQdeps
-  UpdateRemotePlugins
-endfunction
-:command SetupEnv call SetUpFunction()
-
 let g:kitty_navigator_no_mappings = 1
 
 " accepting and rejecting git changes
@@ -15,8 +5,6 @@ let g:conflict_marker_begin = '^<<<<<<.*$'
 let g:conflict_marker_common_ancestors = '^|||||.*$'
 let g:conflict_marker_separator = '^=====*$'
 let g:conflict_marker_end = '^>>>>>.*$'
-
-
 
 let mapleader=" "
 
@@ -62,7 +50,7 @@ nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
 nnoremap <leader>j <cmd>Telescope jumplist<CR>
 nnoremap <leader>k <cmd>Telescope keymaps<CR>
-nnoremap <leader>b <cmd>Telescope git_branches<CR>
+nnoremap <leader>b <cmd>Telescope git_branches show_remote_tracking_branches=false<CR>
 nnoremap <leader>m <cmd>Telescope marks<CR>
 nnoremap <CR><CR> <cmd>Telescope buffers<CR>
 nnoremap - :lua require("oil").open()<CR>
@@ -194,9 +182,11 @@ Plug 'winston0410/cmd-parser.nvim' " For range-highlight
 
 " Language support
 Plug 'cstrahan/vim-capnp'
-Plug 'gleam-lang/gleam.vim'
-Plug 'Glench/Vim-Jinja2-Syntax'
+" Plug 'gleam-lang/gleam.vim'
+" Plug 'Glench/Vim-Jinja2-Syntax'
+Plug 'https://gitlab.com/inko-lang/inko.vim.git'
 Plug 'rescript-lang/vim-rescript' 
+Plug 'jakwings/vim-pony'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
