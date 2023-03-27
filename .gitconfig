@@ -4,7 +4,6 @@
 
 [core]
 pager = delta
-	excludesfile = /Users/dustyphillips/.gitignore_global_tophat
 
 [interactive]
     diffFilter = delta --color-only
