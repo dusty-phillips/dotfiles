@@ -1,0 +1,8 @@
+setup.cfg
+setup.py
+neovim.egg-info/PKG-INFO
+neovim.egg-info/SOURCES.txt
+neovim.egg-info/dependency_links.txt
+neovim.egg-info/not-zip-safe
+neovim.egg-info/requires.txt
+neovim.egg-info/top_level.txt

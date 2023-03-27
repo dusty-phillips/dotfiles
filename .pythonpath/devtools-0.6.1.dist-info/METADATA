@@ -1,0 +1,139 @@
+Metadata-Version: 2.1
+Name: devtools
+Version: 0.6.1
+Summary: Python's missing debug print command and other development tools.
+Home-page: https://github.com/samuelcolvin/python-devtools
+Author: Samuel Colvin
+Author-email: s@muelcolvin.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: Unix
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Environment :: MacOS X
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: pygments
+Requires-Dist: Pygments (>=2.2.0) ; extra == 'pygments'
+
+# python devtools
+
+[![CI](https://github.com/samuelcolvin/python-devtools/workflows/CI/badge.svg?event=push)](https://github.com/samuelcolvin/python-devtools/actions?query=event%3Apush+branch%3Amaster+workflow%3ACI)
+[![Coverage](https://codecov.io/gh/samuelcolvin/python-devtools/branch/master/graph/badge.svg)](https://codecov.io/gh/samuelcolvin/python-devtools)
+[![pypi](https://img.shields.io/pypi/v/devtools.svg)](https://pypi.python.org/pypi/devtools)
+[![versions](https://img.shields.io/pypi/pyversions/devtools.svg)](https://github.com/samuelcolvin/python-devtools)
+[![license](https://img.shields.io/github/license/samuelcolvin/python-devtools.svg)](https://github.com/samuelcolvin/python-devtools/blob/master/LICENSE)
+
+**Python's missing debug print command and other development tools.**
+
+For more information, see [documentation](https://python-devtools.helpmanual.io/).
+
+## Install
+
+Just
+
+```bash
+pip install devtools[pygments]
+```
+
+`pygments` is not required but if it's installed, output will be highlighted and easier to read.
+
+`devtools` has no other required dependencies except python 3.6, 3.7, or 3.8.
+If you've got python 3.6+ and `pip` installed, you're good to go.
+
+## Usage
+
+```py
+from devtools import debug
+
+whatever = [1, 2, 3]
+debug(whatever)
+```
+
+Outputs:
+
+```py
+test.py:4 <module>:
+    whatever: [1, 2, 3] (list)
+```
+
+
+That's only the tip of the iceberg, for example:
+
+```py
+import numpy as np
+
+data = {
+    'foo': np.array(range(20)),
+    'bar': {'apple', 'banana', 'carrot', 'grapefruit'},
+    'spam': [{'a': i, 'b': (i for i in range(3))} for i in range(3)],
+    'sentence': 'this is just a boring sentence.\n' * 4
+}
+
+debug(data)
+```
+
+outputs:
+
+![python-devtools demo](https://raw.githubusercontent.com/samuelcolvin/python-devtools/master/demo.py.png)
+
+## Usage without Import
+
+modify `/usr/lib/python3.8/sitecustomize.py` making `debug` available in any python 3.8 code
+
+```py
+# add devtools debug to builtins
+try:
+    from devtools import debug
+except ImportError:
+    pass
+else:
+    __builtins__['debug'] = debug
+```
+
+
+## v0.6.0 (2020-07-29)
+* improve `__pretty__` to work better with pydantic classes, [#52](https://github.com/samuelcolvin/pydantic/issues/52)
+* improve the way statement ranges are calculated, [#58](https://github.com/samuelcolvin/pydantic/issues/58)
+* drastically improve import time, [#50](https://github.com/samuelcolvin/pydantic/issues/50)
+* pretty printing for non-standard dicts, [#60](https://github.com/samuelcolvin/pydantic/issues/60)
+* better statement finding for multi-line statements, [#61](https://github.com/samuelcolvin/pydantic/issues/61)
+* colors in windows, [#57](https://github.com/samuelcolvin/pydantic/issues/57)
+* fix `debug(type(dict(...)))`, [#62](https://github.com/samuelcolvin/pydantic/issues/62)
+
+## v0.5.1 (2019-10-09)
+* fix python tag in `setup.cfg`, [#46](https://github.com/samuelcolvin/pydantic/issues/46)
+
+## v0.5.0 (2019-01-03)
+* support `MultiDict`, [#34](https://github.com/samuelcolvin/pydantic/issues/34)
+* support `__pretty__` method, [#36](https://github.com/samuelcolvin/pydantic/issues/36)
+
+## v0.4.0 (2018-12-29)
+* remove use of `warnings`, include in output, [#30](https://github.com/samuelcolvin/pydantic/issues/30)
+* fix rendering errors [#31](https://github.com/samuelcolvin/pydantic/issues/31)
+* better str and bytes wrapping [#32](https://github.com/samuelcolvin/pydantic/issues/32)
+* add `len` everywhere possible, part of [#16](https://github.com/samuelcolvin/pydantic/issues/16)
+
+## v0.3.0 (2017-10-11)
+* allow `async/await` arguments
+* fix subscript
+* fix weird named tuples eg. `mock > call_args`
+* add `timer`
+
+## v0.2.0 (2017-09-14)
+* improve output
+* numerous bug fixes
+
+
