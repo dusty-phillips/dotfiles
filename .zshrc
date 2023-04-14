@@ -97,7 +97,7 @@ export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
 export PYTHONBREAKPOINT='IPython.core.debugger.set_trace'
 export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH
+export PATH=$PYENV_ROOT/bin:$PATH:$HOME/.local/bin
 eval "$(pyenv init -)"
 
 # config not visible in public dotfiles repo
