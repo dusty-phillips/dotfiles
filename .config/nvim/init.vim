@@ -278,7 +278,7 @@ require('lualine').setup {
   options = {theme = 'papercolor_light'},
     sections = {
         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end }},
-        lualine_b = {'branch',},
+        lualine_b = {},
         lualine_c = {{'filename', path=1, symbols = { modified='⭑'}}},
         lualine_x = {"filetype"},
         lualine_y = {'diagnostics'},

@@ -39,7 +39,7 @@ export FZF_DEFAULT_COMMAND="fd --follow --exclude Library"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type directory"
 
-zinit snippet  OMZ::plugins/dirhistory/dirhistory.plugin.zsh
+# zinit snippet  OMZ::plugins/dirhistory/dirhistory.plugin.zsh
 zinit snippet  OMZ::plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 zinit light zdharma-continuum/fast-syntax-highlighting
 zinit pack"bgn-binary+keys" for fzf
@@ -66,7 +66,8 @@ unalias l 2>/dev/null
 alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
-alias lzd=lazydocker
+alias v="source .venv/bin/activate"
+
 
 function z {
   if  selected=$(fasd -dlR | fzf --no-sort --height 10%)  ; then
@@ -94,6 +95,7 @@ function pt {
 
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
+export PYTHONBREAKPOINT='IPython.core.debugger.set_trace'
 export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH
 eval "$(pyenv init -)"
