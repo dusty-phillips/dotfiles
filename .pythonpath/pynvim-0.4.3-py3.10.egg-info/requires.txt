@@ -1,8 +1,0 @@
-msgpack>=0.5.0
-greenlet
-
-[pyuv]
-pyuv>=1.0.0
-
-[test]
-pytest>=3.4.0

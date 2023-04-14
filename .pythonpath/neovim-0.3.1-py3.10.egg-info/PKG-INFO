@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: neovim
-Version: 0.3.1
-Summary: Transition packgage for pynvim
-Home-page: http://github.com/neovim/python-client
-Author: Thiago de Arruda
-Author-email: tpadilha84@gmail.com
-License: Apache
