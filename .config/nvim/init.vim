@@ -45,6 +45,7 @@ inoremap <C-s> <C-o>:w<CR>
 nnoremap <D-s> :w<CR>
 inoremap <D-s> <C-o>:w<CR>
 nnoremap l <cmd>Telescope git_files show_untracked=true <CR>
+nnoremap <C-l> <cmd>lua require('telescope.builtin').git_files({git_command={'git', 'ls-files', '--modified', '--exclude-standard'}, show_untracked=true})<CR>
 nnoremap L <cmd>Telescope find_files no_ignore=true <CR>
 nnoremap <leader>f <cmd>Telescope live_grep<CR>
 nnoremap <leader>F <cmd>Telescope grep_string<CR>
