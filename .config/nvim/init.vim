@@ -58,7 +58,9 @@ nnoremap - :lua require("oil").open()<CR>
 
 " Misc keybindings
 nnoremap <leader>u :UndotreeToggle<CR>
+nnoremap <CR>d :%bd\|e#\|bd#<CR>
 nmap sw saiw
+
 
 " ; to run a single command in normal mode
 inoremap <M-.> <C-x><C-o>
@@ -263,6 +265,18 @@ vim.api.nvim_set_keymap("x", "gp", "<Plug>(YankyGPutAfter)", {})
 vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
 vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleForward)", {})
 vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleBackward)", {})
+
+require('telescope').setup {
+  pickers = {
+    buffers = {
+      mappings = {
+        n = {
+          ["dd"] = "delete_buffer",
+          }
+      }
+    }
+  }
+}
 
 
 require('oil').setup({
