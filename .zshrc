@@ -61,12 +61,12 @@ setopt SHARE_HISTORY
 bindkey -M vicmd '^R' fzf-history-widget
 
 
-unalias rd 2>/dev/null
 unalias l 2>/dev/null
 alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
 alias v="source .venv/bin/activate"
+alias nomos="kitty +kitten ssh dustyphillips@dusty-nomos.local"
 
 
 function z {
