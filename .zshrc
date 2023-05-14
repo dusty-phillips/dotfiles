@@ -62,6 +62,7 @@ bindkey -M vicmd '^R' fzf-history-widget
 
 
 unalias l 2>/dev/null
+alias 14="reset&&z"  # weird trick for escape sequence issue
 alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
