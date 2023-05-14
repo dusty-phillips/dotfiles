@@ -1,16 +1,32 @@
+# Debug with `kitty --debug-keyboard`
 import re
 
+from kittens.ssh.utils import is_kitten_cmdline as is_ssh_kitten_cmdline
 from kittens.tui.handler import result_handler
-from kitty.key_encoding import KeyEvent, parse_shortcut
+from kitty.key_encoding import KeyEvent
+from kitty.key_encoding import parse_shortcut
+
+DEFAULT_VIM_ID = "n?vim|n|l"
+
+SSH_TITLE_MATCH = re.compile(r"^.*: (nvim|n|l)(\s+\S+|$)")
+LOCAL_CMD_MATCH = re.compile("n?vim")
 
 
 def is_window_vim(window, vim_id):
-    fp = window.child.foreground_processes
-    print(fp)
-    return any(
-        re.search(vim_id, p["cmdline"][0] if len(p["cmdline"]) else "", re.I)
-        for p in fp
+    fg_processes = window.child.foreground_processes
+    window_title = window.child_title
+
+    if any(is_ssh_kitten_cmdline(p["cmdline"]) for p in fg_processes):
+        is_vim_ssh = bool(SSH_TITLE_MATCH.match(window_title))
+        print("is vim via ssh: ", is_vim_ssh)
+        return is_vim_ssh
+
+    is_vim_local = any(
+        re.search(vim_id, p["cmdline"][0] if p["cmdline"] else "", re.I)
+        for p in fg_processes
     )
+    print("is vim via local:", is_vim_local)
+    return is_vim_local
 
 
 def encode_key_mapping(window, key_mapping):
@@ -38,7 +54,7 @@ def handle_result(args, result, target_window_id, boss):
     window = boss.window_id_map.get(target_window_id)
     direction = args[2]
     key_mapping = args[3]
-    vim_id = args[4] if len(args) > 4 else "n?vim"
+    vim_id = args[4] if len(args) > 4 else DEFAULT_VIM_ID
 
     if window is None:
         return
