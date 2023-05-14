@@ -36,4 +36,5 @@ def djbug(*args, **kwargs):
     debug(*new_args, **kwargs)
 
 
-__builtins__["debug"] = djbug
+__builtins__["debug"] = debug
+__builtins__["djbug"] = djbug
