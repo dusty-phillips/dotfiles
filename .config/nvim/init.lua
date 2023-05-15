@@ -115,66 +115,70 @@ require("lazy").setup({
                     ["<leader>f"] = {"<cmd>Telescope live_grep<cr>", "Find in Files"},
                     ["<leader>b"] = {"<cmd>Telescope git_branches show_remote_tracking_branches=false<cr>", "Git Branches"},
                     ["<cr><cr>"] = {"<cmd>Telescope buffers<cr>", "Open Buffers"},
-                }, {mode='n'})
-                wk.register({
-                    ["<C-S>"] = { '<cmd>w<cr>', "Save" },
-                }, {mode={'i', 'n'}})
+            }, {mode='n'})
+            wk.register({
+                ["<C-S>"] = { '<cmd>w<cr>', "Save" },
+            }, {mode={'i', 'n'}})
 
-                -- Search and Navigation
-                wk.register({
-                    ["h"] = {"<Plug>(leap-forward-to)", "Leap Forward"},
-                    ["H"] = {"<Plug>(leap-backward-to)", "Leap Backward"},
-                    ["n"] = {"nzz", "Search Next"},
-                    ["N"] = {"Nzz", "Search Previous"},
-                }, {mode={'n', 'x', 'o'}})
+            -- Search and Navigation
+            wk.register({
+                ["h"] = {"<Plug>(leap-forward-to)", "Leap Forward"},
+                ["H"] = {"<Plug>(leap-backward-to)", "Leap Backward"},
+                ["n"] = {"nzz", "Search Next"},
+                ["N"] = {"Nzz", "Search Previous"},
+                ["\\w"] = {"<cmd>lua require('spider').motion('w')<cr>", "Word By Case"},
+                ["\\e"] = {"<cmd>lua require('spider').motion('e')<cr>", "End By Case"},
+                ["\\b"] = {"<cmd>lua require('spider').motion('b')<cr>", "Back Word By Case"},
+                ["\\ge"] = {"<cmd>lua require('spider').motion('ge')<cr>", "Back end By Case"},
+            }, {mode={'n', 'x', 'o'}})
 
-                -- LSP
-                wk.register({
-                    ["<leader>o"] = {
-                        "<cmd>Telescope lsp_document_symbols ignore_symbols=variable<cr>",
-                        "Document Symbols"
-                    },
-                    ["gr"] = {"<cmd>Telescope lsp_references<cr>", "List References"},
-                    ["<leader>."] = {vim.lsp.buf.code_action, "Fix"},
-                    ["K"] = {vim.lsp.buf.hover, "Hover Docs"},
-                    ["<C-K>"] = {vim.lsp.buf.signature_help, "Signature Help"},
-                    ["[d"] = {vim.diagnostic.goto_prev, "Previous Diagnostic"},
-                    ["]d"] = {vim.diagnostic.goto_next, "Next Diagnostic"},
-                    ["<leader>r"] = {vim.lsp.buf.rename, "Rename Symbol"},
-                })
+            -- LSP
+            wk.register({
+                ["<leader>o"] = {
+                    "<cmd>Telescope lsp_document_symbols ignore_symbols=variable<cr>",
+                    "Document Symbols"
+                },
+                ["gr"] = {"<cmd>Telescope lsp_references<cr>", "List References"},
+                ["<leader>."] = {vim.lsp.buf.code_action, "Fix"},
+                ["K"] = {vim.lsp.buf.hover, "Hover Docs"},
+                ["<C-K>"] = {vim.lsp.buf.signature_help, "Signature Help"},
+                ["[d"] = {vim.diagnostic.goto_prev, "Previous Diagnostic"},
+                ["]d"] = {vim.diagnostic.goto_next, "Next Diagnostic"},
+                ["<leader>r"] = {vim.lsp.buf.rename, "Rename Symbol"},
+            })
 
-                -- Insert tricks
-                wk.register({
-                    ["<M-.>"] = {"<C-x><C-o>", "Trigger Completion"},
-                    [";"] = {"<C-o>", "Trigger Normal Mode"},
-                    [";<Space>"] = {";<Space>", "Don't trigger normal mode"},
-                    [";<CR>"] = {";<CR>", "Don't trigger normal mode"},
-                    [";;"] = {";;", "Don't trigger normal mode"},
-                }, {mode='i'})
+            -- Insert tricks
+            wk.register({
+                ["<M-.>"] = {"<C-x><C-o>", "Trigger Completion"},
+                [";"] = {"<C-o>", "Trigger Normal Mode"},
+                [";<Space>"] = {";<Space>", "Don't trigger normal mode"},
+                [";<CR>"] = {";<CR>", "Don't trigger normal mode"},
+                [";;"] = {";;", "Don't trigger normal mode"},
+            }, {mode='i'})
 
-                -- Source Control
-                wk.register({
-                    ["]h"] = {"<cmd>Gitsigns next_hunk<cr>", "Next Hunk,"},
-                    ["[h"] = {"<cmd>Gitsigns prev_hunk<cr>", "Previous Hunk"},
-                    ["<leader>ha"] = {"<cmd>Gitsigns stage_buffer<cr>", "Stage Buffer"},
-                    ["<leader>hs"] = {"<cmd>Gitsigns stage_hunk<cr>", "Stage Hunk"},
-                    ["<leader>hp"] = {"<cmd>Gitsigns preview_hunk<cr>", "Preview Hunk"},
-                    ["<leader>hr"] = {"<cmd>Gitsigns reset_hunk<cr>", "Reset Hunk"},
-                    ["<leader>hd"] = {"<cmd>Gitsigns diffthis<cr>", "Diff This"},
-                    ["<leader>hv"] = {"<cmd>Gitsigns select_hunk<cr>", "Select Hunk"},
-                })
+            -- Source Control
+            wk.register({
+                ["]h"] = {"<cmd>Gitsigns next_hunk<cr>", "Next Hunk,"},
+                ["[h"] = {"<cmd>Gitsigns prev_hunk<cr>", "Previous Hunk"},
+                ["<leader>ha"] = {"<cmd>Gitsigns stage_buffer<cr>", "Stage Buffer"},
+                ["<leader>hs"] = {"<cmd>Gitsigns stage_hunk<cr>", "Stage Hunk"},
+                ["<leader>hp"] = {"<cmd>Gitsigns preview_hunk<cr>", "Preview Hunk"},
+                ["<leader>hr"] = {"<cmd>Gitsigns reset_hunk<cr>", "Reset Hunk"},
+                ["<leader>hd"] = {"<cmd>Gitsigns diffthis<cr>", "Diff This"},
+                ["<leader>hv"] = {"<cmd>Gitsigns select_hunk<cr>", "Select Hunk"},
+            })
 
-                wk.register({
-                    ["ga."] = {'<cmd>TextCaseOpenTelescope<cr>', "Text Case"},
-                }, {mode={'n', 'v'}})
+            wk.register({
+                ["ga."] = {'<cmd>TextCaseOpenTelescope<cr>', "Text Case"},
+            }, {mode={'n', 'v'}})
 
-                -- Misc
-                wk.register({
-                    ["sw"] = {"saiw", "Add Surround To Word"},
-                    ["]q"] = {"<cmd>cnext<cr>", "Quick Fix Next"},
-                    ["[q"] = {"<cmd>cprev<cr>", "Quick Fix Previous"},
-                    ["<leader>u"] = {require('undotree').toggle, "Undo Tree"}
-                })
+            -- Misc
+            wk.register({
+                ["sw"] = {"saiw", "Add Surround To Word"},
+                ["]q"] = {"<cmd>cnext<cr>", "Quick Fix Next"},
+                ["[q"] = {"<cmd>cprev<cr>", "Quick Fix Previous"},
+                ["<leader>u"] = {require('undotree').toggle, "Undo Tree"}
+            })
 
             end
         },
@@ -341,13 +345,18 @@ require("lazy").setup({
                         delay = 200,
                     },
                 }
+                vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', {fg='#9999bb'})
+                vim.api.nvim_set_hl(0, 'GitSignsAddInline', {bg='#aaddbb'})
+                vim.api.nvim_set_hl(0, 'GitSignsChangeInline', {bg='#ccccdd'})
+                vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {bg='#ddaaaa'})
+
             end
         },
         {'akinsho/git-conflict.nvim', version = "*", config = true},
 
         {'tpope/vim-sensible'},
-        {'bkad/CamelCaseMotion'},
-        {'farmergreg/vim-lastplace'},
+        {'chrisgrieser/nvim-spider'},
+        {'ethanholz/nvim-lastplace', config=true},
         {'mhinz/vim-sayonara'},
         {'luukvbaal/stabilize.nvim', config=true},
         {'nmac427/guess-indent.nvim', config=true},
