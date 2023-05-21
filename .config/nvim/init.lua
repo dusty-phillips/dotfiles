@@ -153,7 +153,7 @@ require("lazy").setup({
                 [";"] = {"<C-o>", "Trigger Normal Mode"},
                 [";<Space>"] = {";<Space>", "Don't trigger normal mode"},
                 [";<CR>"] = {";<CR>", "Don't trigger normal mode"},
-                [";;"] = {";;", "Don't trigger normal mode"},
+                [";;"] = {";", "Don't trigger normal mode"},
             }, {mode='i'})
 
             -- Source Control
@@ -168,13 +168,19 @@ require("lazy").setup({
                 ["<leader>hv"] = {"<cmd>Gitsigns select_hunk<cr>", "Select Hunk"},
             })
 
-            wk.register({
-                ["ga."] = {'<cmd>TextCaseOpenTelescope<cr>', "Text Case"},
-            }, {mode={'n', 'v'}})
 
             -- Misc
             wk.register({
-                ["sw"] = {"saiw", "Add Surround To Word"},
+                ["ga."] = {'<cmd>TextCaseOpenTelescope<cr>', "Text Case"},
+            }, {mode={'n', 'v'}})
+            wk.register({
+                ["ai"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer()<CR>", "Select context-aware indent (outer)"},
+                ["aI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer(true)<CR>", "Select context-aware indent (outer, line-wise)"},
+                ["ii"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner()<CR>", "Select context-aware indent (inner, partial range)"},
+                ["iI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner(true)<CR>", "Select context-aware indent (inner, entire range)"},
+            }, {mode={'x', 'o'}})
+            wk.register({
+                ["sw"] = {"saiw", "Add Surround To Word", noremap=false},
                 ["]q"] = {"<cmd>cnext<cr>", "Quick Fix Next"},
                 ["[q"] = {"<cmd>cprev<cr>", "Quick Fix Previous"},
                 ["<leader>u"] = {require('undotree').toggle, "Undo Tree"}
@@ -218,7 +224,15 @@ require("lazy").setup({
         },
 
         {"tpope/vim-repeat"},
-        {"ggandor/leap.nvim"},
+        {
+            "ggandor/leap.nvim",
+            config = function ()
+                vim.api.nvim_set_hl(0, 'LeapLabelPrimary', {bg='#2222a2', fg="#eeeeee", bold=true})
+                vim.api.nvim_set_hl(0, 'LeapLabelSecondary', {bg='#3333a3', fg="#dddddd", bold=true})
+                vim.api.nvim_set_hl(0, 'LeapLabelSelected', {bg='#ff0000'})
+
+            end
+    },
         {"ggandor/flit.nvim", config = true},
         {"ggandor/leap-spooky.nvim", config = true},
 
@@ -256,10 +270,6 @@ require("lazy").setup({
                 require("lspconfig").pyright.setup{}
                 require("lspconfig").tsserver.setup{}
                 require("lspconfig").lua_ls.setup{}
-                vim.cmd([[autocmd CursorHold   * :silent! lua vim.lsp.buf.document_highlight()]])
-                vim.cmd([[autocmd CursorHoldI  * :silent! lua vim.lsp.buf.document_highlight()]])
-                vim.cmd([[autocmd CursorMoved  * lua vim.lsp.buf.clear_references()]])
-                vim.cmd([[autocmd CursorMovedI * lua vim.lsp.buf.clear_references()]])
             end
         },
         {
@@ -352,7 +362,9 @@ require("lazy").setup({
 
             end
         },
-        {'akinsho/git-conflict.nvim', version = "*", config = true},
+        --{'akinsho/git-conflict.nvim', version = "*", config = true}, Doesn't seem to work well
+        {'rhysd/conflict-marker.vim'},
+        {'kiyoon/treesitter-indent-object.nvim'},
 
         {'tpope/vim-sensible'},
         {'chrisgrieser/nvim-spider'},
@@ -374,6 +386,7 @@ require("lazy").setup({
         {'echasnovski/mini.comment', version = false, config = true },
         {'echasnovski/mini.pairs', version = false, config = true },
         {'echasnovski/mini.indentscope', version = false, config = true },
+        {'echasnovski/mini.cursorword', version = false, config = true },
 
         {'jiaoshijie/undotree', config = true},
 
