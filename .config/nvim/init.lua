@@ -103,6 +103,14 @@ require("lazy").setup({
                 ["<leader>p"] = { '"*p', "Paste from System Clipboard" },
                 ["<leader>P"] = { '"*P', "Paste Before from System Clipboard" },
             }, {mode={'n', 'v'}})
+            wk.register({
+                ["y"] = {"<Plug>(YankyYank)", "Yank text"},
+                ["p"] = {'<Plug>(YankyPutAfter)', "Put After cursor location"},
+                ["P"] = {'<Plug>(YankyPutBefore)', "Put Before cursor location"},
+            }, {mode={'n', 'x'}})
+            wk.register({
+                ["<C-p>"] = {"<Plug>(YankyCycleForward)", "Cycle through yank ring"},
+            }, {mode={'n'}})
 
             -- Filesystem
             wk.register({
@@ -173,11 +181,18 @@ require("lazy").setup({
             wk.register({
                 ["ga."] = {'<cmd>TextCaseOpenTelescope<cr>', "Text Case"},
             }, {mode={'n', 'v'}})
+            -- wk.register({
+            --     ["ai"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer()<CR>", "Select context-aware indent (outer)"},
+            --     ["aI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer(true)<CR>", "Select context-aware indent (outer, line-wise)"},
+            --     ["ii"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner()<CR>", "Select context-aware indent (inner, partial range)"},
+            --     ["iI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner(true)<CR>", "Select context-aware indent (inner, entire range)"},
+            -- }, {mode={'x', 'o'}})
             wk.register({
-                ["ai"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer()<CR>", "Select context-aware indent (outer)"},
-                ["aI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer(true)<CR>", "Select context-aware indent (outer, line-wise)"},
-                ["ii"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner()<CR>", "Select context-aware indent (inner, partial range)"},
-                ["iI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner(true)<CR>", "Select context-aware indent (inner, entire range)"},
+                ["ai"] = {"<Cmd>lua require('various-textobjs').indentation(false, true)<CR>", "Select context-aware indent (outer)"},
+                ["aI"] = {"<Cmd>lua require('various-textobjs').indentation(false, false)<CR>", "Select context-aware indent (outer, line-wise)"},
+                ["ii"] = {"<Cmd>lua require('various-textobjs').indentation(true, true)<CR>", "Select context-aware indent (inner, partial range)"},
+                ["iI"] = {"<Cmd>lua require('various-textobjs').indentation(true, false)<CR>", "Select context-aware indent (inner, entire range)"},
+                ["ae"] = {"<Cmd>lua require('various-textobjs').entireBuffer(false)<CR>", "Select entire buffer"},
             }, {mode={'x', 'o'}})
             wk.register({
                 ["sw"] = {"saiw", "Add Surround To Word", noremap=false},
@@ -326,7 +341,7 @@ require("lazy").setup({
                 }
             end
         },
-        {'nvim-treesitter/nvim-treesitter-textobjects'},
+        -- {'nvim-treesitter/nvim-treesitter-textobjects'},
         {
             'romgrk/nvim-treesitter-context',
             config = function()
@@ -367,7 +382,23 @@ require("lazy").setup({
         {'kiyoon/treesitter-indent-object.nvim'},
 
         {'tpope/vim-sensible'},
+        {'chrisgrieser/nvim-various-textobjs'},
         {'chrisgrieser/nvim-spider'},
+        {
+            'gbprod/yanky.nvim',
+            config=function()
+                require('yanky').setup({
+                    preserve_cursor_position = {enabled = true},
+                    highlight = {
+                        on_put = true,
+                        on_yank=true,
+                        timer=800
+                    }
+                })
+                require('telescope').load_extension('yank_history')
+
+            end
+        },
         {'ethanholz/nvim-lastplace', config=true},
         {'mhinz/vim-sayonara'},
         {'luukvbaal/stabilize.nvim', config=true},
@@ -411,13 +442,5 @@ require("lazy").setup({
     })
 
 
-    vim.api.nvim_create_autocmd('TextYankPost', {
-        group = vim.api.nvim_create_augroup('highlight_yank', {}),
-        desc = 'Hightlight selection on yank',
-        pattern = '*',
-        callback = function()
-            vim.highlight.on_yank { higroup = 'IncSearch', timeout = 500 }
-        end,
-    })
 
 
