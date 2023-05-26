@@ -399,6 +399,7 @@ require("lazy").setup({
 
             end
         },
+        {'inko-lang/inko.vim'},
         {'ethanholz/nvim-lastplace', config=true},
         {'mhinz/vim-sayonara'},
         {'luukvbaal/stabilize.nvim', config=true},
