@@ -234,6 +234,9 @@ require("lazy").setup({
                         lualine_x = {"filetype"},
                         lualine_y = {'diagnostics'},
                     },
+                    winbar = {
+                        lualine_c = {"navic"}
+                    }
                 }
             end
         },
@@ -342,21 +345,32 @@ require("lazy").setup({
             end
         },
         -- {'nvim-treesitter/nvim-treesitter-textobjects'},
+        -- {
+        --     'romgrk/nvim-treesitter-context',
+        --     config = function()
+        --         require'treesitter-context'.setup{
+        --             enable = true,
+        --             throttle = true,
+        --             max_lines = 0,
+        --             patterns = {
+        --                 default = {
+        --                     'class',
+        --                     'function',
+        --                     'method',
+        --                 },
+        --             },
+        --         }
+        --     end
+        -- },
         {
-            'romgrk/nvim-treesitter-context',
+            "SmiteshP/nvim-navic",
+            dependencies = {"neovim/nvim-lspconfig"},
             config = function()
-                require'treesitter-context'.setup{
-                    enable = true,
-                    throttle = true,
-                    max_lines = 0,
-                    patterns = {
-                        default = {
-                            'class',
-                            'function',
-                            'method',
-                        },
-                    },
-                }
+                require("nvim-navic").setup({
+                    lsp = {auto_attach=true},
+                    highlight = true,
+                    separator = "  "
+                })
             end
         },
 
