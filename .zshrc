@@ -45,7 +45,7 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 zinit pack"bgn-binary+keys" for fzf
 zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
-eval "$(lua /usr/local/Cellar/z.lua/1.8.16/share/z.lua/z.lua --init zsh once fzf)"
+eval "$(lua $HOMEBREW_CELLAR/z.lua/1.8.16/share/z.lua/z.lua --init zsh once fzf)"
 
 export EDITOR='nvim'
 export HISTFILE=~/.zsh_history
