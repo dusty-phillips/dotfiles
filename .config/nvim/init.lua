@@ -41,24 +41,6 @@ vim.g.camelcasemotion_key = '\\'
 vim.g.mapleader = " "
 
 require("lazy").setup({
-    -- {
-    --     "NLKNguyen/papercolor-theme",
-    --     lazy = false,
-    --     priority = 1000,
-    --     config = function()
-    --         vim.g.PaperColor_Theme_Options = {
-    --             theme = {
-    --                 ['default.light'] = {
-    --                     override= {
-    --                         vertsplit_fg= {'#eeeeee', '232'},
-    --                         vertsplit_bg= {'#005faf', '232'}
-    --                     }
-    --                 }
-    --             }
-    --         }
-    --         vim.cmd([[colorscheme PaperColor]])
-    --     end,
-    -- },
     {
         "marko-cerovac/material.nvim",
         priority=1000,
@@ -198,12 +180,9 @@ require("lazy").setup({
             wk.register({
                 ["ga."] = {'<cmd>TextCaseOpenTelescope<cr>', "Text Case"},
             }, {mode={'n', 'v'}})
-            -- wk.register({
-            --     ["ai"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer()<CR>", "Select context-aware indent (outer)"},
-            --     ["aI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_outer(true)<CR>", "Select context-aware indent (outer, line-wise)"},
-            --     ["ii"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner()<CR>", "Select context-aware indent (inner, partial range)"},
-            --     ["iI"] = {"<Cmd>lua require'treesitter_indent_object.textobj'.select_indent_inner(true)<CR>", "Select context-aware indent (inner, entire range)"},
-            -- }, {mode={'x', 'o'}})
+            wk.register({
+                ["gas"] = {"<cmd>lua require('textcase').current_word('to_snake_case')<cr>", "Snake Case"}
+            }, {mode={'n', 'v'}})
             wk.register({
                 ["ai"] = {"<Cmd>lua require('various-textobjs').indentation(false, true)<CR>", "Select context-aware indent (outer)"},
                 ["aI"] = {"<Cmd>lua require('various-textobjs').indentation(false, false)<CR>", "Select context-aware indent (outer, line-wise)"},
@@ -362,24 +341,6 @@ require("lazy").setup({
                 }
             end
         },
-        -- {'nvim-treesitter/nvim-treesitter-textobjects'},
-        -- {
-        --     'romgrk/nvim-treesitter-context',
-        --     config = function()
-        --         require'treesitter-context'.setup{
-        --             enable = true,
-        --             throttle = true,
-        --             max_lines = 0,
-        --             patterns = {
-        --                 default = {
-        --                     'class',
-        --                     'function',
-        --                     'method',
-        --                 },
-        --             },
-        --         }
-        --     end
-        -- },
         {
             "SmiteshP/nvim-navic",
             dependencies = {"neovim/nvim-lspconfig"},
@@ -409,7 +370,6 @@ require("lazy").setup({
 
             end
         },
-        --{'akinsho/git-conflict.nvim', version = "*", config = true}, Doesn't seem to work well
         {'rhysd/conflict-marker.vim'},
         {'kiyoon/treesitter-indent-object.nvim'},
 
