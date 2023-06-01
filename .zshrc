@@ -111,4 +111,3 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-export HOMEBREW_GITHUB_API_TOKEN=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
