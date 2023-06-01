@@ -41,23 +41,40 @@ vim.g.camelcasemotion_key = '\\'
 vim.g.mapleader = " "
 
 require("lazy").setup({
+    -- {
+    --     "NLKNguyen/papercolor-theme",
+    --     lazy = false,
+    --     priority = 1000,
+    --     config = function()
+    --         vim.g.PaperColor_Theme_Options = {
+    --             theme = {
+    --                 ['default.light'] = {
+    --                     override= {
+    --                         vertsplit_fg= {'#eeeeee', '232'},
+    --                         vertsplit_bg= {'#005faf', '232'}
+    --                     }
+    --                 }
+    --             }
+    --         }
+    --         vim.cmd([[colorscheme PaperColor]])
+    --     end,
+    -- },
     {
-        "NLKNguyen/papercolor-theme",
-        lazy = false,
-        priority = 1000,
+        "marko-cerovac/material.nvim",
+        priority=1000,
         config = function()
-            vim.g.PaperColor_Theme_Options = {
-                theme = {
-                    ['default.light'] = {
-                        override= {
-                            vertsplit_fg= {'#eeeeee', '232'},
-                            vertsplit_bg= {'#005faf', '232'}
-                        }
-                    }
-                }
-            }
-            vim.cmd([[colorscheme PaperColor]])
-        end,
+            require("material").setup({
+              contrast = {
+                non_current_windows = true,
+              },
+              colored_cursor = false,
+              disable = {
+                  colored_cursor = true
+              }
+            })
+            vim.g.material_style = "lighter"
+            vim.cmd("colorscheme material")
+        end
     },
     {
         "folke/which-key.nvim", config = function()
@@ -226,7 +243,8 @@ require("lazy").setup({
         {
             "nvim-lualine/lualine.nvim", config = function()
                 require('lualine').setup {
-                    options = {theme = 'papercolor_light'},
+                    -- options = {theme = 'papercolor_light'},
+                    -- options = {theme = 'onelight'},
                     sections = {
                         lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end }},
                         lualine_b = {},
