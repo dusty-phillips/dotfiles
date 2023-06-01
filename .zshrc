@@ -32,7 +32,7 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust 
+    zdharma-continuum/zinit-annex-rust
 ### End of Zinit's installer chunk
 
 export FZF_DEFAULT_COMMAND="fd --follow --exclude Library"
@@ -45,7 +45,7 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 zinit pack"bgn-binary+keys" for fzf
 zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
 zinit light sindresorhus/pure
-eval "$(fasd --init zsh-hook)"
+eval "$(lua /usr/local/Cellar/z.lua/1.8.16/share/z.lua/z.lua --init zsh once fzf)"
 
 export EDITOR='nvim'
 export HISTFILE=~/.zsh_history
@@ -70,12 +70,12 @@ alias v="source .venv/bin/activate"
 alias nomos="kitty +kitten ssh dustyphillips@dusty-nomos.local"
 
 
-function z {
-  if  selected=$(fasd -dlR | fzf --no-sort --height 10%)  ; then
-      cd $selected
-  fi
-}
-bindkey -s "^[r" "z\n"
+# function z {
+#   if  selected=$(fasd -dlR | fzf --no-sort --height 10%)  ; then
+#       cd $selected
+#   fi
+# }
+bindkey -s "^[r" "z -I .\n"
 
 function l {
  if [ $1 ] ; then
@@ -109,3 +109,6 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+export HOMEBREW_GITHUB_API_TOKEN=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
