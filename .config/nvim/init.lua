@@ -43,28 +43,11 @@ vim.g.mapleader = " "
 
 require("lazy").setup({
     {
-        "marko-cerovac/material.nvim",
+        "rose-pine/neovim",
+        name='rose-pine',
         priority=1000,
         config = function()
-            require("material").setup({
-              contrast = {
-                non_current_windows = true,
-              },
-              colored_cursor = false,
-              disable = {
-                  colored_cursor = true
-              }
-            })
-            vim.g.material_style = "lighter"
-            -- vim.cmd("colorscheme material")
-        end
-    },
-    {"rktjmp/lush.nvim"},
-    {
-        "mcchrish/zenbones.nvim",
-        dependencies = {"rktjmp/lush.nvim"},
-        config = function()
-            vim.cmd("colorscheme zenbones")
+            vim.cmd("colorscheme rose-pine")
         end
     },
     {
