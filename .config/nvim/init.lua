@@ -12,6 +12,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.o.nocompatible = true
 vim.o.background = "light"
 vim.o.termguicolors = true
 vim.o.mouse = "a"
@@ -24,7 +25,6 @@ vim.o.splitright = true
 vim.o.nobackup = true
 vim.o.nowritebackup = true
 vim.o.shortmess = "acIF"
-vim.o.cmdheight = 2
 vim.o.noshowcmd = true
 vim.o.noshowmode = true
 vim.o.signcolumn = 'yes'
@@ -36,6 +36,7 @@ vim.o.wildmenu = true
 vim.o.wildmode = "longest:list,full"
 vim.o.expandtab = true
 vim.o.sw = 2
+vim.o.smartindent = true
 
 vim.g.camelcasemotion_key = '\\'
 vim.g.mapleader = " "
@@ -55,7 +56,15 @@ require("lazy").setup({
               }
             })
             vim.g.material_style = "lighter"
-            vim.cmd("colorscheme material")
+            -- vim.cmd("colorscheme material")
+        end
+    },
+    {"rktjmp/lush.nvim"},
+    {
+        "mcchrish/zenbones.nvim",
+        dependencies = {"rktjmp/lush.nvim"},
+        config = function()
+            vim.cmd("colorscheme zenbones")
         end
     },
     {
@@ -231,9 +240,6 @@ require("lazy").setup({
                         lualine_x = {"filetype"},
                         lualine_y = {'diagnostics'},
                     },
-                    winbar = {
-                        lualine_c = {"navic"}
-                    }
                 }
             end
         },
@@ -247,7 +253,7 @@ require("lazy").setup({
                 vim.api.nvim_set_hl(0, 'LeapLabelSelected', {bg='#ff0000'})
 
             end
-    },
+        },
         {"ggandor/flit.nvim", config = true},
         {"ggandor/leap-spooky.nvim", config = true},
 
@@ -341,18 +347,11 @@ require("lazy").setup({
                 }
             end
         },
-        {
-            "SmiteshP/nvim-navic",
-            dependencies = {"neovim/nvim-lspconfig"},
-            config = function()
-                require("nvim-navic").setup({
-                    lsp = {auto_attach=true},
-                    highlight = true,
-                    separator = "  "
-                })
-            end
+        { "Bekaboo/dropbar.nvim",
+          config = function()
+            require('dropbar').setup {}
+          end
         },
-
         {
             'lewis6991/gitsigns.nvim',
             config = function()
@@ -391,11 +390,18 @@ require("lazy").setup({
 
             end
         },
+        {},
         {'inko-lang/inko.vim'},
         {'ethanholz/nvim-lastplace', config=true},
         {'mhinz/vim-sayonara'},
         {'luukvbaal/stabilize.nvim', config=true},
-        {'nmac427/guess-indent.nvim', config=true},
+        {
+            'nmac427/guess-indent.nvim',
+            config=function()
+                require('guess-indent').setup {auto_cmd=true, override_editorconfig=true}
+            end
+
+        },
         {'norcalli/nvim-colorizer.lua', config=true},
         {
             'johmsalas/text-case.nvim',
