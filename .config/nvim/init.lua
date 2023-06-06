@@ -238,7 +238,14 @@ require("lazy").setup({
             end
         },
         {"ggandor/flit.nvim", config = true},
-        {"ggandor/leap-spooky.nvim", config = true},
+        {
+            "ggandor/leap-spooky.nvim",
+            config = function()
+                require('leap-spooky').setup{ 
+                    paste_on_remote_yank = true
+                }
+            end
+    },
 
         { 'mrjones2014/smart-splits.nvim', build = './kitty/install-kittens.bash' },
 
@@ -302,6 +309,7 @@ require("lazy").setup({
             end
         },
 
+        {"nvim-treesitter/nvim-treesitter-textobjects"},
         {
             'nvim-treesitter/nvim-treesitter',
             config = function()
