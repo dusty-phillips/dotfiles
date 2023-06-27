@@ -113,6 +113,7 @@ require("lazy").setup({
                     ["L"] = {"<cmd>Telescope find_files no_ignore=true <cr>", "Show All Files"},
                     ["<leader>f"] = {"<cmd>Telescope live_grep<cr>", "Find in Files"},
                     ["<leader>b"] = {"<cmd>Telescope git_branches show_remote_tracking_branches=false<cr>", "Git Branches"},
+                    ["<leader>g"] = {"<cmd>Telescope git_status<cr>", "Git Status"},
                     ["<cr><cr>"] = {"<cmd>Telescope buffers<cr>", "Open Buffers"},
             }, {mode='n'})
             wk.register({
@@ -196,6 +197,11 @@ require("lazy").setup({
         {
             'nvim-telescope/telescope.nvim', config = function()
                 require('telescope').setup {
+                    defaults = {
+                        layout_config = {
+                            horizontal = {width = 0.95}
+                        }
+                    },
                     pickers = {
                         buffers = {
                             mappings = {
