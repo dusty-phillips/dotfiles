@@ -1,32 +1,14 @@
-# Debug with `kitty --debug-keyboard`
 import re
 
-from kittens.ssh.utils import is_kitten_cmdline as is_ssh_kitten_cmdline
 from kittens.tui.handler import result_handler
-from kitty.key_encoding import KeyEvent
-from kitty.key_encoding import parse_shortcut
-
-DEFAULT_VIM_ID = "n?vim|n|l"
-
-SSH_TITLE_MATCH = re.compile(r"^.*: (nvim|n|l)(\s+\S+|$)")
-LOCAL_CMD_MATCH = re.compile("n?vim")
+from kitty.key_encoding import KeyEvent, parse_shortcut
 
 
 def is_window_vim(window, vim_id):
-    fg_processes = window.child.foreground_processes
-    window_title = window.child_title
-
-    if any(is_ssh_kitten_cmdline(p["cmdline"]) for p in fg_processes):
-        is_vim_ssh = bool(SSH_TITLE_MATCH.match(window_title))
-        print("is vim via ssh: ", is_vim_ssh)
-        return is_vim_ssh
-
-    is_vim_local = any(
-        re.search(vim_id, p["cmdline"][0] if p["cmdline"] else "", re.I)
-        for p in fg_processes
-    )
-    print("is vim via local:", is_vim_local)
-    return is_vim_local
+    from kittens.tui.loop import debug
+    debug(vim_id)
+    fp = window.child.foreground_processes
+    return any(re.search(vim_id, p['cmdline'][0] if len(p['cmdline']) else '', re.I) for p in fp)
 
 
 def encode_key_mapping(window, key_mapping):
@@ -44,61 +26,58 @@ def encode_key_mapping(window, key_mapping):
 
     return window.encoded_key(event)
 
-
 def relative_resize_window(direction, amount, target_window_id, boss):
     window = boss.window_id_map.get(target_window_id)
     if window is None:
         return
 
-    neighbors = boss.active_tab.current_layout.neighbors_for_window(
-        window, boss.active_tab.windows
-    )
+    neighbors = boss.active_tab.current_layout.neighbors_for_window(window, boss.active_tab.windows)
     current_window_id = boss.active_tab.active_window
 
-    left_neighbors = neighbors.get("left")
-    right_neighbors = neighbors.get("right")
-    top_neighbors = neighbors.get("top")
-    bottom_neighbors = neighbors.get("bottom")
+    left_neighbors = neighbors.get('left')
+    right_neighbors = neighbors.get('right')
+    top_neighbors = neighbors.get('top')
+    bottom_neighbors = neighbors.get('bottom')
 
     # has a neighbor on both sides
-    if direction == "left" and (left_neighbors and right_neighbors):
-        boss.active_tab.resize_window("narrower", amount)
+    if direction == 'left' and (left_neighbors and right_neighbors):
+        boss.active_tab.resize_window('narrower', amount)
     # only has left neighbor
-    elif direction == "left" and left_neighbors:
-        boss.active_tab.resize_window("wider", amount)
+    elif direction == 'left' and left_neighbors:
+        boss.active_tab.resize_window('wider', amount)
     # only has right neighbor
-    elif direction == "left" and right_neighbors:
-        boss.active_tab.resize_window("narrower", amount)
+    elif direction == 'left' and right_neighbors:
+        boss.active_tab.resize_window('narrower', amount)
 
     # has a neighbor on both sides
-    elif direction == "right" and (left_neighbors and right_neighbors):
-        boss.active_tab.resize_window("wider", amount)
+    elif direction == 'right' and (left_neighbors and right_neighbors):
+        boss.active_tab.resize_window('wider', amount)
     # only has left neighbor
-    elif direction == "right" and left_neighbors:
-        boss.active_tab.resize_window("narrower", amount)
+    elif direction == 'right' and left_neighbors:
+        boss.active_tab.resize_window('narrower', amount)
     # only has right neighbor
-    elif direction == "right" and right_neighbors:
-        boss.active_tab.resize_window("wider", amount)
+    elif direction == 'right' and right_neighbors:
+        boss.active_tab.resize_window('wider', amount)
 
     # has a neighbor above and below
-    elif direction == "up" and (top_neighbors and bottom_neighbors):
-        boss.active_tab.resize_window("shorter", amount)
+    elif direction == 'up' and (top_neighbors and bottom_neighbors):
+        boss.active_tab.resize_window('shorter', amount)
     # only has top neighbor
-    elif direction == "up" and top_neighbors:
-        boss.active_tab.resize_window("taller", amount)
+    elif direction == 'up' and top_neighbors:
+        boss.active_tab.resize_window('taller', amount)
     # only has bottom neighbor
-    elif direction == "up" and bottom_neighbors:
-        boss.active_tab.resize_window("shorter", amount)
+    elif direction == 'up' and bottom_neighbors:
+        boss.active_tab.resize_window('shorter', amount)
 
     # has a neighbor above and below
-    elif direction == "down" and (top_neighbors and bottom_neighbors):
-        boss.active_tab.resize_window("taller", amount)
+    elif direction == 'down' and (top_neighbors and bottom_neighbors):
+        boss.active_tab.resize_window('taller', amount)
     # only has top neighbor
-    elif direction == "down" and top_neighbors:
-        boss.active_tab.resize_window("shorter", amount)
+    elif direction == 'down' and top_neighbors:
+        boss.active_tab.resize_window('shorter', amount)
     # only has bottom neighbor
-    elif direction == "down" and bottom_neighbors:
-        boss.active_tab.resize_window("taller", amount)
+    elif direction == 'down' and bottom_neighbors:
+        boss.active_tab.resize_window('taller', amount)
 
 
 def main():
@@ -110,9 +89,9 @@ def handle_result(args, result, target_window_id, boss):
     window = boss.window_id_map.get(target_window_id)
     action = args[1]
     direction = args[2]
-    key_mapping = args[3] if action == "neighboring_window" else args[4]
-    amount = int(args[3]) if action == "relative_resize" else None
-    vim_id_idx = 4 if action == "neighboring_window" else 5
+    key_mapping = args[3] if action == 'neighboring_window' else args[4]
+    amount = int(args[3]) if action == 'relative_resize' else None
+    vim_id_idx = 4 if action == 'neighboring_window' else 5
     vim_id = args[vim_id_idx] if len(args) > vim_id_idx else "n?vim"
 
     if window is None:
@@ -121,7 +100,7 @@ def handle_result(args, result, target_window_id, boss):
         for keymap in key_mapping.split(">"):
             encoded = encode_key_mapping(window, keymap)
             window.write_to_child(encoded)
-    elif action == "neighboring_window":
+    elif action == 'neighboring_window':
         boss.active_tab.neighboring_window(direction)
-    elif action == "relative_resize":
+    elif action == 'relative_resize':
         relative_resize_window(direction, amount, target_window_id, boss)
