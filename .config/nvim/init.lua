@@ -449,6 +449,7 @@ require("lazy").setup({
   {'inko-lang/inko.vim'},
   {'ethanholz/nvim-lastplace', config=true},
   {'mhinz/vim-sayonara'},
+  {'code-biscuits/nvim-biscuits', config=true},
   {'luukvbaal/stabilize.nvim', config=true},
   {
     'nmac427/guess-indent.nvim',
@@ -472,6 +473,7 @@ require("lazy").setup({
   {'echasnovski/mini.pairs', version = false, config = true },
   {'echasnovski/mini.indentscope', version = false, config = true },
   {'echasnovski/mini.cursorword', version = false, config = true },
+  {'echasnovski/mini.animate', version = false, config = true },
 
   {'jiaoshijie/undotree', config = true},
 
@@ -486,6 +488,8 @@ require("lazy").setup({
       }
     end
   },
+
+  {'levouh/tint.nvim', config=true, opts={tint=-5, tint_background_colors=true}},
 
   {'inko-lang/inko.vim'},
   {'rescript-lang/vim-rescript'}
