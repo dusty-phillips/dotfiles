@@ -473,7 +473,6 @@ require("lazy").setup({
   {'echasnovski/mini.pairs', version = false, config = true },
   {'echasnovski/mini.indentscope', version = false, config = true },
   {'echasnovski/mini.cursorword', version = false, config = true },
-  {'echasnovski/mini.animate', version = false, config = true },
 
   {'jiaoshijie/undotree', config = true},
 
