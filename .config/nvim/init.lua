@@ -411,7 +411,7 @@ require("lazy").setup({
     'lewis6991/gitsigns.nvim',
     config = function()
       require('gitsigns').setup {
-        word_diff = true,
+        word_diff = false,
         current_line_blame = true,
         current_line_blame_opts = {
           delay = 200,
