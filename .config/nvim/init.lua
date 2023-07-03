@@ -17,6 +17,7 @@ vim.o.background = "light"
 vim.o.termguicolors = true
 vim.o.mouse = "a"
 vim.o.cursorline = true
+vim.o.cursorcolumn = true
 vim.o.nohlsearch = true
 vim.o.inccommand = "split"
 vim.o.updatetime = 50
@@ -488,7 +489,7 @@ require("lazy").setup({
     end
   },
 
-  {'levouh/tint.nvim', config=true, opts={tint=-5, tint_background_colors=true}},
+  {'levouh/tint.nvim', config=true, opts={tint=-9, tint_background_colors=true}},
 
   {'inko-lang/inko.vim'},
   {'rescript-lang/vim-rescript'}
