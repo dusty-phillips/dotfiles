@@ -12,22 +12,22 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-vim.o.nocompatible = true
+vim.o.compatible = false
 vim.o.background = "light"
 vim.o.termguicolors = true
 vim.o.mouse = "a"
 vim.o.cursorline = true
 vim.o.cursorcolumn = true
-vim.o.nohlsearch = true
+vim.o.hlsearch = false
 vim.o.inccommand = "split"
 vim.o.updatetime = 50
 vim.o.undofile = true
 vim.o.splitright = true
-vim.o.nobackup = true
-vim.o.nowritebackup = true
+vim.o.backup = false
+vim.o.writebackup = false
 vim.o.shortmess = "acIF"
-vim.o.noshowcmd = true
-vim.o.noshowmode = true
+vim.o.showcmd = false
+vim.o.showmode = false
 vim.o.signcolumn = 'yes'
 vim.o.completeopt = "menuone,noselect"
 vim.o.foldlevel = 20
