@@ -42,6 +42,7 @@ vim.o.smartindent = true
 vim.g.camelcasemotion_key = '\\'
 vim.g.mapleader = " "
 
+
 require("lazy").setup({
   {
     "rose-pine/neovim",
@@ -344,36 +345,37 @@ require("lazy").setup({
       dependencies = {"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim"},
       config = function()
         require("lspconfig").pyright.setup{}
-        require("lspconfig").tsserver.setup{}
+        require("lspconfig").ruff_lsp.setup{}
+        require("lspconfig").tsserver.setup{init_options = {documentFormatting = false}}
         require("lspconfig").lua_ls.setup{}
-      end
-    },
-    {
-      'jay-babu/mason-null-ls.nvim',
-      dependencies = {"williamboman/mason.nvim"},
-      config = function()
-        require("mason-null-ls").setup{
-          automatic_installation = true
+        require("lspconfig").efm.setup {
+          init_options = {documentFormatting = true},
+          settings = {
+            rootMarkers = {".git/"},
+            languages = {
+              python = {
+                {formatCommand = "black -q -", formatStdin=true}
+              },
+              typescript = {
+                {
+                  formatCommand = "prettier --stdin --stdin-filepath ${INPUT}",
+                  formatStdin=true,
+                }
+              },
+              typescriptreact = {
+                {
+                  formatCommand = "prettier --stdin --stdin-filepath ${INPUT}",
+                  formatStdin=true,
+                }
+              }
+            }
+          },
+          filetypes = { "typescript", "typescriptreact", "python" }
         }
+
+        vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format({filter = function(client) return client.name == "efm" end})]]
       end
     },
-    {
-      'jose-elias-alvarez/null-ls.nvim',
-      config = function()
-        local null_ls = require("null-ls")
-        null_ls.setup {
-          sources = {
-            null_ls.builtins.formatting.black,
-            null_ls.builtins.formatting.reorder_python_imports,
-            null_ls.builtins.formatting.prettier,
-            null_ls.builtins.code_actions.gitsigns
-          }
-        }
-        vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format({filter = function(client) return client.name == "null-ls" end})]]
-
-      end
-    },
-
     {"nvim-treesitter/nvim-treesitter-textobjects"},
     {
       'nvim-treesitter/nvim-treesitter',
