@@ -365,7 +365,7 @@ require("lazy").setup({
             rootMarkers = {".git/"},
             languages = {
               python = {
-                {formatCommand = "black -q -", formatStdin=true}
+                {formatCommand = "black -l 100 -", formatStdin=true}
               },
               typescript = {
                 {
