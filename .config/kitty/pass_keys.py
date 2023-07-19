@@ -8,7 +8,7 @@ from kitty.key_encoding import parse_shortcut
 
 DEFAULT_VIM_ID = "n?vim|n|l"
 
-SSH_TITLE_MATCH = re.compile(r"^.*: (nvim|n|l)(\s+\S+|$)")
+SSH_TITLE_MATCH = re.compile(r"^.*: (nvim|n|l|poetry run nvim)(\s+\S+|$)")
 LOCAL_CMD_MATCH = re.compile("n?vim")
 
 
@@ -22,8 +22,7 @@ def is_window_vim(window, vim_id):
         return is_vim_ssh
 
     is_vim_local = any(
-        re.search(vim_id, p["cmdline"][0] if p["cmdline"] else "", re.I)
-        for p in fg_processes
+        re.search(vim_id, p["cmdline"][0] if p["cmdline"] else "", re.I) for p in fg_processes
     )
     print("is vim via local:", is_vim_local)
     return is_vim_local
@@ -50,9 +49,7 @@ def relative_resize_window(direction, amount, target_window_id, boss):
     if window is None:
         return
 
-    neighbors = boss.active_tab.current_layout.neighbors_for_window(
-        window, boss.active_tab.windows
-    )
+    neighbors = boss.active_tab.current_layout.neighbors_for_window(window, boss.active_tab.windows)
     current_window_id = boss.active_tab.active_window
 
     left_neighbors = neighbors.get("left")
