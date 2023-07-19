@@ -70,7 +70,7 @@ alias ls='ls --color=auto'
 alias n=nvim
 alias d=deactivate
 alias v="source .venv/bin/activate"
-alias nomos="kitty +kitten ssh dustyphillips@dusty-nomos.local"
+alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
 
 
 # function z {

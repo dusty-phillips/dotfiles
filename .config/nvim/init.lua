@@ -38,9 +38,18 @@ vim.o.wildmode = "longest:list,full"
 vim.o.expandtab = true
 vim.o.sw = 2
 vim.o.smartindent = true
-
-vim.g.camelcasemotion_key = '\\'
 vim.g.mapleader = " "
+
+vim.g.coq_settings = {
+  auto_start = 'shut-up',
+  clients = {
+    -- only interested in lsp completions for now
+    snippets = {enabled = false},
+    tree_sitter = {enabled = false},
+    buffers = {enabled = false}
+  }
+}
+
 
 
 require("lazy").setup({
@@ -344,11 +353,13 @@ require("lazy").setup({
       'neovim/nvim-lspconfig',
       dependencies = {"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim"},
       config = function()
-        require("lspconfig").pyright.setup{}
-        require("lspconfig").ruff_lsp.setup{}
-        require("lspconfig").tsserver.setup{init_options = {documentFormatting = false}}
-        require("lspconfig").lua_ls.setup{}
-        require("lspconfig").efm.setup {
+        local lsp = require "lspconfig"
+        local coq = require "coq"
+        lsp.pyright.setup(coq.lsp_ensure_capabilities({}))
+        lsp.ruff_lsp.setup(coq.lsp_ensure_capabilities({}))
+        lsp.tsserver.setup(coq.lsp_ensure_capabilities({init_options = {documentFormatting = false}}))
+        lsp.lua_ls.setup{coq.lsp_ensure_capabilities({})}
+        lsp.efm.setup {
           init_options = {documentFormatting = true},
           settings = {
             rootMarkers = {".git/"},
@@ -375,6 +386,9 @@ require("lazy").setup({
 
         vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format({filter = function(client) return client.name == "efm" end})]]
       end
+    },
+    {
+      'ms-jpq/coq_nvim'
     },
     {"nvim-treesitter/nvim-treesitter-textobjects"},
     {
@@ -452,7 +466,6 @@ require("lazy").setup({
   {'inko-lang/inko.vim'},
   {'ethanholz/nvim-lastplace', config=true},
   {'mhinz/vim-sayonara'},
-  {'code-biscuits/nvim-biscuits', config=true},
   {'luukvbaal/stabilize.nvim', config=true},
   {
     'nmac427/guess-indent.nvim',
