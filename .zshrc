@@ -68,6 +68,7 @@ unalias l 2>/dev/null
 alias 14="reset&&z"  # weird trick for escape sequence issue
 alias ls='ls --color=auto'
 alias n=nvim
+alias pn='poetry run nvim -c "Telescope find_files"'
 alias d=deactivate
 alias v="source .venv/bin/activate"
 alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
@@ -87,10 +88,6 @@ function l {
    nvim -c "Telescope find_files"
  fi
 
-}
-
-function lg {
-  lazygit
 }
 
 function pt {
