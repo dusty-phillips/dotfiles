@@ -125,6 +125,7 @@ require("lazy").setup({
           ["<leader>f"] = {"<cmd>Telescope live_grep<cr>", "Find in Files"},
           ["<leader>b"] = {"<cmd>Telescope git_branches show_remote_tracking_branches=false<cr>", "Git Branches"},
           ["<leader>g"] = {"<cmd>Telescope git_status<cr>", "Git Status"},
+          ["<leader>;"] = {"<cmd>lua require('gitlinker').link({action = require('gitlinker.actions').clipboard})<cr>", "Link to Github"},
           ["<cr><cr>"] = {"<cmd>Telescope buffers<cr>", "Open Buffers"},
         }, {mode='n'})
         wk.register({
@@ -440,6 +441,15 @@ require("lazy").setup({
       vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', {bg='#ddaaaa'})
 
     end
+  },
+  {
+    'linrongbin16/gitlinker.nvim',
+    config = function()
+      require('gitlinker').setup{mapping=false}
+    end
+  },
+  {
+    "NeogitOrg/neogit", dependencies = "nvim-lua/plenary.nvim", config = true
   },
   {'rhysd/conflict-marker.vim'},
   {'kiyoon/treesitter-indent-object.nvim'},
