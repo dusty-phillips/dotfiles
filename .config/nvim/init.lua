@@ -114,7 +114,7 @@ require("lazy").setup({
         ["<C-p>"] = {"<Plug>(YankyCycleForward)", "Cycle through yank ring"},
       }, {mode={'n'}})
 
-      -- Filesystem
+      -- Filesystem and git
       wk.register({
         ["l"] = {"<cmd>Telescope git_files show_untracked=true <cr>", "Show Git Files"},
         ["-"] = {require("oil").open, "List/Edit Directory"},
@@ -124,7 +124,7 @@ require("lazy").setup({
           ["L"] = {"<cmd>Telescope find_files no_ignore=true <cr>", "Show All Files"},
           ["<leader>f"] = {"<cmd>Telescope live_grep<cr>", "Find in Files"},
           ["<leader>b"] = {"<cmd>Telescope git_branches show_remote_tracking_branches=false<cr>", "Git Branches"},
-          ["<leader>g"] = {"<cmd>Telescope git_status<cr>", "Git Status"},
+          ["<leader>e"] = {"<cmd>Telescope git_status<cr>", "Git Status"},
           ["<leader>;"] = {"<cmd>lua require('gitlinker').link({action = require('gitlinker.actions').clipboard})<cr>", "Link to Github"},
           ["<cr><cr>"] = {"<cmd>Telescope buffers<cr>", "Open Buffers"},
         }, {mode='n'})
@@ -447,9 +447,6 @@ require("lazy").setup({
     config = function()
       require('gitlinker').setup{mapping=false}
     end
-  },
-  {
-    "NeogitOrg/neogit", dependencies = "nvim-lua/plenary.nvim", config = true
   },
   {'rhysd/conflict-marker.vim'},
   {'kiyoon/treesitter-indent-object.nvim'},
