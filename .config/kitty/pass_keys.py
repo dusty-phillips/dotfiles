@@ -8,7 +8,7 @@ from kitty.key_encoding import parse_shortcut
 
 DEFAULT_VIM_ID = "n?vim|n|l"
 
-SSH_TITLE_MATCH = re.compile(r"^.*: (nvim|n|l|poetry run nvim)(\s+\S+|$)")
+SSH_TITLE_MATCH = re.compile(r"^.*: (nvim|n|l|pn|poetry run nvim)(\s+\S+|$)")
 LOCAL_CMD_MATCH = re.compile("n?vim")
 
 
