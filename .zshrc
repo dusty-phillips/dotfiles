@@ -65,7 +65,7 @@ bindkey -M vicmd '^R' fzf-history-widget
 
 
 unalias l 2>/dev/null
-alias 14="reset&&z"  # weird trick for escape sequence issue
+alias 14="reset&&z -I .\n"  # weird trick for escape sequence issue
 alias ls='ls --color=auto'
 alias lg='lazygit'
 alias n=nvim
@@ -75,7 +75,9 @@ alias v="source .venv/bin/activate"
 alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
+alias dcl='docker-compose logs -f'
 alias mng='docker exec -it nautical-api-api-1 ./manage.py shell_plus'
+alias dsh='docker exec -it nautical-api-api-1 /bin/bash'
 
 
 # function z {
