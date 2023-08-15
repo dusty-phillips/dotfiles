@@ -285,14 +285,6 @@ require("lazy").setup({
           desc = "Treesitter Search",
         },
         {
-          "*",
-          mode = { "n" },
-          function()
-            require("flash").jump({ pattern = vim.fn.expand("<cword>") })
-          end,
-          desc = "jump to word under cursor",
-        },
-        {
           "gl",
           mode = { "n", "o", "x" },
           function()
@@ -370,13 +362,13 @@ require("lazy").setup({
               },
               typescript = {
                 {
-                  formatCommand = "prettier --stdin --stdin-filepath ${INPUT}",
+                  formatCommand = "npx prettier --stdin --stdin-filepath ${INPUT}",
                   formatStdin=true,
                 }
               },
               typescriptreact = {
                 {
-                  formatCommand = "prettier --stdin --stdin-filepath ${INPUT}",
+                  formatCommand = "npx prettier --stdin --stdin-filepath ${INPUT}",
                   formatStdin=true,
                 }
               }
