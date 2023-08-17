@@ -1,0 +1,9 @@
+[[language]]
+name = 'tsx'
+formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
+
+
+[[language]]
+name = 'typescript'
+formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
+
