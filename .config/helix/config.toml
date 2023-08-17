@@ -1,0 +1,32 @@
+theme = "rose_pine_dawn"
+
+[editor]
+gutters = ["diagnostics", "spacer", "diff"]
+color-modes = true
+
+[editor.cursor-shape]
+insert = "underline"
+
+[editor.statusline]
+mode.normal = "N"
+mode.insert = "I"
+mode.select = "S"
+right = ["selections", "position", "total-line-numbers"]
+
+[editor.indent-guides]
+render = true
+
+[editor.search]
+smart-case = false
+
+[keys.normal]
+C-s = ":w"
+
+[keys.normal.g]
+left = "goto_line_start"
+right = "goto_line_end"
+
+[keys.select.g]
+left = "goto_line_start"
+right = "goto_line_end" 
+
