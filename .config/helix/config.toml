@@ -19,9 +19,6 @@ render = true
 [editor.search]
 smart-case = false
 
-[keys.normal]
-C-s = ":w"
-
 [keys.normal.g]
 left = "goto_line_start"
 right = "goto_line_end"
