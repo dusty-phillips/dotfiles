@@ -5,7 +5,8 @@ gutters = ["diagnostics", "spacer", "diff"]
 color-modes = true
 
 [editor.cursor-shape]
-insert = "underline"
+insert = "bar"
+select = "underline"
 
 [editor.statusline]
 mode.normal = "N"
@@ -20,7 +21,10 @@ render = true
 smart-case = false
 
 [keys.normal]
-C-q = ":q"
+C-q = ":quit-all"
+
+[keys.insert]
+C-s = ":w"
 
 [keys.normal.g]
 left = "goto_line_start"

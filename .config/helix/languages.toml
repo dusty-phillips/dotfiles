@@ -11,3 +11,10 @@ formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typesc
 name = 'python'
 formatter = {command = 'poetry', args = ['run', 'black', '-l', '100', '-']}
 
+[[language]]
+name = 'inko'
+scope = "source.inko"
+file-types = ["inko"]
+comment-token = "#"
+indent = { tab-width = 2, unit = " "}
+roots = ["src"]
