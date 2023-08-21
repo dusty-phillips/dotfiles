@@ -56,6 +56,13 @@ verbs: [
         leave_broot: false
         execution: "git difftool -y {file}"
     }
+    
+    {
+        invocation: git_add
+        shortcut: ga
+        leave_broot: false
+        execution: "git add {file}"
+    }
 
     # On ctrl-b, propose the creation of a copy of the selection.
     # While this might occasionally be useful, this verb is mostly here
