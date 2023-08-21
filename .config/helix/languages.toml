@@ -7,3 +7,7 @@ formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typesc
 name = 'typescript'
 formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
 
+[[language]]
+name = 'python'
+formatter = {command = 'poetry', args = ['run', 'black', '-l', '100', '-']}
+
