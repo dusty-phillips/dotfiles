@@ -44,9 +44,9 @@ verbs: [
     # A convenient shortcut to create new text files in
     # the current directory or below
     {
-        shortcut: c
-        invocation: create {subpath}
-        execution: "$EDITOR {directory}/{subpath}"
+        invocation: touch {subpath}
+        shortcut: t
+        execution: "touch {directory}/{subpath}"
         leave_broot: false
     }
 
@@ -62,6 +62,12 @@ verbs: [
         shortcut: ga
         leave_broot: false
         execution: "git add {file}"
+    }
+    {
+        invocation: git_blame
+        shortcut: gb
+        leave_broot: false
+        execution: "git blame {file}"
     }
 
     # On ctrl-b, propose the creation of a copy of the selection.

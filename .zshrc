@@ -76,6 +76,7 @@ alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
 alias dcl='docker-compose logs -f'
+alias dps='docker ps'
 alias mng='docker exec -it nautical-api-api-1 ./manage.py shell_plus'
 alias dsh='docker exec -it nautical-api-api-1 /bin/bash'
 

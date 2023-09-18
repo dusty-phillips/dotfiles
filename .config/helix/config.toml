@@ -20,8 +20,21 @@ render = true
 [editor.search]
 smart-case = false
 
+[editor.whitespace.render]
+space = "none"
+tab = "all"
+newline = "all"
+
+[editor.whitespace.characters]
+tab = "→"
+newline = "⏎"
+tabpad = "→"
+
 [keys.normal]
 C-q = ":quit-all"
+C-s = ":w"
+A-s = "save_selection"
+esc = ["collapse_selection", "keep_primary_selection"]
 
 [keys.insert]
 C-s = ":w"
@@ -34,6 +47,7 @@ right = "goto_line_end"
 left = "goto_line_start"
 right = "goto_line_end" 
 
+# I just want \ to be windows mode, but there's no shortcut for window mode so I copied it in
 [keys.normal."\\"]
 "\\" = "rotate_view"
 v = "vsplit"
@@ -48,3 +62,4 @@ q = "wclose"
 "S-right" = "swap_view_right"
 K = "swap_view_up"
 J = "swap_view_down"
+

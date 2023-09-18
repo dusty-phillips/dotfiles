@@ -1,18 +1,22 @@
 [[language]]
 name = 'tsx'
+auto-format = true
 formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
 
 
 [[language]]
 name = 'typescript'
+auto-format = true
 formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
 
 [[language]]
 name = 'python'
+auto-format = true
 formatter = {command = 'poetry', args = ['run', 'black', '-l', '100', '-']}
 
 [[language]]
 name = 'inko'
+auto-format = true
 scope = "source.inko"
 file-types = ["inko"]
 comment-token = "#"
