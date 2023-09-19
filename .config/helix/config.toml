@@ -1,7 +1,7 @@
 theme = "rose_pine_dawn"
 
 [editor]
-gutters = ["diagnostics", "spacer", "diff"]
+gutters = ["diagnostics",  "diff"]
 color-modes = true
 
 [editor.cursor-shape]
@@ -35,7 +35,9 @@ C-q = ":quit-all"
 C-s = ":w"
 A-s = "save_selection"
 esc = ["collapse_selection", "keep_primary_selection"]
-# Because A-left/right doesn't work on my keyboard
+# Because one less keystroke than A-; and esc covers old ";"
+";" = "flip_selections"
+# Because A-left/right doesn't work on my keyboard:
 S-up = "expand_selection"
 S-down = "shrink_selection"
 S-left = "select_prev_sibling"
