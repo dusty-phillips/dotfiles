@@ -66,10 +66,9 @@ bindkey -M vicmd '^R' fzf-history-widget
 
 unalias l 2>/dev/null
 alias 14="reset&&z -I .\n"  # weird trick for escape sequence issue
+alias 4="reset&&z -I .\n"  # weird trick for escape sequence issue
 alias ls='ls --color=auto'
 alias lg='lazygit'
-alias n=nvim
-alias pn='poetry run nvim -c "Telescope find_files"'
 alias d=deactivate
 alias v="source .venv/bin/activate"
 alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
@@ -88,14 +87,6 @@ alias dsh='docker exec -it nautical-api-api-1 /bin/bash'
 # }
 bindkey -s "^[r" "z -I .\n"
 
-function l {
- if [ $1 ] ; then
-    nvim $@
-  else
-   nvim -c "Telescope find_files"
- fi
-
-}
 
 function pt {
   ptw -- --tb=short $@
