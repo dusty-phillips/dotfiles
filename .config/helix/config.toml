@@ -3,6 +3,8 @@ theme = "rose_pine_dawn"
 [editor]
 gutters = ["diagnostics",  "diff"]
 color-modes = true
+cursorline = true
+cursorcolumn = true
 
 [editor.cursor-shape]
 insert = "bar"
