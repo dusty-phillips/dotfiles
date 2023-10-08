@@ -7,11 +7,18 @@ config.font = wezterm.font('VictorMono Nerd Font')
 config.font_size = 14.0
 config.hide_tab_bar_if_only_one_tab = true
 config.disable_default_key_bindings = true
+
+-- SSH and Multiplexing
 config.tls_clients = {
   {
     name = 'nautical',
     remote_address = 'dusty-nautical.local',
     bootstrap_via_ssh = 'dustyphillips@dusty-nautical.local'
+  }
+}
+config.tls_servers = {
+  {
+    bind_address = ':55555'
   }
 }
 config.keys = {
