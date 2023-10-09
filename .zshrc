@@ -71,8 +71,7 @@ alias ls='ls --color=auto'
 alias lg='lazygit'
 alias d=deactivate
 alias v="source .venv/bin/activate"
-# alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
-alias nautical="wezterm ssh dusty-nautical.local"
+alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
 alias dcl='docker-compose logs -f'
