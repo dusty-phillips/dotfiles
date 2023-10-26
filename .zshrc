@@ -72,6 +72,8 @@ alias lg='lazygit'
 alias d=deactivate
 alias v="source .venv/bin/activate"
 alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
+alias po="poetry run"
+alias pom="poetry run ./manage.py"
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
 alias dcl='docker-compose logs -f'
@@ -98,6 +100,7 @@ export PYTHONBREAKPOINT='IPython.core.debugger.set_trace'
 export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH:$HOME/.local/bin
 eval "$(pyenv init -)"
+eval "$(direnv hook zsh)"
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
