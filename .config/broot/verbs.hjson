@@ -63,6 +63,14 @@ verbs: [
         leave_broot: false
         execution: "git add {file}"
     }
+
+    {
+        invocation: git_rm
+        shortcut: grm
+        leave_broot: false
+        execution: "git rm {file}"
+    }
+
     {
         invocation: git_blame
         shortcut: gb
