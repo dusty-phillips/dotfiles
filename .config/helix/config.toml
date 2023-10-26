@@ -14,7 +14,7 @@ select = "underline"
 mode.normal = "N"
 mode.insert = "I"
 mode.select = "S"
-right = ["selections", "position", "total-line-numbers"]
+right = ["register", "selections", "position", "total-line-numbers"]
 
 [editor.indent-guides]
 render = true
@@ -35,7 +35,6 @@ tabpad = "→"
 [keys.normal]
 C-q = ":quit-all"
 C-s = ":w"
-A-s = "save_selection"
 esc = ["collapse_selection", "keep_primary_selection"]
 # Because one less keystroke than A-; and esc covers old ";"
 ";" = "flip_selections"
@@ -72,3 +71,5 @@ q = "wclose"
 K = "swap_view_up"
 J = "swap_view_down"
 
+[keys.normal.space]
+u = ":reset-diff-change"
