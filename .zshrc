@@ -71,7 +71,7 @@ alias ls='ls --color=auto'
 alias lg='lazygit'
 alias d=deactivate
 alias v="source .venv/bin/activate"
-alias nautical="kitty +kitten ssh dustyphillips@dusty-nautical.local"
+alias nautical="kitty +kitten ssh nautical"
 alias po="poetry run"
 alias pom="poetry run ./manage.py"
 alias dcu='docker-compose up'
