@@ -43,6 +43,7 @@ S-up = "expand_selection"
 S-down = "shrink_selection"
 S-left = "select_prev_sibling"
 S-right = "select_next_sibling"
+X = "extend_line_above"
 
 [keys.insert]
 C-s = ":w"
