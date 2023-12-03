@@ -12,7 +12,7 @@ formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typesc
 [[language]]
 name = 'python'
 auto-format = true
-formatter = {command = 'poetry', args = ['run', 'black', '-l', '100', '-']}
+formatter = {command = 'poetry', args = ['run', 'ruff', 'format', '-']}
 
 [[language]]
 name = 'inko'
