@@ -51,10 +51,14 @@ C-s = ":w"
 [keys.normal.g]
 left = "goto_line_start"
 right = "goto_line_end"
+e = "goto_line_end"
+G = "goto_file_end"
 
 [keys.select.g]
 left = "goto_line_start"
 right = "goto_line_end" 
+e = "goto_line_end"
+G = "goto_file_end"
 
 # I just want \ to be windows mode, but there's no shortcut for window mode so I copied it in
 [keys.normal."\\"]
