@@ -72,8 +72,11 @@ alias lg='lazygit'
 alias d=deactivate
 alias v="source .venv/bin/activate"
 alias nautical="kitty +kitten ssh nautical"
+alias poh="poetry run hx"
 alias po="poetry run"
 alias pom="poetry run ./manage.py"
+alias pt="DDT_TRACE_ENABLE=false poetry run pytest --tb=short -n 0 -s -k"
+alias pta="DD_TRACE_ENABLE=false poetry run pytest -m 'not integration'"
 alias dcu='docker-compose up'
 alias dcd='docker-compose down'
 alias dcl='docker-compose logs -f'
