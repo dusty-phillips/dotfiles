@@ -1,13 +1,95 @@
-[[language]]
-name = 'tsx'
-auto-format = true
-formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
-
+[language-server]
+biome = { command = "yarn", args = ["biome", "lsp-proxy"] }
 
 [[language]]
-name = 'typescript'
+name = "javascript"
 auto-format = true
-formatter = {command = 'npx', args = ['prettier', '--stdin', '--parser', 'typescript']}
+comment-token = "//"
+file-types = ["js", "mjs", "cjs"]
+injection-regex = "(js|javascript)"
+language-id = "javascript"
+language-servers = ["typescript-language-server", "biome"]
+roots = []
+scope = "source.js"
+shebangs = ["node"]
+
+[language.formatter]
+command = "yarn"
+args = ["biome", "format", "--stdin-file-path", "test.js"]
+
+[language.indent]
+tab-width = 2
+unit = "  "
+
+[[language]]
+name = "typescript"
+auto-format = true
+file-types = ["ts", "mts", "cts"]
+injection-regex = "(ts|typescript)"
+language-id = "typescript"
+language-servers = ["typescript-language-server", "biome"]
+roots = []
+scope = "source.ts"
+shebangs = []
+
+[language.formatter]
+command = "yarn"
+args = ["biome", "format", "--stdin-file-path", "test.ts"]
+
+[language.indent]
+tab-width = 2
+unit = "  "
+
+[[language]]
+name = "tsx"
+auto-format = true
+file-types = ["tsx"]
+injection-regex = "(tsx)"
+language-id = "typescriptreact"
+language-servers = ["typescript-language-server", "biome"]
+roots = []
+scope = "source.tsx"
+
+[language.formatter]
+command = "yarn"
+args = ["biome", "format", "--stdin-file-path", "test.tsx"]
+
+[language.indent]
+tab-width = 2
+unit = "  "
+
+[[language]]
+name = "jsx"
+auto-format = true
+comment-token = "//"
+file-types = ["jsx"]
+grammar = "javascript"
+injection-regex = "jsx"
+language-id = "javascriptreact"
+language-servers = ["typescript-language-server", "biome"]
+roots = []
+scope = "source.jsx"
+
+[language.formatter]
+command = "yarn"
+args = ["biome", "format", "--stdin-file-path", "test.jsx"]
+
+[language.indent]
+tab-width = 2
+unit = "  "
+
+[[language]]
+name = "json"
+auto-format = true
+file-types = ["json", "jsonc", "arb", "ipynb", "geojson"]
+injection-regex = "json"
+language-servers = ["biome"]
+roots = []
+scope = "source.json"
+
+[language.formatter]
+command = "yarn"
+args = ["biome", "format", "--stdin-file-path", "test.json"]
 
 [[language]]
 name = 'python'
