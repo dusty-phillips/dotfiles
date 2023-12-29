@@ -39,7 +39,6 @@ export FZF_DEFAULT_COMMAND="fd --follow --exclude Library"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type directory"
 
-# zinit snippet  OMZ::plugins/dirhistory/dirhistory.plugin.zsh
 zinit snippet  OMZ::plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 zinit light zdharma-continuum/fast-syntax-highlighting
 zinit pack"bgn-binary+keys" for fzf
@@ -69,29 +68,8 @@ alias 14="reset&&z -I .\n"  # weird trick for escape sequence issue
 alias 4="reset&&z -I .\n"  # weird trick for escape sequence issue
 alias ls='ls --color=auto'
 alias lg='lazygit'
-alias d=deactivate
-alias v="source .venv/bin/activate"
-alias nautical="kitty +kitten ssh nautical"
-alias poh="poetry run hx"
-alias po="poetry run"
-alias pom="poetry run ./manage.py"
-alias pt="DDT_TRACE_ENABLE=false poetry run pytest --tb=short -n 0 -s -k"
-alias pta="DD_TRACE_ENABLE=false poetry run pytest -m 'not integration'"
-alias dcu='docker-compose up'
-alias dcd='docker-compose down'
-alias dcl='docker-compose logs -f'
-alias dps='docker ps'
-alias mng='docker exec -it nautical-api-api-1 ./manage.py shell_plus'
-alias dsh='docker exec -it nautical-api-api-1 /bin/bash'
 
-
-# function z {
-#   if  selected=$(fasd -dlR | fzf --no-sort --height 10%)  ; then
-#       cd $selected
-#   fi
-# }
 bindkey -s "^[r" "z -I .\n"
-
 
 function pt {
   ptw -- --tb=short $@
@@ -99,7 +77,6 @@ function pt {
 
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
-export PYTHONBREAKPOINT='IPython.core.debugger.set_trace'
 export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$HOME/.cargo/bin:$PATH:$HOME/.local/bin
 eval "$(pyenv init -)"
@@ -112,6 +89,7 @@ fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NODE_VERSIONS="${NVM_DIR}/versions/node"
+export NODE_VERSION_PREFIX="v"
 
 source /Users/dustyphillips/.config/broot/launcher/bash/br
