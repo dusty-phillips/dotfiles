@@ -1,4 +1,4 @@
-theme = "rose_pine_dawn"
+theme = "spacebones_light"
 
 [editor]
 gutters = ["diagnostics",  "diff"]
