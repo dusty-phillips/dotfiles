@@ -2,7 +2,8 @@
 # curl -Lks https://is.gd/B5GXbi | /bin/bash
 alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-set -o emacs # Don't want zsh in vi mode even if $EDITOR is nvim
+# set -o emacs # Don't want zsh in vi mode even if $EDITOR is nvim
+set -o vi
 
 # zmodload zsh/zprof # for when things get too slow
 
@@ -49,7 +50,7 @@ HOMEBREW_CELLAR="${HOMEBREW_CELLAR:-/usr/local/Cellar}"
 export _ZL_FZF_FLAG='+s'
 eval "$(lua $HOMEBREW_CELLAR/z.lua/1.8.16/share/z.lua/z.lua --init zsh once fzf)"
 
-export EDITOR='hx'
+export EDITOR='nvim'
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=100000
