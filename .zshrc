@@ -48,7 +48,7 @@ zinit light sindresorhus/pure
 
 HOMEBREW_CELLAR="${HOMEBREW_CELLAR:-/usr/local/Cellar}"
 export _ZL_FZF_FLAG='+s'
-eval "$(lua $HOMEBREW_CELLAR/z.lua/1.8.16/share/z.lua/z.lua --init zsh once fzf)"
+eval "$(lua $HOMEBREW_CELLAR/z.lua/1.8.17/share/z.lua/z.lua --init zsh once fzf)"
 
 export EDITOR='nvim'
 export HISTFILE=~/.zsh_history
