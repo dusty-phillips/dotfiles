@@ -4,3 +4,4 @@
 
 vim.opt.number = false
 vim.opt.relativenumber = false
+vim.opt.shell = "/usr/local/bin/fish"
