@@ -6,6 +6,7 @@ if status is-interactive
     set fish_greeting
     set fish_cursor_insert line
     set -x EDITOR nvim
+    set -x _ZL_FZF_FLAG +s # make z.lua fuzzy by removing -e
 
     fish_vi_key_bindings
 

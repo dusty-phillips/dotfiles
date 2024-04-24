@@ -7,3 +7,8 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     require("guess-indent").set_from_buffer("auto_cmd")
   end,
 })
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.svx",
+  command = "setlocal filetype=markdown",
+})
