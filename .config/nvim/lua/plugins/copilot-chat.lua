@@ -9,6 +9,9 @@ return {
     },
     opts = {
       debug = false,
+      window = {
+        width = 0.25,
+      },
     },
     keys = {
       {

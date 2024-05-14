@@ -37,6 +37,7 @@ return {
       go_in_vertical_plus = ";v",
       go_in_horizontal_plus = ";s",
       change_cwd = ";c",
+      change_lcd = ";l",
     },
     windows = {
       width_nofocus = 20,
@@ -94,6 +95,14 @@ return {
       end
     end
 
+    local files_set_local_cwd = function()
+      local cur_entry_path = MiniFiles.get_fs_entry().path
+      local cur_directory = vim.fs.dirname(cur_entry_path)
+      if cur_directory ~= nil then
+        vim.cmd("lcd " .. cur_directory)
+      end
+    end
+
     vim.api.nvim_create_autocmd("User", {
       pattern = "MiniFilesBufferCreate",
       callback = function(args)
@@ -126,6 +135,12 @@ return {
           opts.mappings.change_cwd or "gc",
           files_set_cwd,
           { buffer = args.data.buf_id, desc = "Set cwd" }
+        )
+        vim.keymap.set(
+          "n",
+          opts.mappings.change_lcd or "gl",
+          files_set_local_cwd,
+          { buffer = args.data.buf_id, desc = "Set local cwd" }
         )
       end,
     })
