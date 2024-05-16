@@ -1,13 +1,15 @@
 return {
   "neovim/nvim-lspconfig",
   opts = {
-    settings = {
-      gopls = {
-        buildFlags = { "-tags=test" },
-      },
-    },
     servers = {
       rescriptls = {},
+      gopls = {
+        settings = {
+          gopls = {
+            buildFlags = { "-tags=test" },
+          },
+        },
+      },
     },
   },
   init = function()
