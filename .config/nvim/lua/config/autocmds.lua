@@ -3,9 +3,7 @@
 -- Add any additional autocmds here
 
 vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function(event)
-    require("guess-indent").set_from_buffer("auto_cmd")
-  end,
+  command = "silent lua require('guess-indent').set_from_buffer('auto_cmd')",
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
