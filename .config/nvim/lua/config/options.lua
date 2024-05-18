@@ -5,3 +5,4 @@
 vim.opt.backupcopy = "yes"
 vim.opt.shell = "/usr/local/bin/fish"
 vim.opt.ignorecase = false
+vim.opt.cursorcolumn = true
