@@ -72,25 +72,12 @@ alias lg='lazygit'
 
 bindkey -s "^[r" "z -I .\n"
 
-function pt {
-  ptw -- --tb=short $@
-}
-
 export PY_DEVTOOLS_HIGHLIGHT=1
 export PYTHONPATH="$PYTHONPATH:$HOME/.pythonpath"
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PYENV_ROOT/bin:$HOME/.cargo/bin:$PATH:$HOME/.local/bin
-eval "$(pyenv init -)"
-eval "$(direnv hook zsh)"
 
 # config not visible in public dotfiles repo
 if [ -e $HOME/.zshrc-local ] ; then
   source ~/.zshrc-local
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-export NODE_VERSIONS="${NVM_DIR}/versions/node"
-export NODE_VERSION_PREFIX="v"
 
-source /Users/dustyphillips/.config/broot/launcher/bash/br
