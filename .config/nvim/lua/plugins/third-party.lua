@@ -34,35 +34,6 @@ return {
     },
   },
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    lazy = true,
-    branch = "canary",
-    dependencies = {
-      { "zbirenbaum/copilot.lua" },
-      { "nvim-lua/plenary.nvim" },
-    },
-    opts = {
-      debug = false,
-      window = {
-        width = 0.25,
-      },
-    },
-    keys = {
-      {
-        "<Leader>ch",
-        ":'<,'>CopilotChat<CR>",
-        mode = { "v" },
-        desc = "Copilot Chat Selection",
-      },
-      {
-        "<Leader>ch",
-        ":CopilotChatToggle<CR>",
-        mode = { "n" },
-        desc = "Toggle Copilot Chat",
-      },
-    },
-  },
-  {
     "nmac427/guess-indent.nvim",
     lazy = false,
     opts = { auto_cmd = true, override_editorconfig = true },
@@ -77,10 +48,10 @@ return {
     "akinsho/git-conflict.nvim",
     opts = {
       default_mappings = {
-        ours = ";o",
-        theirs = ";t",
-        none = ";0",
-        both = ";b",
+        ours = "<leader>ho",
+        theirs = "<leader>ht",
+        none = "<leader>h0",
+        both = "<leader>hb",
         next = "]x",
         prev = "[x",
       },
