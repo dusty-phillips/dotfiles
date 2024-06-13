@@ -1,5 +1,3 @@
-local Util = require("lazyvim.util")
-
 return {
   { "nvim-telescope/telescope-live-grep-args.nvim" },
   {
@@ -15,7 +13,7 @@ return {
       },
     },
     keys = {
-      { "<leader><space>", Util.telescope("files", { cwd = false }), desc = "Find Files (cwd)" },
+      { "<leader><space>", LazyVim.pick("auto", { root = false }), desc = "Find Files (cwd)" },
       {
         "<leader>/",
         function()

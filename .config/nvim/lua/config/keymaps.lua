@@ -4,3 +4,4 @@
 
 vim.keymap.set("n", "\\", "<C-w>", { desc = "Show Window menu", remap = true })
 vim.keymap.set("n", "<leader>r", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
+vim.keymap.set("n", "<leader>xc", "<cmd>Trouble close<cr>", { desc = "Close trouble window" })

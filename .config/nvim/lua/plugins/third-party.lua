@@ -5,6 +5,7 @@ return {
     keys = {
       {
         "<A-Left>",
+        mode = { "n", "v" },
         function()
           require("smart-splits").move_cursor_left()
         end,
@@ -12,6 +13,7 @@ return {
       },
       {
         "<A-Right>",
+        mode = { "n", "v" },
         function()
           require("smart-splits").move_cursor_right()
         end,
@@ -19,6 +21,7 @@ return {
       },
       {
         "<A-j>",
+        mode = { "n", "v" },
         function()
           require("smart-splits").move_cursor_down()
         end,
@@ -26,6 +29,7 @@ return {
       },
       {
         "<A-k>",
+        mode = { "n", "v" },
         function()
           require("smart-splits").move_cursor_up()
         end,
