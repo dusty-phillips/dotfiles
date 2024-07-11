@@ -1,0 +1,12 @@
+{
+  "foo": {
+    "prefix": "foo",
+    "body": [
+      "Foo",
+      "Bar",
+      "baz $0",
+      "fizz $1 buzz"
+    ],
+    "description": "foo bar baz fizz buzz"
+  }
+}

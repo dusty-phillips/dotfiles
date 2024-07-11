@@ -1,0 +1,17 @@
+{
+  "Boilerplate Component": {
+    "prefix": "<scr",
+    "description": "Basic svelte boilerplate",
+    "body": [
+      "<script lang=\"ts\">",
+      "  $1",
+      "</script>",
+      "",
+      "${2:<div></div>}",
+      "",
+      "<style>",
+      "  $3",
+      "</style>"
+    ]
+  }
+}

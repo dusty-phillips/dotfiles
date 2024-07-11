@@ -6,7 +6,7 @@ return {
       function()
         return require("CopilotChat").open()
       end,
-      desc = "Toggle (CopilotChat)",
+      desc = "CopilotChat",
       mode = { "n", "v" },
     },
     {
@@ -14,7 +14,7 @@ return {
       function()
         return require("CopilotChat").close()
       end,
-      desc = "Toggle (CopilotChat)",
+      desc = "Close (CopilotChat)",
       mode = { "n", "v" },
     },
   },
