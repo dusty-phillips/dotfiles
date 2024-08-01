@@ -1,5 +1,6 @@
 return {
   "chrisgrieser/nvim-spider",
+  opts = {},
   keys = {
     {
       "w",
