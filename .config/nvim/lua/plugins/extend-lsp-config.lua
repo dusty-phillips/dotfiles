@@ -6,6 +6,7 @@ return {
         css_variables = {
           filetypes = { "css", "scss", "less", "svelte" },
         },
+        roc_ls = {},
       },
     },
   },
