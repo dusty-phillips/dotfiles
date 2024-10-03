@@ -20,6 +20,7 @@ if status is-interactive
 
     alias lg='lazygit'
     alias rm=grm
+    alias cp=gcp
     alias sed=gsed
     function grep # Needs to be function or fish overrules it
         ggrep --color=auto $argv
