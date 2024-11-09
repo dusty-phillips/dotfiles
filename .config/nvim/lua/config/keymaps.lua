@@ -9,6 +9,8 @@ vim.keymap.set("n", "<leader>xc", "<cmd>Trouble close<cr>", { desc = "Close Trou
 vim.keymap.set("n", "<D-s>", "<cmd>w<cr>", { desc = "Save" })
 vim.keymap.set("i", "<D-s>", "<Esc><cmd>w<cr>a", { desc = "Save" })
 
-vim.keymap.set("n", "<leader><delete>", LazyVim.ui.bufremove, { desc = "Close Buffer" })
-vim.keymap.set("n", "<leader><CR>", "<cmd>%bd<cr>", { desc = "Close All Buffers" })
-vim.keymap.set("n", "<leader>bo", "<cmd>%bd | e# | bd#<cr>", { desc = "Close Other Buffers" })
+vim.keymap.set("n", "<leader><delete>", function()
+  Snacks.bufdelete()
+end, { desc = "Close Buffer" })
+vim.keymap.set("n", "<leader><CR>", Snacks.bufdelete.all, { desc = "Close All Buffers" })
+vim.keymap.set("n", "<leader>bo", Snacks.bufdelete.other, { desc = "Close Other Buffers" })
