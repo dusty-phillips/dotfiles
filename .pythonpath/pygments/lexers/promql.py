@@ -4,21 +4,13 @@
 
     Lexer for Prometheus Query Language.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
 from pygments.lexer import RegexLexer, bygroups, default, words
-from pygments.token import (
-    Comment,
-    Keyword,
-    Name,
-    Number,
-    Operator,
-    Punctuation,
-    String,
-    Whitespace,
-)
+from pygments.token import Comment, Keyword, Name, Number, Operator, \
+    Punctuation, String, Whitespace
 
 __all__ = ["PromQLLexer"]
 
@@ -37,6 +29,7 @@ class PromQLLexer(RegexLexer):
     url = 'https://prometheus.io/docs/prometheus/latest/querying/basics/'
     aliases = ["promql"]
     filenames = ["*.promql"]
+    version_added = ''
 
     base_keywords = (
         words(

@@ -30,10 +30,13 @@
         - highlights errors in the output and notification levels;
         - handles psql backslash commands.
 
+    `PostgresExplainLexer`
+        A lexer to highlight Postgres execution plan.
+
     The ``tests/examplefiles`` contains a few test files with data to be
     parsed by these lexers.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -45,7 +48,7 @@ from pygments.token import Punctuation, Whitespace, Text, Comment, Operator, \
 from pygments.lexers import get_lexer_by_name, ClassNotFound
 
 from pygments.lexers._postgres_builtins import KEYWORDS, DATATYPES, \
-    PSEUDO_TYPES, PLPGSQL_KEYWORDS
+    PSEUDO_TYPES, PLPGSQL_KEYWORDS, EXPLAIN_KEYWORDS
 from pygments.lexers._mysql_builtins import \
     MYSQL_CONSTANTS, \
     MYSQL_DATATYPES, \
@@ -57,8 +60,8 @@ from pygments.lexers import _tsql_builtins
 
 
 __all__ = ['PostgresLexer', 'PlPgsqlLexer', 'PostgresConsoleLexer',
-           'SqlLexer', 'TransactSqlLexer', 'MySqlLexer',
-           'SqliteConsoleLexer', 'RqlLexer']
+           'PostgresExplainLexer', 'SqlLexer', 'TransactSqlLexer',
+           'MySqlLexer', 'SqliteConsoleLexer', 'RqlLexer']
 
 line_re  = re.compile('.*?\n')
 sqlite_prompt_re = re.compile(r'^(?:sqlite|   ...)>(?= )')
@@ -151,13 +154,13 @@ class PostgresBase:
 class PostgresLexer(PostgresBase, RegexLexer):
     """
     Lexer for the PostgreSQL dialect of SQL.
-
-    .. versionadded:: 1.5
     """
 
     name = 'PostgreSQL SQL dialect'
     aliases = ['postgresql', 'postgres']
     mimetypes = ['text/x-postgresql']
+    url = 'https://www.postgresql.org'
+    version_added = '1.5'
 
     flags = re.IGNORECASE
     tokens = {
@@ -207,15 +210,16 @@ class PostgresLexer(PostgresBase, RegexLexer):
 class PlPgsqlLexer(PostgresBase, RegexLexer):
     """
     Handle the extra syntax in Pl/pgSQL language.
-
-    .. versionadded:: 1.5
     """
     name = 'PL/pgSQL'
     aliases = ['plpgsql']
     mimetypes = ['text/x-plpgsql']
+    url = 'https://www.postgresql.org/docs/current/plpgsql.html'
+    version_added = '1.5'
 
     flags = re.IGNORECASE
-    tokens = {k: l[:] for (k, l) in PostgresLexer.tokens.items()}
+    # FIXME: use inheritance
+    tokens = {name: state[:] for (name, state) in PostgresLexer.tokens.items()}
 
     # extend the keywords list
     for i, pattern in enumerate(tokens['root']):
@@ -249,7 +253,7 @@ class PsqlRegexLexer(PostgresBase, RegexLexer):
     aliases = []    # not public
 
     flags = re.IGNORECASE
-    tokens = {k: l[:] for (k, l) in PostgresLexer.tokens.items()}
+    tokens = {name: state[:] for (name, state) in PostgresLexer.tokens.items()}
 
     tokens['root'].append(
         (r'\\[^\s]+', Keyword.Pseudo, 'psql-command'))
@@ -299,13 +303,13 @@ class lookahead:
 class PostgresConsoleLexer(Lexer):
     """
     Lexer for psql sessions.
-
-    .. versionadded:: 1.5
     """
 
     name = 'PostgreSQL console (psql)'
     aliases = ['psql', 'postgresql-console', 'postgres-console']
     mimetypes = ['text/x-postgresql-psql']
+    url = 'https://www.postgresql.org'
+    version_added = '1.5'
 
     def get_tokens_unprocessed(self, data):
         sql = PsqlRegexLexer(**self.options)
@@ -368,6 +372,192 @@ class PostgresConsoleLexer(Lexer):
                 return
 
 
+class PostgresExplainLexer(RegexLexer):
+    """
+    Handle PostgreSQL EXPLAIN output
+    """
+
+    name = 'PostgreSQL EXPLAIN dialect'
+    aliases = ['postgres-explain']
+    filenames = ['*.explain']
+    mimetypes = ['text/x-postgresql-explain']
+    url = 'https://www.postgresql.org/docs/current/using-explain.html'
+    version_added = '2.15'
+
+    tokens = {
+        'root': [
+            (r'(:|\(|\)|ms|kB|->|\.\.|\,)', Punctuation),
+            (r'(\s+)', Whitespace),
+
+            # This match estimated cost and effectively measured counters with ANALYZE
+            # Then, we move to instrumentation state
+            (r'(cost)(=?)', bygroups(Name.Class, Punctuation), 'instrumentation'),
+            (r'(actual)( )(=?)', bygroups(Name.Class, Whitespace, Punctuation), 'instrumentation'),
+
+            # Misc keywords
+            (words(('actual', 'Memory Usage', 'Memory', 'Buckets', 'Batches',
+                    'originally', 'row', 'rows', 'Hits', 'Misses',
+                    'Evictions', 'Overflows'), suffix=r'\b'),
+             Comment.Single),
+
+            (r'(hit|read|dirtied|written|write|time|calls)(=)', bygroups(Comment.Single, Operator)),
+            (r'(shared|temp|local)', Keyword.Pseudo),
+
+            # We move to sort state in order to emphasize specific keywords (especially disk access)
+            (r'(Sort Method)(: )', bygroups(Comment.Preproc, Punctuation), 'sort'),
+
+            # These keywords can be followed by an object, like a table
+            (r'(Sort Key|Group Key|Presorted Key|Hash Key)(:)( )',
+             bygroups(Comment.Preproc, Punctuation, Whitespace), 'object_name'),
+            (r'(Cache Key|Cache Mode)(:)( )', bygroups(Comment, Punctuation, Whitespace), 'object_name'),
+
+            # These keywords can be followed by a predicate
+            (words(('Join Filter', 'Subplans Removed', 'Filter', 'Merge Cond',
+                    'Hash Cond', 'Index Cond', 'Recheck Cond', 'Heap Blocks',
+                    'TID Cond', 'Run Condition', 'Order By', 'Function Call',
+                    'Table Function Call', 'Inner Unique', 'Params Evaluated',
+                    'Single Copy', 'Sampling', 'One-Time Filter', 'Output',
+                    'Relations', 'Remote SQL'), suffix=r'\b'),
+             Comment.Preproc, 'predicate'),
+
+            # Special keyword to handle ON CONFLICT
+            (r'Conflict ', Comment.Preproc, 'conflict'),
+
+            # Special keyword for InitPlan or SubPlan
+            (r'(InitPlan|SubPlan)( )(\d+)( )',
+             bygroups(Keyword, Whitespace, Number.Integer, Whitespace),
+             'init_plan'),
+
+            (words(('Sort Method', 'Join Filter', 'Planning time',
+                    'Planning Time', 'Execution time', 'Execution Time',
+                    'Workers Planned', 'Workers Launched', 'Buffers',
+                    'Planning', 'Worker', 'Query Identifier', 'Time',
+                    'Full-sort Groups', 'Pre-sorted Groups'), suffix=r'\b'), Comment.Preproc),
+
+            # Emphasize these keywords
+
+            (words(('Rows Removed by Join Filter', 'Rows Removed by Filter',
+                    'Rows Removed by Index Recheck',
+                    'Heap Fetches', 'never executed'),
+                   suffix=r'\b'), Name.Exception),
+            (r'(I/O Timings)(:)( )', bygroups(Name.Exception, Punctuation, Whitespace)),
+
+            (words(EXPLAIN_KEYWORDS, suffix=r'\b'), Keyword),
+
+            # join keywords
+            (r'((Right|Left|Full|Semi|Anti) Join)', Keyword.Type),
+            (r'(Parallel |Async |Finalize |Partial )', Comment.Preproc),
+            (r'Backward', Comment.Preproc),
+            (r'(Intersect|Except|Hash)', Comment.Preproc),
+
+            (r'(CTE)( )(\w*)?', bygroups(Comment, Whitespace, Name.Variable)),
+
+
+            # Treat "on" and "using" as a punctuation
+            (r'(on|using)', Punctuation, 'object_name'),
+
+
+            # strings
+            (r"'(''|[^'])*'", String.Single),
+            # numbers
+            (r'-?\d+\.\d+', Number.Float),
+            (r'(-?\d+)', Number.Integer),
+
+            # boolean
+            (r'(true|false)', Name.Constant),
+            # explain header
+            (r'\s*QUERY PLAN\s*\n\s*-+', Comment.Single),
+            # Settings
+            (r'(Settings)(:)( )', bygroups(Comment.Preproc, Punctuation, Whitespace), 'setting'),
+
+            # Handle JIT counters
+            (r'(JIT|Functions|Options|Timing)(:)', bygroups(Comment.Preproc, Punctuation)),
+            (r'(Inlining|Optimization|Expressions|Deforming|Generation|Emission|Total)', Keyword.Pseudo),
+
+            # Handle Triggers counters
+            (r'(Trigger)( )(\S*)(:)( )',
+             bygroups(Comment.Preproc, Whitespace, Name.Variable, Punctuation, Whitespace)),
+
+        ],
+        'expression': [
+            # matches any kind of parenthesized expression
+            # the first opening paren is matched by the 'caller'
+            (r'\(', Punctuation, '#push'),
+            (r'\)', Punctuation, '#pop'),
+            (r'(never executed)', Name.Exception),
+            (r'[^)(]+', Comment),
+        ],
+        'object_name': [
+
+            # This is a cost or analyze measure
+            (r'(\(cost)(=?)', bygroups(Name.Class, Punctuation), 'instrumentation'),
+            (r'(\(actual)( )(=?)', bygroups(Name.Class, Whitespace, Punctuation), 'instrumentation'),
+
+            # if object_name is parenthesized, mark opening paren as
+            # punctuation, call 'expression', and exit state
+            (r'\(', Punctuation, 'expression'),
+            (r'(on)', Punctuation),
+            # matches possibly schema-qualified table and column names
+            (r'\w+(\.\w+)*( USING \S+| \w+ USING \S+)', Name.Variable),
+            (r'\"?\w+\"?(?:\.\"?\w+\"?)?', Name.Variable),
+            (r'\'\S*\'', Name.Variable),
+
+            # if we encounter a comma, another object is listed
+            (r',\n', Punctuation, 'object_name'),
+            (r',', Punctuation, 'object_name'),
+
+            # special case: "*SELECT*"
+            (r'"\*SELECT\*( \d+)?"(.\w+)?', Name.Variable),
+            (r'"\*VALUES\*(_\d+)?"(.\w+)?', Name.Variable),
+            (r'"ANY_subquery"', Name.Variable),
+
+            # Variable $1 ...
+            (r'\$\d+', Name.Variable),
+            # cast
+            (r'::\w+', Name.Variable),
+            (r' +', Whitespace),
+            (r'"', Punctuation),
+            (r'\[\.\.\.\]', Punctuation),
+            (r'\)', Punctuation, '#pop'),
+        ],
+        'predicate': [
+            # if predicate is parenthesized, mark paren as punctuation
+            (r'(\()([^\n]*)(\))', bygroups(Punctuation, Name.Variable, Punctuation), '#pop'),
+            # otherwise color until newline
+            (r'[^\n]*', Name.Variable, '#pop'),
+        ],
+        'instrumentation': [
+            (r'=|\.\.', Punctuation),
+            (r' +', Whitespace),
+            (r'(rows|width|time|loops)', Name.Class),
+            (r'\d+\.\d+', Number.Float),
+            (r'(\d+)', Number.Integer),
+            (r'\)', Punctuation, '#pop'),
+        ],
+        'conflict': [
+            (r'(Resolution: )(\w+)', bygroups(Comment.Preproc, Name.Variable)),
+            (r'(Arbiter \w+:)', Comment.Preproc, 'object_name'),
+            (r'(Filter: )', Comment.Preproc, 'predicate'),
+        ],
+        'setting': [
+            (r'([a-z_]*?)(\s*)(=)(\s*)(\'.*?\')', bygroups(Name.Attribute, Whitespace, Operator, Whitespace, String)),
+            (r'\, ', Punctuation),
+        ],
+        'init_plan': [
+            (r'\(', Punctuation),
+            (r'returns \$\d+(,\$\d+)?', Name.Variable),
+            (r'\)', Punctuation, '#pop'),
+        ],
+        'sort': [
+            (r':|kB', Punctuation),
+            (r'(quicksort|top-N|heapsort|Average|Memory|Peak)', Comment.Prepoc),
+            (r'(external|merge|Disk|sort)', Name.Exception),
+            (r'(\d+)', Number.Integer),
+            (r' +', Whitespace),
+        ],
+    }
+
+
 class SqlLexer(RegexLexer):
     """
     Lexer for Structured Query Language. Currently, this lexer does
@@ -378,6 +568,8 @@ class SqlLexer(RegexLexer):
     aliases = ['sql']
     filenames = ['*.sql']
     mimetypes = ['text/x-sql']
+    url = 'https://en.wikipedia.org/wiki/SQL'
+    version_added = ''
 
     flags = re.IGNORECASE
     tokens = {
@@ -512,6 +704,8 @@ class TransactSqlLexer(RegexLexer):
     aliases = ['tsql', 't-sql']
     filenames = ['*.sql']
     mimetypes = ['text/x-tsql']
+    url = 'https://www.tsql.info'
+    version_added = ''
 
     flags = re.IGNORECASE
 
@@ -596,6 +790,8 @@ class MySqlLexer(RegexLexer):
     name = 'MySQL'
     aliases = ['mysql']
     mimetypes = ['text/x-mysql']
+    url = 'https://www.mysql.com'
+    version_added = ''
 
     flags = re.IGNORECASE
     tokens = {
@@ -770,14 +966,14 @@ class MySqlLexer(RegexLexer):
 class SqliteConsoleLexer(Lexer):
     """
     Lexer for example sessions using sqlite3.
-
-    .. versionadded:: 0.11
     """
 
     name = 'sqlite3con'
     aliases = ['sqlite3']
     filenames = ['*.sqlite3-console']
     mimetypes = ['text/x-sqlite3-console']
+    url = 'https://www.sqlite.org'
+    version_added = '0.11'
 
     def get_tokens_unprocessed(self, data):
         sql = SqlLexer(**self.options)
@@ -811,14 +1007,13 @@ class SqliteConsoleLexer(Lexer):
 class RqlLexer(RegexLexer):
     """
     Lexer for Relation Query Language.
-
-    .. versionadded:: 2.0
     """
     name = 'RQL'
     url = 'http://www.logilab.org/project/rql'
     aliases = ['rql']
     filenames = ['*.rql']
     mimetypes = ['text/x-rql']
+    version_added = '2.0'
 
     flags = re.IGNORECASE
     tokens = {

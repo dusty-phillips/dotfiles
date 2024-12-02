@@ -4,7 +4,7 @@
 
     Lexers for various domain-specific languages.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -23,14 +23,13 @@ __all__ = ['ProtoBufLexer', 'ZeekLexer', 'PuppetLexer', 'RslLexer',
 class ProtoBufLexer(RegexLexer):
     """
     Lexer for Protocol Buffer definition files.
-
-    .. versionadded:: 1.4
     """
 
     name = 'Protocol Buffer'
     url = 'https://developers.google.com/protocol-buffers/'
     aliases = ['protobuf', 'proto']
     filenames = ['*.proto']
+    version_added = '1.4'
 
     tokens = {
         'root': [
@@ -85,14 +84,13 @@ class ProtoBufLexer(RegexLexer):
 class ThriftLexer(RegexLexer):
     """
     For Thrift interface definitions.
-
-    .. versionadded:: 2.1
     """
     name = 'Thrift'
     url = 'https://thrift.apache.org/'
     aliases = ['thrift']
     filenames = ['*.thrift']
     mimetypes = ['application/x-thrift']
+    version_added = '2.1'
 
     tokens = {
         'root': [
@@ -191,13 +189,12 @@ class ThriftLexer(RegexLexer):
 class ZeekLexer(RegexLexer):
     """
     For Zeek scripts.
-
-    .. versionadded:: 2.5
     """
     name = 'Zeek'
     url = 'https://www.zeek.org/'
     aliases = ['zeek', 'bro']
     filenames = ['*.zeek', '*.bro']
+    version_added = '2.5'
 
     _hex = r'[0-9a-fA-F]'
     _float = r'((\d*\.?\d+)|(\d+\.?\d*))([eE][-+]?\d+)?'
@@ -232,7 +229,7 @@ class ZeekLexer(RegexLexer):
         'directives': [
             (r'@(load-plugin|load-sigs|load|unload)\b.*$', Comment.Preproc),
             (r'@(DEBUG|DIR|FILENAME|deprecated|if|ifdef|ifndef|else|endif)\b', Comment.Preproc),
-            (r'(@prefixes)(\s*)((\+?=).*)$', bygroups(Comment.Preproc, 
+            (r'(@prefixes)(\s*)((\+?=).*)$', bygroups(Comment.Preproc,
                 Whitespace, Comment.Preproc)),
         ],
 
@@ -353,13 +350,12 @@ BroLexer = ZeekLexer
 class PuppetLexer(RegexLexer):
     """
     For Puppet configuration DSL.
-
-    .. versionadded:: 1.6
     """
     name = 'Puppet'
     url = 'https://puppet.com/'
     aliases = ['puppet']
     filenames = ['*.pp']
+    version_added = '1.6'
 
     tokens = {
         'root': [
@@ -443,14 +439,13 @@ class RslLexer(RegexLexer):
     RSL is the formal specification
     language used in RAISE (Rigorous Approach to Industrial Software Engineering)
     method.
-
-    .. versionadded:: 2.0
     """
     name = 'RSL'
     url = 'http://en.wikipedia.org/wiki/RAISE'
     aliases = ['rsl']
     filenames = ['*.rsl']
     mimetypes = ['text/rsl']
+    version_added = '2.0'
 
     flags = re.MULTILINE | re.DOTALL
 
@@ -505,13 +500,12 @@ class RslLexer(RegexLexer):
 class MscgenLexer(RegexLexer):
     """
     For Mscgen files.
-
-    .. versionadded:: 1.6
     """
     name = 'Mscgen'
     url = 'http://www.mcternan.me.uk/mscgen/'
     aliases = ['mscgen', 'msc']
     filenames = ['*.msc']
+    version_added = '1.6'
 
     _var = r'(\w+|"(?:\\"|[^"])*")'
 
@@ -555,13 +549,12 @@ class MscgenLexer(RegexLexer):
 class VGLLexer(RegexLexer):
     """
     For SampleManager VGL source code.
-
-    .. versionadded:: 1.6
     """
     name = 'VGL'
     url = 'http://www.thermoscientific.com/samplemanager'
     aliases = ['vgl']
     filenames = ['*.rpf']
+    version_added = '1.6'
 
     flags = re.MULTILINE | re.DOTALL | re.IGNORECASE
 
@@ -589,8 +582,6 @@ class VGLLexer(RegexLexer):
 class AlloyLexer(RegexLexer):
     """
     For Alloy source code.
-
-    .. versionadded:: 2.0
     """
 
     name = 'Alloy'
@@ -598,10 +589,12 @@ class AlloyLexer(RegexLexer):
     aliases = ['alloy']
     filenames = ['*.als']
     mimetypes = ['text/x-alloy']
+    version_added = '2.0'
 
     flags = re.MULTILINE | re.DOTALL
 
-    iden_rex = r'[a-zA-Z_][\w\']*'
+    iden_rex = r'[a-zA-Z_][\w]*"*'
+    string_rex = r'"\b(\\\\|\\[^\\]|[^"\\])*"'
     text_tuple = (r'[^\S\n]+', Whitespace)
 
     tokens = {
@@ -621,6 +614,10 @@ class AlloyLexer(RegexLexer):
             (r'\{', Operator, '#pop'),
             (iden_rex, Name, '#pop'),
         ],
+        'fact': [
+            include('fun'),
+            (string_rex, String, '#pop'),
+        ],
         'root': [
             (r'--.*?$', Comment.Single),
             (r'//.*?$', Comment.Single),
@@ -631,17 +628,20 @@ class AlloyLexer(RegexLexer):
             (r'(sig|enum)(\s+)', bygroups(Keyword.Declaration, Whitespace), 'sig'),
             (r'(iden|univ|none)\b', Keyword.Constant),
             (r'(int|Int)\b', Keyword.Type),
-            (r'(this|abstract|extends|set|seq|one|lone|let)\b', Keyword),
+            (r'(var|this|abstract|extends|set|seq|one|lone|let)\b', Keyword),
             (r'(all|some|no|sum|disj|when|else)\b', Keyword),
-            (r'(run|check|for|but|exactly|expect|as)\b', Keyword),
+            (r'(run|check|for|but|exactly|expect|as|steps)\b', Keyword),
+            (r'(always|after|eventually|until|release)\b', Keyword), # future time operators
+            (r'(historically|before|once|since|triggered)\b', Keyword), # past time operators
             (r'(and|or|implies|iff|in)\b', Operator.Word),
-            (r'(fun|pred|fact|assert)(\s+)', bygroups(Keyword, Whitespace), 'fun'),
-            (r'!|#|&&|\+\+|<<|>>|>=|<=>|<=|\.|->', Operator),
-            (r'[-+/*%=<>&!^|~{}\[\]().]', Operator),
+            (r'(fun|pred|assert)(\s+)', bygroups(Keyword, Whitespace), 'fun'),
+            (r'(fact)(\s+)', bygroups(Keyword, Whitespace), 'fact'),
+            (r'!|#|&&|\+\+|<<|>>|>=|<=>|<=|\.\.|\.|->', Operator),
+            (r'[-+/*%=<>&!^|~{}\[\]().\';]', Operator),
             (iden_rex, Name),
             (r'[:,]', Punctuation),
             (r'[0-9]+', Number.Integer),
-            (r'"(\\\\|\\[^\\]|[^"\\])*"', String),
+            (string_rex, String),
             (r'\n', Whitespace),
         ]
     }
@@ -652,14 +652,13 @@ class PanLexer(RegexLexer):
     Lexer for pan source files.
 
     Based on tcsh lexer.
-
-    .. versionadded:: 2.0
     """
 
     name = 'Pan'
     url = 'https://github.com/quattor/pan/'
     aliases = ['pan']
     filenames = ['*.pan']
+    version_added = '2.0'
 
     tokens = {
         'root': [
@@ -719,14 +718,13 @@ class PanLexer(RegexLexer):
 class CrmshLexer(RegexLexer):
     """
     Lexer for crmsh configuration files for Pacemaker clusters.
-
-    .. versionadded:: 2.1
     """
     name = 'Crmsh'
     url = 'http://crmsh.github.io/'
     aliases = ['crmsh', 'pcmk']
     filenames = ['*.crmsh', '*.pcmk']
     mimetypes = []
+    version_added = '2.1'
 
     elem = words((
         'node', 'primitive', 'group', 'clone', 'ms', 'location',
@@ -765,7 +763,7 @@ class CrmshLexer(RegexLexer):
             (sub, Keyword),
             (acl, Keyword),
             # binary operators
-            (r'(?:%s:)?(%s)(?![\w#$-])' % (val_qual, bin_ops), Operator.Word),
+            (rf'(?:{val_qual}:)?({bin_ops})(?![\w#$-])', Operator.Word),
             # other operators
             (bin_rel, Operator.Word),
             (un_ops, Operator.Word),
@@ -773,11 +771,11 @@ class CrmshLexer(RegexLexer):
             # builtin attributes (e.g. #uname)
             (r'#[a-z]+(?![\w#$-])', Name.Builtin),
             # acl_mod:blah
-            (r'(%s)(:)("(?:""|[^"])*"|\S+)' % acl_mod,
+            (rf'({acl_mod})(:)("(?:""|[^"])*"|\S+)',
              bygroups(Keyword, Punctuation, Name)),
             # rsc_id[:(role|action)]
             # NB: this matches all other identifiers
-            (r'([\w#$-]+)(?:(:)(%s))?(?![\w#$-])' % rsc_role_action,
+            (rf'([\w#$-]+)(?:(:)({rsc_role_action}))?(?![\w#$-])',
              bygroups(Name, Punctuation, Operator.Word)),
             # punctuation
             (r'(\\(?=\n)|[\[\](){}/:@])', Punctuation),
@@ -789,14 +787,13 @@ class CrmshLexer(RegexLexer):
 class FlatlineLexer(RegexLexer):
     """
     Lexer for Flatline expressions.
-
-    .. versionadded:: 2.2
     """
     name = 'Flatline'
     url = 'https://github.com/bigmlcom/flatline'
     aliases = ['flatline']
     filenames = []
     mimetypes = ['text/x-flatline']
+    version_added = '2.2'
 
     special_forms = ('let',)
 
@@ -866,14 +863,13 @@ class FlatlineLexer(RegexLexer):
 class SnowballLexer(ExtendedRegexLexer):
     """
     Lexer for Snowball source code.
-
-    .. versionadded:: 2.2
     """
 
     name = 'Snowball'
-    url = 'http://snowballstem.org/'
+    url = 'https://snowballstem.org/'
     aliases = ['snowball']
     filenames = ['*.sbl']
+    version_added = '2.2'
 
     _ws = r'\n\r\t '
 
@@ -889,8 +885,8 @@ class SnowballLexer(ExtendedRegexLexer):
         def callback(lexer, match, ctx):
             s = match.start()
             text = match.group()
-            string = re.compile(r'([^%s]*)(.)' % re.escape(lexer._start)).match
-            escape = re.compile(r'([^%s]*)(.)' % re.escape(lexer._end)).match
+            string = re.compile(rf'([^{re.escape(lexer._start)}]*)(.)').match
+            escape = re.compile(rf'([^{re.escape(lexer._end)}]*)(.)').match
             pos = 0
             do_string = do_string_first
             while pos < len(text):
@@ -921,11 +917,12 @@ class SnowballLexer(ExtendedRegexLexer):
 
     tokens = {
         'root': [
-            (words(('len', 'lenof'), suffix=r'\b'), Operator.Word),
+            (r'len\b', Name.Builtin),
+            (r'lenof\b', Operator.Word),
             include('root1'),
         ],
         'root1': [
-            (r'[%s]+' % _ws, Whitespace),
+            (rf'[{_ws}]+', Whitespace),
             (r'\d+', Number.Integer),
             (r"'", String.Single, 'string'),
             (r'[()]', Punctuation),
@@ -948,9 +945,9 @@ class SnowballLexer(ExtendedRegexLexer):
             (words(('size', 'limit', 'cursor', 'maxint', 'minint'),
                    suffix=r'\b'),
              Name.Builtin),
-            (r'(stringdef\b)([%s]*)([^%s]+)' % (_ws, _ws),
+            (rf'(stringdef\b)([{_ws}]*)([^{_ws}]+)',
              bygroups(Keyword.Reserved, Whitespace, String.Escape)),
-            (r'(stringescapes\b)([%s]*)(.)([%s]*)(.)' % (_ws, _ws),
+            (rf'(stringescapes\b)([{_ws}]*)(.)([{_ws}]*)(.)',
              _stringescapes),
             (r'[A-Za-z]\w*', Name),
         ],

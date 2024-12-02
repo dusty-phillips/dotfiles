@@ -8,7 +8,7 @@
 
     Run with `python -I` to regenerate.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -1093,7 +1093,6 @@ FUNCTIONS = (
 
 if __name__ == '__main__':  # pragma: no cover
     import re
-    import sys
     from urllib.request import FancyURLopener
 
     from pygments.util import format_lines
@@ -1123,27 +1122,27 @@ if __name__ == '__main__':  # pragma: no cover
         return functions
 
     def regenerate(filename, natives):
-        with open(filename) as fp:
+        with open(filename, encoding='utf-8') as fp:
             content = fp.read()
 
         header = content[:content.find('FUNCTIONS = (')]
         footer = content[content.find("if __name__ == '__main__':")-1:]
 
 
-        with open(filename, 'w') as fp:
+        with open(filename, 'w', encoding='utf-8') as fp:
             fp.write(header)
             fp.write(format_lines('FUNCTIONS', natives))
             fp.write('\n\n' + footer)
 
     def run():
         version = get_version()
-        print('> Downloading function index for SourceMod %s' % version)
+        print(f'> Downloading function index for SourceMod {version}')
         functions = get_sm_functions()
         print('> %d functions found:' % len(functions))
 
         functionlist = []
         for full_function_name in functions:
-            print('>> %s' % full_function_name)
+            print(f'>> {full_function_name}')
             functionlist.append(full_function_name)
 
         regenerate(__file__, functionlist)

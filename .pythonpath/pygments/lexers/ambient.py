@@ -4,14 +4,14 @@
 
     Lexers for AmbientTalk language.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
 import re
 
 from pygments.lexer import RegexLexer, include, words, bygroups
-from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
+from pygments.token import Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Whitespace
 
 __all__ = ['AmbientTalkLexer']
@@ -20,14 +20,13 @@ __all__ = ['AmbientTalkLexer']
 class AmbientTalkLexer(RegexLexer):
     """
     Lexer for AmbientTalk source code.
-
-    .. versionadded:: 2.0
     """
     name = 'AmbientTalk'
     url = 'https://code.google.com/p/ambienttalk'
     filenames = ['*.at']
     aliases = ['ambienttalk', 'ambienttalk/2', 'at']
     mimetypes = ['text/x-ambienttalk']
+    version_added = '2.0'
 
     flags = re.MULTILINE | re.DOTALL
 

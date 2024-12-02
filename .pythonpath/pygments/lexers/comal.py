@@ -4,7 +4,7 @@
 
     Lexer for COMAL-80.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -26,6 +26,7 @@ class Comal80Lexer(RegexLexer):
     url = 'https://en.wikipedia.org/wiki/COMAL'
     aliases = ['comal', 'comal80']
     filenames = ['*.cml', '*.comal']
+    version_added = ''
     flags = re.IGNORECASE
     #
     # COMAL allows for some strange characters in names which we list here so
@@ -34,7 +35,7 @@ class Comal80Lexer(RegexLexer):
     #
     _suffix = r"\b(?!['\[\]←£\\])"
     _identifier = r"[a-z]['\[\]←£\\\w]*"
-    
+
     tokens = {
         'root': [
             (r'//.*\n', Comment.Single),

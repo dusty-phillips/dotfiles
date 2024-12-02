@@ -8,40 +8,27 @@
     More information:
     https://datatracker.ietf.org/doc/rfc8610/
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
-import re
+from pygments.lexer import RegexLexer, bygroups, include, words
+from pygments.token import Comment, Error, Keyword, Name, Number, Operator, \
+    Punctuation, String, Whitespace
 
 __all__ = ['CddlLexer']
-
-from pygments.lexer import RegexLexer, bygroups, include, words
-from pygments.token import (
-    Comment,
-    Error,
-    Keyword,
-    Name,
-    Number,
-    Operator,
-    Punctuation,
-    String,
-    Text,
-    Whitespace,
-)
 
 
 class CddlLexer(RegexLexer):
     """
     Lexer for CDDL definitions.
-
-    .. versionadded:: 2.8
     """
     name = "CDDL"
     url = 'https://datatracker.ietf.org/doc/rfc8610/'
     aliases = ["cddl"]
     filenames = ["*.cddl"]
     mimetypes = ["text/x-cddl"]
+    version_added = '2.8'
 
     _prelude_types = [
         "any",
@@ -120,10 +107,10 @@ class CddlLexer(RegexLexer):
         "root": [
             include("commentsandwhitespace"),
             # tag types
-            (r"#(\d\.{uint})?".format(uint=_re_uint), Keyword.Type),  # type or any
+            (rf"#(\d\.{_re_uint})?", Keyword.Type),  # type or any
             # occurrence
             (
-                r"({uint})?(\*)({uint})?".format(uint=_re_uint),
+                rf"({_re_uint})?(\*)({_re_uint})?",
                 bygroups(Number, Operator, Number),
             ),
             (r"\?|\+", Operator),  # occurrence
@@ -131,8 +118,8 @@ class CddlLexer(RegexLexer):
             (r"(\.\.\.|\.\.)", Operator),  # rangeop
             (words(_controls, suffix=r"\b"), Operator.Word),  # ctlops
             # into choice op
-            (r"&(?=\s*({groupname}|\())".format(groupname=_re_id), Operator),
-            (r"~(?=\s*{})".format(_re_id), Operator),  # unwrap op
+            (rf"&(?=\s*({_re_id}|\())", Operator),
+            (rf"~(?=\s*{_re_id})", Operator),  # unwrap op
             (r"//|/(?!/)", Operator),  # double und single slash
             (r"=>|/==|/=|=", Operator),
             (r"[\[\]{}\(\),<>:]", Punctuation),
@@ -143,15 +130,11 @@ class CddlLexer(RegexLexer):
             # Barewords as member keys (must be matched before values, types, typenames,
             # groupnames).
             # Token type is String as barewords are always interpreted as such.
-            (
-                r"({bareword})(\s*)(:)".format(bareword=_re_id),
-                bygroups(String, Whitespace, Punctuation),
-            ),
+            (rf"({_re_id})(\s*)(:)",
+             bygroups(String, Whitespace, Punctuation)),
             # predefined types
-            (
-                words(_prelude_types, prefix=r"(?![\-_$@])\b", suffix=r"\b(?![\-_$@])"),
-                Name.Builtin,
-            ),
+            (words(_prelude_types, prefix=r"(?![\-_$@])\b", suffix=r"\b(?![\-_$@])"),
+             Name.Builtin),
             # user-defined groupnames, typenames
             (_re_id, Name.Class),
             # values
@@ -160,10 +143,8 @@ class CddlLexer(RegexLexer):
             (r"0x[0-9a-fA-F]+(\.[0-9a-fA-F]+)?p[+-]?\d+", Number.Hex),  # hexfloat
             (r"0x[0-9a-fA-F]+", Number.Hex),  # hex
             # Float
-            (
-                r"{int}(?=(\.\d|e[+-]?\d))(?:\.\d+)?(?:e[+-]?\d+)?".format(int=_re_int),
-                Number.Float,
-            ),
+            (rf"{_re_int}(?=(\.\d|e[+-]?\d))(?:\.\d+)?(?:e[+-]?\d+)?",
+             Number.Float),
             # Int
             (_re_int, Number.Integer),
             (r'"(\\\\|\\"|[^"])*"', String.Double),

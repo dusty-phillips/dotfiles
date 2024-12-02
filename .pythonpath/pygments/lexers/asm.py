@@ -4,7 +4,7 @@
 
     Lexers for assembly languages.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -31,6 +31,8 @@ class GasLexer(RegexLexer):
     aliases = ['gas', 'asm']
     filenames = ['*.s', '*.S']
     mimetypes = ['text/x-gas']
+    url = 'https://www.gnu.org/software/binutils'
+    version_added = ''
 
     #: optional Comment or Whitespace
     string = r'"(\\"|[^"])*"'
@@ -95,7 +97,7 @@ class GasLexer(RegexLexer):
             (r'/[*][\w\W]*?[*]/', Comment.Multiline)
         ],
         'punctuation': [
-            (r'[-*,.()\[\]!:]+', Punctuation)
+            (r'[-*,.()\[\]!:{}]+', Punctuation)
         ]
     }
 
@@ -167,6 +169,8 @@ class ObjdumpLexer(RegexLexer):
     aliases = ['objdump']
     filenames = ['*.objdump']
     mimetypes = ['text/x-objdump']
+    url = 'https://www.gnu.org/software/binutils'
+    version_added = ''
 
     tokens = _objdump_lexer_tokens(GasLexer)
 
@@ -179,6 +183,8 @@ class DObjdumpLexer(DelegatingLexer):
     aliases = ['d-objdump']
     filenames = ['*.d-objdump']
     mimetypes = ['text/x-d-objdump']
+    url = 'https://www.gnu.org/software/binutils'
+    version_added = ''
 
     def __init__(self, **options):
         super().__init__(DLexer, ObjdumpLexer, **options)
@@ -192,6 +198,8 @@ class CppObjdumpLexer(DelegatingLexer):
     aliases = ['cpp-objdump', 'c++-objdumb', 'cxx-objdump']
     filenames = ['*.cpp-objdump', '*.c++-objdump', '*.cxx-objdump']
     mimetypes = ['text/x-cpp-objdump']
+    url = 'https://www.gnu.org/software/binutils'
+    version_added = ''
 
     def __init__(self, **options):
         super().__init__(CppLexer, ObjdumpLexer, **options)
@@ -205,6 +213,9 @@ class CObjdumpLexer(DelegatingLexer):
     aliases = ['c-objdump']
     filenames = ['*.c-objdump']
     mimetypes = ['text/x-c-objdump']
+    url = 'https://www.gnu.org/software/binutils'
+    version_added = ''
+
 
     def __init__(self, **options):
         super().__init__(CLexer, ObjdumpLexer, **options)
@@ -213,13 +224,13 @@ class CObjdumpLexer(DelegatingLexer):
 class HsailLexer(RegexLexer):
     """
     For HSAIL assembly code.
-
-    .. versionadded:: 2.2
     """
     name = 'HSAIL'
     aliases = ['hsail', 'hsa']
     filenames = ['*.hsail']
     mimetypes = ['text/x-hsail']
+    url = 'https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture#HSA_Intermediate_Layer'
+    version_added = '2.2'
 
     string = r'"[^"]*?"'
     identifier = r'[a-zA-Z_][\w.]*'
@@ -354,6 +365,7 @@ class LlvmLexer(RegexLexer):
     aliases = ['llvm']
     filenames = ['*.ll']
     mimetypes = ['text/x-llvm']
+    version_added = ''
 
     #: optional Comment or Whitespace
     string = r'"[^"]*?"'
@@ -478,7 +490,7 @@ class LlvmLexer(RegexLexer):
             # Types
             (words(('void', 'half', 'bfloat', 'float', 'double', 'fp128',
                     'x86_fp80', 'ppc_fp128', 'label', 'metadata', 'x86_mmx',
-                    'x86_amx', 'token')),
+                    'x86_amx', 'token', 'ptr')),
                    Keyword.Type),
 
             # Integer types
@@ -490,14 +502,13 @@ class LlvmLexer(RegexLexer):
 class LlvmMirBodyLexer(RegexLexer):
     """
     For LLVM MIR examples without the YAML wrapper.
-
-    .. versionadded:: 2.6
     """
     name = 'LLVM-MIR Body'
     url = 'https://llvm.org/docs/MIRLangRef.html'
     aliases = ['llvm-mir-body']
     filenames = []
     mimetypes = []
+    version_added = '2.6'
 
     tokens = {
         'root': [
@@ -635,13 +646,12 @@ class LlvmMirLexer(RegexLexer):
     machine specific intermediate representation. It allows LLVM's developers to
     see the state of the compilation process at various points, as well as test
     individual pieces of the compiler.
-
-    .. versionadded:: 2.6
     """
     name = 'LLVM-MIR'
     url = 'https://llvm.org/docs/MIRLangRef.html'
     aliases = ['llvm-mir']
     filenames = ['*.mir']
+    version_added = '2.6'
 
     tokens = {
         'root': [
@@ -713,8 +723,10 @@ class NasmLexer(RegexLexer):
     """
     name = 'NASM'
     aliases = ['nasm']
-    filenames = ['*.asm', '*.ASM']
+    filenames = ['*.asm', '*.ASM', '*.nasm']
     mimetypes = ['text/x-nasm']
+    url = 'https://nasm.us'
+    version_added = ''
 
     # Tasm uses the same file endings, but TASM is not as common as NASM, so
     # we prioritize NASM higher by default
@@ -730,8 +742,9 @@ class NasmLexer(RegexLexer):
     declkw = r'(?:res|d)[bwdqt]|times'
     register = (r'(r[0-9][0-5]?[bwd]?|'
                 r'[a-d][lh]|[er]?[a-d]x|[er]?[sb]p|[er]?[sd]i|[c-gs]s|st[0-7]|'
-                r'mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7])\b')
-    wordop = r'seg|wrt|strict'
+                r'mm[0-7]|cr[0-4]|dr[0-367]|tr[3-7]|k[0-7]|'
+                r'[xyz]mm(?:[12][0-9]?|3[01]?|[04-9]))\b')
+    wordop = r'seg|wrt|strict|rel|abs'
     type = r'byte|[dq]?word'
     # Directives must be followed by whitespace, otherwise CPU will match
     # cpuid for instance.
@@ -745,7 +758,7 @@ class NasmLexer(RegexLexer):
             (r'^\s*%', Comment.Preproc, 'preproc'),
             include('whitespace'),
             (identifier + ':', Name.Label),
-            (r'(%s)(\s+)(equ)' % identifier,
+            (rf'({identifier})(\s+)(equ)',
                 bygroups(Name.Constant, Whitespace, Keyword.Declaration),
                 'instruction-args'),
             (directives, Keyword, 'instruction-args'),
@@ -778,7 +791,7 @@ class NasmLexer(RegexLexer):
             (r'#.*', Comment.Single)
         ],
         'punctuation': [
-            (r'[,():\[\]]+', Punctuation),
+            (r'[,{}():\[\]]+', Punctuation),
             (r'[&|^<>+*/%~-]+', Operator),
             (r'[$]+', Keyword.Constant),
             (wordop, Operator.Word),
@@ -795,13 +808,13 @@ class NasmLexer(RegexLexer):
 class NasmObjdumpLexer(ObjdumpLexer):
     """
     For the output of ``objdump -d -M intel``.
-
-    .. versionadded:: 2.0
     """
     name = 'objdump-nasm'
     aliases = ['objdump-nasm']
     filenames = ['*.objdump-intel']
     mimetypes = ['text/x-nasm-objdump']
+    url = 'https://www.gnu.org/software/binutils'
+    version_added = '2.0'
 
     tokens = _objdump_lexer_tokens(NasmLexer)
 
@@ -814,6 +827,8 @@ class TasmLexer(RegexLexer):
     aliases = ['tasm']
     filenames = ['*.asm', '*.ASM', '*.tasm']
     mimetypes = ['text/x-tasm']
+    url = 'https://en.wikipedia.org/wiki/Turbo_Assembler'
+    version_added = ''
 
     identifier = r'[@a-z$._?][\w$.?#@~]*'
     hexn = r'(?:0x[0-9a-f]+|$0[0-9a-f]*|[0-9]+[0-9a-f]*h)'
@@ -843,7 +858,7 @@ class TasmLexer(RegexLexer):
             include('whitespace'),
             (identifier + ':', Name.Label),
             (directives, Keyword, 'instruction-args'),
-            (r'(%s)(\s+)(%s)' % (identifier, datatype),
+            (rf'({identifier})(\s+)({datatype})',
                 bygroups(Name.Constant, Whitespace, Keyword.Declaration),
                 'instruction-args'),
             (declkw, Keyword.Declaration, 'instruction-args'),
@@ -861,7 +876,8 @@ class TasmLexer(RegexLexer):
             (register, Name.Builtin),
             (identifier, Name.Variable),
             # Do not match newline when it's preceded by a backslash
-            (r'(\\)(\s*)(;.*)([\r\n])', bygroups(Text, Whitespace, Comment.Single, Whitespace)),
+            (r'(\\)(\s*)(;.*)([\r\n])',
+             bygroups(Text, Whitespace, Comment.Single, Whitespace)),
             (r'[\r\n]+', Whitespace, '#pop'),
             include('whitespace')
         ],
@@ -894,12 +910,12 @@ class TasmLexer(RegexLexer):
 class Ca65Lexer(RegexLexer):
     """
     For ca65 assembler sources.
-
-    .. versionadded:: 1.6
     """
     name = 'ca65 assembler'
     aliases = ['ca65']
     filenames = ['*.s']
+    url = 'https://cc65.github.io'
+    version_added = '1.6'
 
     flags = re.IGNORECASE
 
@@ -933,14 +949,13 @@ class Ca65Lexer(RegexLexer):
 class Dasm16Lexer(RegexLexer):
     """
     For DCPU-16 Assembly.
-
-    .. versionadded:: 2.4
     """
     name = 'DASM16'
     url = 'http://0x10c.com/doc/dcpu-16.txt'
     aliases = ['dasm16']
     filenames = ['*.dasm16', '*.dasm']
     mimetypes = ['text/x-dasm16']
+    version_added = '2.4'
 
     INSTRUCTIONS = [
         'SET',

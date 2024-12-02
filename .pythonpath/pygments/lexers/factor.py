@@ -4,15 +4,13 @@
 
     Lexers for the Factor language.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
-import re
-
 from pygments.lexer import RegexLexer, bygroups, default, words
 from pygments.token import Text, Comment, Keyword, Name, String, Number, \
-        Whitespace, Punctuation
+    Whitespace, Punctuation
 
 __all__ = ['FactorLexer']
 
@@ -20,14 +18,13 @@ __all__ = ['FactorLexer']
 class FactorLexer(RegexLexer):
     """
     Lexer for the Factor language.
-
-    .. versionadded:: 1.4
     """
     name = 'Factor'
     url = 'http://factorcode.org'
     aliases = ['factor']
     filenames = ['*.factor']
     mimetypes = ['text/x-factor']
+    version_added = '1.4'
 
     builtin_kernel = words((
         '-rot', '2bi', '2bi@', '2bi*', '2curry', '2dip', '2drop', '2dup', '2keep', '2nip',

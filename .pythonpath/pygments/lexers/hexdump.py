@@ -4,12 +4,12 @@
 
     Lexers for hexadecimal dumps.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
 from pygments.lexer import RegexLexer, bygroups, include
-from pygments.token import Text, Name, Number, String, Punctuation, Whitespace
+from pygments.token import Name, Number, String, Punctuation, Whitespace
 
 __all__ = ['HexdumpLexer']
 
@@ -33,11 +33,11 @@ class HexdumpLexer(RegexLexer):
     * ``od -t x1z FILE``
     * ``xxd FILE``
     * ``DEBUG.EXE FILE.COM`` and entering ``d`` to the prompt.
-
-    .. versionadded:: 2.1
     """
     name = 'Hexdump'
     aliases = ['hexdump']
+    url = 'https://en.wikipedia.org/wiki/Hex_dump'
+    version_added = '2.1'
 
     hd = r'[0-9A-Ha-h]'
 

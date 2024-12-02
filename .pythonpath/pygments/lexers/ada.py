@@ -4,22 +4,17 @@
 
     Lexers for Ada family languages.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
 import re
 
-from pygments.lexer import Lexer, RegexLexer, include, bygroups, words, \
-    using, this, default
-from pygments.util import get_bool_opt, get_list_opt
+from pygments.lexer import RegexLexer, include, bygroups, words, using, this, \
+    default
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
-    Number, Punctuation, Error
-from pygments.scanner import Scanner
+    Number, Punctuation
 from pygments.lexers._ada_builtins import KEYWORD_LIST, BUILTIN_LIST
-
-# compatibility import
-from pygments.lexers.modula2 import Modula2Lexer
 
 __all__ = ['AdaLexer']
 
@@ -27,14 +22,14 @@ __all__ = ['AdaLexer']
 class AdaLexer(RegexLexer):
     """
     For Ada source code.
-
-    .. versionadded:: 1.3
     """
 
     name = 'Ada'
     aliases = ['ada', 'ada95', 'ada2005']
     filenames = ['*.adb', '*.ads', '*.ada']
     mimetypes = ['text/x-ada']
+    url = 'https://www.adaic.org'
+    version_added = '1.3'
 
     flags = re.MULTILINE | re.IGNORECASE
 

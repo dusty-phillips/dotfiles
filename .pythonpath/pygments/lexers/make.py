@@ -4,7 +4,7 @@
 
     Lexers for Makefiles and similar.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -31,6 +31,8 @@ class MakefileLexer(Lexer):
     aliases = ['make', 'makefile', 'mf', 'bsdmake']
     filenames = ['*.mak', '*.mk', 'Makefile', 'makefile', 'Makefile.*', 'GNUmakefile']
     mimetypes = ['text/x-makefile']
+    url = 'https://en.wikipedia.org/wiki/Make_(software)'
+    version_added = ''
 
     r_special = re.compile(
         r'^(?:'
@@ -44,7 +46,7 @@ class MakefileLexer(Lexer):
 
     def get_tokens_unprocessed(self, text):
         ins = []
-        lines = text.splitlines(True)
+        lines = text.splitlines(keepends=True)
         done = ''
         lex = BaseMakefileLexer(**self.options)
         backslashflag = False
@@ -67,14 +69,14 @@ class MakefileLexer(Lexer):
 class BaseMakefileLexer(RegexLexer):
     """
     Lexer for simple Makefiles (no preprocessing).
-
-    .. versionadded:: 0.10
     """
 
     name = 'Base Makefile'
     aliases = ['basemake']
     filenames = []
     mimetypes = []
+    url = 'https://en.wikipedia.org/wiki/Make_(software)'
+    version_added = '0.10'
 
     tokens = {
         'root': [
@@ -85,16 +87,19 @@ class BaseMakefileLexer(RegexLexer):
             (r'\s+', Whitespace),
             (r'#.*?\n', Comment),
             (r'((?:un)?export)(\s+)(?=[\w${}\t -]+\n)',
-             bygroups(Keyword, Text), 'export'),
+             bygroups(Keyword, Whitespace), 'export'),
             (r'(?:un)?export\s+', Keyword),
             # assignment
             (r'([\w${}().-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n)+|.*\n)',
-             bygroups(Name.Variable, Text, Operator, Text, using(BashLexer))),
+             bygroups(
+                Name.Variable, Whitespace, Operator, Whitespace,
+                using(BashLexer))),
             # strings
             (r'"(\\\\|\\[^\\]|[^"\\])*"', String.Double),
             (r"'(\\\\|\\[^\\]|[^'\\])*'", String.Single),
             # targets
-            (r'([^\n:]+)(:+)([ \t]*)', bygroups(Name.Function, Operator, Text),
+            (r'([^\n:]+)(:+)([ \t]*)', bygroups(
+                Name.Function, Operator, Whitespace),
              'block-header'),
             # expansions
             (r'\$\(', Keyword, 'expansion'),
@@ -117,7 +122,7 @@ class BaseMakefileLexer(RegexLexer):
             (r'\\\n', Text),  # line continuation
             (r'\$\(', Keyword, 'expansion'),
             (r'[a-zA-Z_]+', Name),
-            (r'\n', Text, '#pop'),
+            (r'\n', Whitespace, '#pop'),
             (r'.', Text),
         ],
     }
@@ -126,14 +131,13 @@ class BaseMakefileLexer(RegexLexer):
 class CMakeLexer(RegexLexer):
     """
     Lexer for CMake files.
-
-    .. versionadded:: 1.2
     """
     name = 'CMake'
     url = 'https://cmake.org/documentation/'
     aliases = ['cmake']
     filenames = ['*.cmake', 'CMakeLists.txt']
     mimetypes = ['text/x-cmake']
+    version_added = '1.2'
 
     tokens = {
         'root': [
@@ -163,7 +167,7 @@ class CMakeLexer(RegexLexer):
             # r'VTK_MAKE_INSTANTIATOR|VTK_WRAP_JAVA|VTK_WRAP_PYTHON|'
             # r'VTK_WRAP_TCL|WHILE|WRITE_FILE|'
             # r'COUNTARGS)\b', Name.Builtin, 'args'),
-            (r'\b(\w+)([ \t]*)(\()', bygroups(Name.Builtin, Text,
+            (r'\b(\w+)([ \t]*)(\()', bygroups(Name.Builtin, Whitespace,
                                               Punctuation), 'args'),
             include('keywords'),
             include('ws')
@@ -176,8 +180,9 @@ class CMakeLexer(RegexLexer):
             (r'(\$<)(.+?)(>)', bygroups(Operator, Name.Variable, Operator)),
             (r'(?s)".*?"', String.Double),
             (r'\\\S+', String),
+            (r'\[(?P<level>=*)\[[\w\W]*?\](?P=level)\]', String.Multiline),
             (r'[^)$"# \t\n]+', String),
-            (r'\n', Text),  # explicitly legal
+            (r'\n', Whitespace),  # explicitly legal
             include('keywords'),
             include('ws')
         ],
@@ -190,6 +195,7 @@ class CMakeLexer(RegexLexer):
         ],
         'ws': [
             (r'[ \t]+', Whitespace),
+            (r'#\[(?P<level>=*)\[[\w\W]*?\](?P=level)\]', Comment),
             (r'#.*\n', Comment),
         ]
     }
@@ -200,7 +206,7 @@ class CMakeLexer(RegexLexer):
             r'\([ \t]*VERSION[ \t]*\d+(\.\d+)*[ \t]*'
             r'([ \t]FATAL_ERROR)?[ \t]*\)[ \t]*'
             r'(#[^\n]*)?$'
-       )
+        )
         if re.search(exp, text, flags=re.MULTILINE | re.IGNORECASE):
             return 0.8
         return 0.0

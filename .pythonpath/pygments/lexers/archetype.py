@@ -2,18 +2,14 @@
     pygments.lexers.archetype
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Lexer for Archetype-related syntaxes, including:
-
-    - ODIN syntax <https://github.com/openEHR/odin>
-    - ADL syntax <http://www.openehr.org/releases/trunk/architecture/am/adl2.pdf>
-    - cADL sub-syntax of ADL
+    Lexer for Archetype-related syntaxes, including ODIN, ADL and cADL.
 
     For uses of this syntax, see the openEHR archetypes <http://www.openEHR.org/ckm>
 
     Contributed by Thomas Beale <https://github.com/wolandscat>,
     <https://bitbucket.org/thomas_beale>.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -40,7 +36,8 @@ class AtomsLexer(RegexLexer):
         ],
         'archetype_id': [
             (r'([ \t]*)(([a-zA-Z]\w+(\.[a-zA-Z]\w+)*::)?[a-zA-Z]\w+(-[a-zA-Z]\w+){2}'
-             r'\.\w+[\w-]*\.v\d+(\.\d+){,2}((-[a-z]+)(\.\d+)?)?)', bygroups(Whitespace, Name.Decorator)),
+             r'\.\w+[\w-]*\.v\d+(\.\d+){,2}((-[a-z]+)(\.\d+)?)?)',
+             bygroups(Whitespace, Name.Decorator)),
         ],
         'date_constraints': [
             # ISO 8601-based date/time constraints
@@ -138,13 +135,13 @@ class AtomsLexer(RegexLexer):
 class OdinLexer(AtomsLexer):
     """
     Lexer for ODIN syntax.
-
-    .. versionadded:: 2.1
     """
     name = 'ODIN'
     aliases = ['odin']
     filenames = ['*.odin']
     mimetypes = ['text/odin']
+    url = 'https://github.com/openEHR/odin'
+    version_added = '2.1'
 
     tokens = {
         'path': [
@@ -187,12 +184,12 @@ class OdinLexer(AtomsLexer):
 class CadlLexer(AtomsLexer):
     """
     Lexer for cADL syntax.
-
-    .. versionadded:: 2.1
     """
     name = 'cADL'
     aliases = ['cadl']
     filenames = ['*.cadl']
+    url = 'https://specifications.openehr.org/releases/AM/latest/ADL2.html#_cadl_constraint_adl'
+    version_added = '2.1'
 
     tokens = {
         'path': [
@@ -252,13 +249,13 @@ class CadlLexer(AtomsLexer):
 class AdlLexer(AtomsLexer):
     """
     Lexer for ADL syntax.
-
-    .. versionadded:: 2.1
     """
 
     name = 'ADL'
     aliases = ['adl']
     filenames = ['*.adl', '*.adls', '*.adlf', '*.adlx']
+    url = 'https://specifications.openehr.org/releases/AM/latest/ADL2.html'
+    version_added = '2.1'
 
     tokens = {
         'whitespace': [
@@ -271,7 +268,8 @@ class AdlLexer(AtomsLexer):
             # repeating the following two rules from the root state enable multi-line
             # strings that start in the first column to be dealt with
             (r'^(language|description|ontology|terminology|annotations|'
-             r'component_terminologies|revision_history)([ \t]*\n)', bygroups(Generic.Heading, Whitespace)),
+             r'component_terminologies|revision_history)([ \t]*\n)',
+             bygroups(Generic.Heading, Whitespace)),
             (r'^(definition)([ \t]*\n)', bygroups(Generic.Heading, Whitespace), 'cadl_section'),
             (r'^([ \t]*|[ \t]+.*)\n', using(OdinLexer)),
             (r'^([^"]*")(>[ \t]*\n)', bygroups(String, Punctuation)),

@@ -4,11 +4,9 @@
 
     Lexer for the BARE schema.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
-
-import re
 
 from pygments.lexer import RegexLexer, words, bygroups
 from pygments.token import Text, Comment, Keyword, Name, Literal, Whitespace
@@ -19,13 +17,12 @@ __all__ = ['BareLexer']
 class BareLexer(RegexLexer):
     """
     For BARE schema source.
-
-    .. versionadded:: 2.7
     """
     name = 'BARE'
     url = 'https://baremessages.org'
     filenames = ['*.bare']
     aliases = ['bare']
+    version_added = '2.7'
 
     keywords = [
         'type',
@@ -66,7 +63,8 @@ class BareLexer(RegexLexer):
         'struct': [
             (r'\{', Text, '#push'),
             (r'\}', Text, '#pop'),
-            (r'([a-zA-Z0-9]+)(:)(\s*)', bygroups(Name.Attribute, Text, Whitespace), 'typedef'),
+            (r'([a-zA-Z0-9]+)(:)(\s*)',
+             bygroups(Name.Attribute, Text, Whitespace), 'typedef'),
             (r'\s+', Whitespace),
         ],
         'union': [
@@ -94,7 +92,8 @@ class BareLexer(RegexLexer):
         'enum': [
             (r'\{', Text, '#push'),
             (r'\}', Text, '#pop'),
-            (r'([A-Z][A-Z0-9_]*)(\s*=\s*)(\d+)', bygroups(Name.Attribute, Text, Literal)),
+            (r'([A-Z][A-Z0-9_]*)(\s*=\s*)(\d+)',
+             bygroups(Name.Attribute, Text, Literal)),
             (r'([A-Z][A-Z0-9_]*)', bygroups(Name.Attribute)),
             (r'#.*?$', Comment),
             (r'\s+', Whitespace),

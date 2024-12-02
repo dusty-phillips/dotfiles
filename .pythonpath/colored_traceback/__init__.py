@@ -1,1 +1,1 @@
-from .colored_traceback import add_hook, Colorizer
+from .colored_traceback import add_hook

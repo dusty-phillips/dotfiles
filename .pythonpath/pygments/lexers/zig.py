@@ -4,7 +4,7 @@
 
     Lexers for Zig.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -17,6 +17,8 @@ __all__ = ['ZigLexer']
 
 class ZigLexer(RegexLexer):
     """
+    Lexer for the Zig language.
+
     grammar: https://ziglang.org/documentation/master/#Grammar
     """
     name = 'Zig'
@@ -24,6 +26,7 @@ class ZigLexer(RegexLexer):
     aliases = ['zig']
     filenames = ['*.zig']
     mimetypes = ['text/zig']
+    version_added = ''
 
     type_keywords = (
         words(('bool', 'f16', 'f32', 'f64', 'f128', 'void', 'noreturn', 'type',

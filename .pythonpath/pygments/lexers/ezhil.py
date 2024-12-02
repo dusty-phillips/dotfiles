@@ -4,14 +4,15 @@
 
     Pygments lexers for Ezhil language.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
 import re
-from pygments.lexer import RegexLexer, include, words, bygroups
-from pygments.token import Keyword, Text, Comment, Name
-from pygments.token import String, Number, Punctuation, Operator, Whitespace
+
+from pygments.lexer import RegexLexer, include, words
+from pygments.token import Keyword, Comment, Name, String, Number, \
+    Punctuation, Operator, Whitespace
 
 __all__ = ['EzhilLexer']
 
@@ -19,14 +20,13 @@ __all__ = ['EzhilLexer']
 class EzhilLexer(RegexLexer):
     """
     Lexer for Ezhil, a Tamil script-based programming language.
-
-    .. versionadded:: 2.1
     """
     name = 'Ezhil'
     url = 'http://ezhillang.org'
     aliases = ['ezhil']
     filenames = ['*.n']
     mimetypes = ['text/x-ezhil']
+    version_added = '2.1'
     # Refer to tamil.utf8.tamil_letters from open-tamil for a stricter version of this.
     # This much simpler version is close enough, and includes combining marks.
     _TALETTERS = '[a-zA-Z_]|[\u0b80-\u0bff]'

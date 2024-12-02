@@ -4,7 +4,7 @@
 
     Lexers for CSS and related stylesheet formats.
 
-    :copyright: Copyright 2006-2022 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2024 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -13,8 +13,8 @@ import copy
 
 from pygments.lexer import ExtendedRegexLexer, RegexLexer, include, bygroups, \
     default, words, inherit
-from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
-    Number, Punctuation, Whitespace
+from pygments.token import Comment, Operator, Keyword, Name, String, Number, \
+    Punctuation, Whitespace
 from pygments.lexers._css_builtins import _css_properties
 
 __all__ = ['CssLexer', 'SassLexer', 'ScssLexer', 'LessCssLexer']
@@ -178,6 +178,7 @@ class CssLexer(RegexLexer):
     aliases = ['css']
     filenames = ['*.css']
     mimetypes = ['text/css']
+    version_added = ''
 
     tokens = {
         'root': [
@@ -249,7 +250,7 @@ class CssLexer(RegexLexer):
         ],
         'function-start': [
             (r'\s+', Whitespace),
-            (r'[-]+([\w+]+[-]*)+', Name.Variable),
+            (r'[-]+([A-Za-z][\w+]*[-]*)+', Name.Variable),
             include('urls'),
             (words(_vendor_prefixes,), Keyword.Pseudo),
             (words(_keyword_values, suffix=r'\b'), Keyword.Constant),
@@ -445,8 +446,6 @@ def _starts_block(token, state):
 class SassLexer(ExtendedRegexLexer):
     """
     For Sass stylesheets.
-
-    .. versionadded:: 1.3
     """
 
     name = 'Sass'
@@ -454,6 +453,7 @@ class SassLexer(ExtendedRegexLexer):
     aliases = ['sass']
     filenames = ['*.sass']
     mimetypes = ['text/x-sass']
+    version_added = '1.3'
 
     flags = re.IGNORECASE | re.MULTILINE
 
@@ -535,6 +535,7 @@ class ScssLexer(RegexLexer):
     aliases = ['scss']
     filenames = ['*.scss']
     mimetypes = ['text/x-scss']
+    version_added = ''
 
     flags = re.IGNORECASE | re.DOTALL
     tokens = {
@@ -579,8 +580,6 @@ class ScssLexer(RegexLexer):
 class LessCssLexer(CssLexer):
     """
     For LESS styleshets.
-
-    .. versionadded:: 2.1
     """
 
     name = 'LessCss'
@@ -588,6 +587,7 @@ class LessCssLexer(CssLexer):
     aliases = ['less']
     filenames = ['*.less']
     mimetypes = ['text/x-less-css']
+    version_added = '2.1'
 
     tokens = {
         'root': [
