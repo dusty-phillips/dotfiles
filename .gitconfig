@@ -5,6 +5,25 @@
 [core]
 pager = delta
 
+[alias]
+	append = town append
+	hack = town hack
+	sync = town sync
+	delete = town delete
+	sw = town switch
+	propose = town propose
+	graph = "!sh -c 'if git show-ref --quiet refs/heads/main; then base=main; else base=master; fi; git log --branches --pretty=oneline --graph --all --abbrev-commit --ancestry-path $base~2..HEAD'"
+	compress = town compress
+	contribute = town contribute
+	diff-parent = town diff-parent
+	observe = town observe
+	park = town park
+	prepend = town prepend
+	rename = town rename
+	repo = town repo
+	set-parent = town set-parent
+	ship = town ship
+
 [interactive]
     diffFilter = delta --color-only
 
