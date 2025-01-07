@@ -23,6 +23,7 @@ pager = delta
 	repo = town repo
 	set-parent = town set-parent
 	ship = town ship
+	tree = town branch
 	graph = "!sh -c 'if git show-ref --quiet refs/heads/main; then base=main; else base=master; fi; git log --branches --pretty=oneline --graph --all --abbrev-commit --ancestry-path $base~2..HEAD'"
 	pulls = "!gh pr status"
 
