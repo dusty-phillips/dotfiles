@@ -26,6 +26,9 @@ pager = delta
 	tree = town branch
 	graph = "!sh -c 'if git show-ref --quiet refs/heads/main; then base=main; else base=master; fi; git log --branches --pretty=oneline --graph --all --abbrev-commit --ancestry-path $base~2..HEAD'"
 	pulls = "!gh pr status"
+	up = "!f() { parent=$(git config \"git-town-branch.$(git rev-parse --abbrev-ref HEAD).parent\"); if [ -n \"$parent\" ]; then git checkout \"$parent\"; else echo \"No parent branch found\"; fi; }; f"
+	down = "!f() { current=$(git rev-parse --abbrev-ref HEAD); child=$(git config --get-regexp \"^git-town-branch\\..*\\.parent\" | grep \"$current$\" | head -n 1 | cut -d\".\" -f2); if [ -n \"$child\" ]; then git checkout \"$child\"; else echo \"No child branch found\"; fi; }; f"
+
 
 [interactive]
     diffFilter = delta --color-only
