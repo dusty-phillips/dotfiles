@@ -1,5 +1,6 @@
 return {
   "echasnovski/mini.files",
+  enabled = false,
   keys = {
     {
       "<leader>e",
