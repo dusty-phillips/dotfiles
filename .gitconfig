@@ -6,29 +6,8 @@
 pager = delta
 
 [alias]
-	append = town append
-	hack = town hack
-	sync = town sync
-	sa = town sync --all
-	delete = town delete
-	sw = town switch
-	propose = town propose
-	compress = town compress
-	contribute = town contribute
-	diff-parent = town diff-parent
-	observe = town observe
-	park = town park
-	prepend = town prepend
-	rename = town rename
-	repo = town repo
-	set-parent = town set-parent
-	ship = town ship
-	tree = town branch
 	graph = "!sh -c 'if git show-ref --quiet refs/heads/main; then base=main; else base=master; fi; git log --branches --pretty=oneline --graph --all --abbrev-commit --ancestry-path $base~2..HEAD'"
 	pulls = "!gh pr status"
-	up = "!f() { parent=$(git config \"git-town-branch.$(git rev-parse --abbrev-ref HEAD).parent\"); if [ -n \"$parent\" ]; then git checkout \"$parent\"; else echo \"No parent branch found\"; fi; }; f"
-	down = "!f() { current=$(git rev-parse --abbrev-ref HEAD); child=$(git config --get-regexp \"^git-town-branch\\..*\\.parent\" | grep \"$current$\" | head -n 1 | cut -d\".\" -f2); if [ -n \"$child\" ]; then git checkout \"$child\"; else echo \"No child branch found\"; fi; }; f"
-
 
 [interactive]
     diffFilter = delta --color-only
@@ -45,12 +24,17 @@ pager = delta
 
 [diff]
     tool = vimdiff
+
 [merge]
     tool = vimdiff
     conflictstyle = zdiff3
+
 [mergetool "vimdiff"]
     cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
 [pull]
 	ff = only
 [init]
 	defaultBranch = main
+[spice "branchCreate"]
+	commit = false
