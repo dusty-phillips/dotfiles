@@ -15,20 +15,6 @@ return {
     keys = {
       { "<leader>hx", "<cmd>GitConflictListQf<cr>", desc = "List Conflicts" },
       { "<leader>hX", "<cmd>GitConflictRefresh<cr>", desc = "Refresh Conflicts" },
-      {
-        "<leader>hb",
-        function()
-          package.loaded.gitsigns.blame_line({ full = true })
-        end,
-        desc = "Blame Line",
-      },
-      {
-        "<leader>hB",
-        function()
-          package.loaded.gitsigns.blame()
-        end,
-        desc = "Blame Buffer",
-      },
     },
   },
   {
