@@ -2,8 +2,8 @@ return {
   "saghen/blink.cmp",
   opts = {
     keymap = {
-      preset = "super-tab",
-      ["<Right>"] = { "accept", "fallback" },
+      ["<Right>"] = { "select_and_accept" },
+      ["<CR>"] = {},
     },
   },
 }
