@@ -13,7 +13,6 @@ return {
             close = {
               modes = {
                 n = "q",
-                i = "<Esc>",
               },
             },
             stop = {
