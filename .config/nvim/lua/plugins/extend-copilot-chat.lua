@@ -1,6 +1,7 @@
 return {
   "CopilotC-Nvim/CopilotChat.nvim",
+  enabled = false,
   opts = {
-    model = "claude-3.7-sonnet",
+    model = "claude-sonnet-4",
   },
 }
