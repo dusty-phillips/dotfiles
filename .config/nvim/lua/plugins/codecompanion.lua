@@ -1,37 +1,43 @@
 return {
   {
-
     "olimorris/codecompanion.nvim",
     cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionToggle", "CodeCompanionAdd", "CodeCompanionChat" },
-
-    opts = function()
-      local options = require("codecompanion.config")
-      local user = vim.env.USER or "You"
-
-      options.strategies.chat.roles = {
-        llm = "  CodeCompanion",
-        user = "  " .. user,
-      }
-
-      options.strategies.chat.keymaps.close.modes = {
-        n = "q",
-        i = "<Esc>",
-      }
-      options.strategies.chat.keymaps.stop.modes.n = "<Esc>"
-      options.strategies.chat.keymaps.send.modes.n = "<CR>"
-
-      return options
-    end,
-
+    opts = {
+      strategies = {
+        chat = {
+          roles = {
+            llm = "  CodeCompanion",
+            user = "  Dusty",
+          },
+          keymaps = {
+            close = {
+              modes = {
+                n = "q",
+                i = "<Esc>",
+              },
+            },
+            stop = {
+              modes = {
+                n = "<Esc>",
+              },
+            },
+            send = {
+              modes = {
+                n = "<CR>",
+              },
+            },
+          },
+        },
+      },
+    },
     keys = {
       { "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
       { "<leader>ap", "<cmd>CodeCompanionActions<cr>", mode = { "n", "v" }, desc = "Prompt Actions (CodeCompanion)" },
-      { "<leader>aa", "<cmd>CodeCompanionToggle<cr>", mode = { "n", "v" }, desc = "Toggle (CodeCompanion)" },
+      { "<leader>aa", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, desc = "Toggle (CodeCompanion)" },
       { "<leader>ac", "<cmd>CodeCompanionAdd<cr>", mode = "v", desc = "Add code to CodeCompanion" },
       { "<leader>ai", "<cmd>CodeCompanion<cr>", mode = "n", desc = "Inline prompt (CodeCompanion)" },
     },
   },
-
   {
     "folke/edgy.nvim",
     optional = true,
