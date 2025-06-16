@@ -1,14 +1,16 @@
 return {
   {
     "olimorris/codecompanion.nvim",
-    cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionToggle", "CodeCompanionAdd", "CodeCompanionChat" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionAdd", "CodeCompanionChat" },
     opts = {
       strategies = {
         chat = {
-          roles = {
-            llm = "  CodeCompanion",
-            user = "  Dusty",
-          },
+          adapter = "copilot",
+          model = "claude-sonnet-4-20250514",
           keymaps = {
             close = {
               modes = {
