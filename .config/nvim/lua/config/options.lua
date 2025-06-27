@@ -5,8 +5,15 @@
 vim.opt.backupcopy = "yes"
 vim.opt.shell = "/usr/local/bin/fish"
 vim.opt.ignorecase = false
-vim.opt.cursorcolumn = true
+-- vim.opt.cursorcolumn = true
 vim.opt.background = "dark"
 vim.opt.number = false
 vim.opt.relativenumber = false
 vim.g.lazyvim_python_lsp = "basedpyright"
+
+-- by @dpetka2001Add commentMore actions
+-- needed to make sure the spec of the Extra gets added first, so other Extras can add onto it
+-- See also treesitter-rewrite.lua
+vim.g.xtras_prios = {
+  ["plugins.extras.ui.treesitter-rewrite"] = 2,
+}
