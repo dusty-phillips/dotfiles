@@ -1,13 +1,3 @@
--- backwards compatibility with the old treesitter config for adding custom parsersAdd commentMore actions
-local function patch()
-  local parsers = require("nvim-treesitter.parsers")
-  parsers.get_parser_configs = setmetatable({}, {
-    __call = function()
-      return parsers
-    end,
-  })
-end
-
 if vim.tbl_contains(LazyVim.config.json.data.extras, "lazyvim.plugins.extras.ui.treesitter-rewrite") then
   if vim.fn.executable("tree-sitter") == 0 then
     LazyVim.error("**treesitter-rewrite** requires the `tree-sitter` executable to be installed")
@@ -29,7 +19,6 @@ return {
     lazy = false,
     cmd = {},
     opts = function()
-      patch()
       return {
         highlight = { enable = true },
         indent = { enable = true },
@@ -75,7 +64,6 @@ return {
       -- by @dpetka2001
       -- needed to install the parsers
       require("nvim-treesitter").install(opts.ensure_install)
-      patch()
 
       -- backwards compatibility with the old treesitter config for indent
       if vim.tbl_get(opts, "indent", "enable") then
