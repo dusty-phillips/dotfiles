@@ -1,14 +1,27 @@
 import os
 import sys
 
-__all__ = ('isatty',)
+__all__ = (
+    'isatty',
+    'env_true',
+    'env_bool',
+    'use_highlight',
+    'is_literal',
+    'LaxMapping',
+    'DataClassType',
+    'SQLAlchemyClassType',
+)
 
 MYPY = False
 if MYPY:
-    from typing import Optional
+    from typing import Any, Optional, no_type_check
+else:
+
+    def no_type_check(x: 'Any') -> 'Any':
+        return x
 
 
-def isatty(stream=None):
+def isatty(stream: 'Any' = None) -> bool:
     stream = stream or sys.stdout
     try:
         return stream.isatty()
@@ -16,7 +29,7 @@ def isatty(stream=None):
         return False
 
 
-def env_true(var_name: str, alt: 'Optional[bool]' = None) -> 'Optional[bool]':
+def env_true(var_name: str, alt: 'Optional[bool]' = None) -> 'Any':
     env = os.getenv(var_name, None)
     if env:
         return env.upper() in {'1', 'TRUE'}
@@ -31,6 +44,7 @@ def env_bool(value: 'Optional[bool]', env_name: str, env_default: 'Optional[bool
         return value
 
 
+@no_type_check
 def activate_win_color() -> bool:  # pragma: no cover
     """
     Activate ANSI support on windows consoles.
@@ -79,14 +93,14 @@ def activate_win_color() -> bool:  # pragma: no cover
     mode = mask = ENABLE_VIRTUAL_TERMINAL_PROCESSING
     try:
         _set_conout_mode(mode, mask)
-    except WindowsError as e:
+    except OSError as e:
         if e.winerror == ERROR_INVALID_PARAMETER:
             return False
         raise
     return True
 
 
-def use_highlight(highlight: 'Optional[bool]' = None, file_=None) -> bool:
+def use_highlight(highlight: 'Optional[bool]' = None, file_: 'Any' = None) -> bool:
     highlight = env_bool(highlight, 'PY_DEVTOOLS_HIGHLIGHT', None)
 
     if highlight is not None:
@@ -95,3 +109,63 @@ def use_highlight(highlight: 'Optional[bool]' = None, file_=None) -> bool:
     if sys.platform == 'win32':  # pragma: no cover
         return isatty(file_) and activate_win_color()
     return isatty(file_)
+
+
+def is_literal(s: 'Any') -> bool:
+    import ast
+
+    try:
+        ast.literal_eval(s)
+    except (TypeError, MemoryError, SyntaxError, ValueError):
+        return False
+    else:
+        return True
+
+
+class MetaLaxMapping(type):
+    def __instancecheck__(self, instance: 'Any') -> bool:
+        return (
+            hasattr(instance, '__getitem__')
+            and hasattr(instance, 'items')
+            and callable(instance.items)
+            and type(instance) != type
+        )
+
+
+class LaxMapping(metaclass=MetaLaxMapping):
+    pass
+
+
+class MetaDataClassType(type):
+    def __instancecheck__(self, instance: 'Any') -> bool:
+        from dataclasses import is_dataclass
+
+        return is_dataclass(instance)
+
+
+class DataClassType(metaclass=MetaDataClassType):
+    pass
+
+
+class MetaSQLAlchemyClassType(type):
+    def __instancecheck__(self, instance: 'Any') -> bool:
+        try:
+            from sqlalchemy.orm import DeclarativeBase
+        except ImportError:
+            pass
+        else:
+            if isinstance(instance, DeclarativeBase):
+                return True
+
+        try:
+            from sqlalchemy.ext.declarative import DeclarativeMeta
+        except ImportError:
+            pass
+        else:
+            return isinstance(instance.__class__, DeclarativeMeta)
+
+        return False
+
+
+class SQLAlchemyClassType(metaclass=MetaSQLAlchemyClassType):
+    pass

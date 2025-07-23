@@ -1,14 +1,27 @@
+import ast
 import io
 import os
 from collections import OrderedDict
 from collections.abc import Generator
 
-from .utils import env_true, isatty
+from .utils import DataClassType, LaxMapping, SQLAlchemyClassType, env_true, isatty
+
+try:
+    from functools import cache
+except ImportError:
+    from functools import lru_cache
+
+    cache = lru_cache()
+
+try:
+    from sqlalchemy import inspect as sa_inspect
+except ImportError:
+    sa_inspect = None  # type: ignore[assignment]
 
 __all__ = 'PrettyFormat', 'pformat', 'pprint'
 MYPY = False
 if MYPY:
-    from typing import Any, Union
+    from typing import Any, Callable, Iterable, List, Set, Tuple, Union
 
 PARENTHESES_LOOKUP = [
     (list, '[', ']'),
@@ -20,7 +33,7 @@ MISSING = object()
 PRETTY_KEY = '__prettier_formatted_value__'
 
 
-def fmt(v):
+def fmt(v: 'Any') -> 'Any':
     return {PRETTY_KEY: v}
 
 
@@ -28,7 +41,8 @@ class SkipPretty(Exception):
     pass
 
 
-def get_pygments():
+@cache
+def get_pygments() -> 'Tuple[Any, Any, Any]':
     try:
         import pygments
         from pygments.formatters import Terminal256Formatter
@@ -39,15 +53,19 @@ def get_pygments():
         return pygments, PythonLexer(), Terminal256Formatter(style='vim')
 
 
+# common generator types (this is not exhaustive: things like chain are not include to avoid the import)
+generator_types = Generator, map, filter, zip, enumerate
+
+
 class PrettyFormat:
     def __init__(
         self,
-        indent_step=4,
-        indent_char=' ',
-        repr_strings=False,
-        simple_cutoff=10,
-        width=120,
-        yield_from_generators=True,
+        indent_step: int = 4,
+        indent_char: str = ' ',
+        repr_strings: bool = False,
+        simple_cutoff: int = 10,
+        width: int = 120,
+        yield_from_generators: bool = True,
     ):
         self._indent_step = indent_step
         self._c = indent_char
@@ -55,15 +73,21 @@ class PrettyFormat:
         self._repr_generators = not yield_from_generators
         self._simple_cutoff = simple_cutoff
         self._width = width
-        self._type_lookup = [
+        self._type_lookup: 'List[Tuple[Any, Callable[[Any, str, int, int], None]]]' = [
             (dict, self._format_dict),
             ((str, bytes), self._format_str_bytes),
             (tuple, self._format_tuples),
             ((list, set, frozenset), self._format_list_like),
-            (Generator, self._format_generators),
+            (bytearray, self._format_bytearray),
+            (generator_types, self._format_generator),
+            # put these last as the check can be slow
+            (ast.AST, self._format_ast_expression),
+            (LaxMapping, self._format_dict),
+            (DataClassType, self._format_dataclass),
+            (SQLAlchemyClassType, self._format_sqlalchemy_class),
         ]
 
-    def __call__(self, value: 'Any', *, indent: int = 0, indent_first: bool = False, highlight: bool = False):
+    def __call__(self, value: 'Any', *, indent: int = 0, indent_first: bool = False, highlight: bool = False) -> str:
         self._stream = io.StringIO()
         self._format(value, indent_current=indent, indent_first=indent_first)
         s = self._stream.getvalue()
@@ -73,7 +97,7 @@ class PrettyFormat:
             s = pygments.highlight(s, lexer=pyg_lexer, formatter=pyg_formatter).rstrip('\n')
         return s
 
-    def _format(self, value: 'Any', indent_current: int, indent_first: bool):
+    def _format(self, value: 'Any', indent_current: int, indent_first: bool) -> None:
         if indent_first:
             self._stream.write(indent_current * self._c)
 
@@ -93,33 +117,21 @@ class PrettyFormat:
                 except SkipPretty:
                     pass
                 else:
-                    return
+                    return None
 
         value_repr = repr(value)
-        if len(value_repr) <= self._simple_cutoff and not isinstance(value, Generator):
+        if len(value_repr) <= self._simple_cutoff and not isinstance(value, generator_types):
             self._stream.write(value_repr)
         else:
             indent_new = indent_current + self._indent_step
             for t, func in self._type_lookup:
                 if isinstance(value, t):
                     func(value, value_repr, indent_current, indent_new)
-                    return
-
-            # very blunt check for things that look like dictionaries but do not necessarily inherit from Mapping
-            # e.g. asyncpg Records
-            # HELP: are there any other checks we should include here?
-            if (
-                hasattr(value, '__getitem__')
-                and hasattr(value, 'items')
-                and callable(value.items)
-                and not type(value) == type
-            ):
-                self._format_dict(value, value_repr, indent_current, indent_new)
-                return
+                    return None
 
             self._format_raw(value, value_repr, indent_current, indent_new)
 
-    def _render_pretty(self, gen, indent: int):
+    def _render_pretty(self, gen: 'Iterable[Any]', indent: int) -> None:
         prefix = False
         for v in gen:
             if isinstance(v, int) and v in {-1, 0, 1}:
@@ -139,13 +151,13 @@ class PrettyFormat:
                     # shouldn't happen but will
                     self._stream.write(repr(v))
 
-    def _format_dict(self, value: 'Any', value_repr: str, indent_current: int, indent_new: int):
+    def _format_dict(self, value: 'Any', _: str, indent_current: int, indent_new: int) -> None:
         open_, before_, split_, after_, close_ = '{\n', indent_new * self._c, ': ', ',\n', '}'
         if isinstance(value, OrderedDict):
             open_, split_, after_, close_ = 'OrderedDict([\n', ', ', '),\n', '])'
             before_ += '('
-        elif not isinstance(value, dict):
-            open_, close_ = '<{}({{\n'.format(value.__class__.__name__), '})>'
+        elif type(value) != dict:
+            open_, close_ = f'<{value.__class__.__name__}({{\n', '})>'
 
         self._stream.write(open_)
         for k, v in value.items():
@@ -157,8 +169,8 @@ class PrettyFormat:
         self._stream.write(indent_current * self._c + close_)
 
     def _format_list_like(
-        self, value: 'Union[list, tuple, set]', value_repr: str, indent_current: int, indent_new: int
-    ):
+        self, value: 'Union[List[Any], Tuple[Any, ...], Set[Any]]', _: str, indent_current: int, indent_new: int
+    ) -> None:
         open_, close_ = '(', ')'
         for t, *oc in PARENTHESES_LOOKUP:
             if isinstance(value, t):
@@ -171,38 +183,35 @@ class PrettyFormat:
             self._stream.write(',\n')
         self._stream.write(indent_current * self._c + close_)
 
-    def _format_tuples(self, value: tuple, value_repr: str, indent_current: int, indent_new: int):
+    def _format_tuples(self, value: 'Tuple[Any, ...]', value_repr: str, indent_current: int, indent_new: int) -> None:
         fields = getattr(value, '_fields', None)
         if fields:
             # named tuple
-            self._stream.write(value.__class__.__name__ + '(\n')
-            for field, v in zip(fields, value):
-                self._stream.write(indent_new * self._c)
-                if field:  # field is falsy sometimes for odd things like call_args
-                    self._stream.write(str(field))
-                    self._stream.write('=')
-                self._format(v, indent_new, False)
-                self._stream.write(',\n')
-            self._stream.write(indent_current * self._c + ')')
+            self._format_fields(value, zip(fields, value), indent_current, indent_new)
         else:
             # normal tuples are just like other similar iterables
-            return self._format_list_like(value, value_repr, indent_current, indent_new)
+            self._format_list_like(value, value_repr, indent_current, indent_new)
 
-    def _format_str_bytes(self, value: 'Union[str, bytes]', value_repr: str, indent_current: int, indent_new: int):
+    def _format_str_bytes(
+        self, value: 'Union[str, bytes]', value_repr: str, indent_current: int, indent_new: int
+    ) -> None:
         if self._repr_strings:
             self._stream.write(value_repr)
         else:
             lines = list(self._wrap_lines(value, indent_new))
             if len(lines) > 1:
-                self._stream.write('(\n')
-                prefix = indent_new * self._c
-                for line in lines:
-                    self._stream.write(prefix + repr(line) + '\n')
-                self._stream.write(indent_current * self._c + ')')
+                self._str_lines(lines, indent_current, indent_new)
             else:
                 self._stream.write(value_repr)
 
-    def _wrap_lines(self, s, indent_new):
+    def _str_lines(self, lines: 'Iterable[Union[str, bytes]]', indent_current: int, indent_new: int) -> None:
+        self._stream.write('(\n')
+        prefix = indent_new * self._c
+        for line in lines:
+            self._stream.write(prefix + repr(line) + '\n')
+        self._stream.write(indent_current * self._c + ')')
+
+    def _wrap_lines(self, s: 'Union[str, bytes]', indent_new: int) -> 'Generator[Union[str, bytes], None, None]':
         width = self._width - indent_new - 3
         for line in s.splitlines(True):
             start = 0
@@ -211,17 +220,62 @@ class PrettyFormat:
                 start = pos
             yield line[start:]
 
-    def _format_generators(self, value: Generator, value_repr: str, indent_current: int, indent_new: int):
+    def _format_generator(
+        self, value: 'Generator[Any, None, None]', value_repr: str, indent_current: int, indent_new: int
+    ) -> None:
         if self._repr_generators:
             self._stream.write(value_repr)
         else:
-            self._stream.write('(\n')
+            name = value.__class__.__name__
+            if name == 'generator':
+                # no name if the name is just "generator"
+                self._stream.write('(\n')
+            else:
+                self._stream.write(f'{name}(\n')
             for v in value:
                 self._format(v, indent_new, True)
                 self._stream.write(',\n')
             self._stream.write(indent_current * self._c + ')')
 
-    def _format_raw(self, value: 'Any', value_repr: str, indent_current: int, indent_new: int):
+    def _format_bytearray(self, value: 'Any', _: str, indent_current: int, indent_new: int) -> None:
+        self._stream.write('bytearray')
+        lines = self._wrap_lines(bytes(value), indent_new)
+        self._str_lines(lines, indent_current, indent_new)
+
+    def _format_ast_expression(self, value: ast.AST, _: str, indent_current: int, indent_new: int) -> None:
+        try:
+            s = ast.dump(value, indent=self._indent_step)
+        except TypeError:
+            # no indent before 3.9
+            s = ast.dump(value)
+        lines = s.splitlines(True)
+        self._stream.write(lines[0])
+        for line in lines[1:]:
+            self._stream.write(indent_current * self._c + line)
+
+    def _format_dataclass(self, value: 'Any', _: str, indent_current: int, indent_new: int) -> None:
+        try:
+            field_items = value.__dict__.items()
+        except AttributeError:
+            # slots
+            field_items = ((f, getattr(value, f)) for f in value.__slots__)
+        self._format_fields(value, field_items, indent_current, indent_new)
+
+    def _format_sqlalchemy_class(self, value: 'Any', _: str, indent_current: int, indent_new: int) -> None:
+        if sa_inspect is not None:
+            state = sa_inspect(value)
+            deferred = state.unloaded
+        else:
+            deferred = set()
+
+        fields = [
+            (field, getattr(value, field) if field not in deferred else '<deferred>')
+            for field in dir(value)
+            if not (field.startswith('_') or field in ['metadata', 'registry'])
+        ]
+        self._format_fields(value, fields, indent_current, indent_new)
+
+    def _format_raw(self, _: 'Any', value_repr: str, indent_current: int, indent_new: int) -> None:
         lines = value_repr.splitlines(True)
         if len(lines) > 1 or (len(value_repr) + indent_current) >= self._width:
             self._stream.write('(\n')
@@ -238,11 +292,23 @@ class PrettyFormat:
         else:
             self._stream.write(value_repr)
 
+    def _format_fields(
+        self, value: 'Any', fields: 'Iterable[Tuple[str, Any]]', indent_current: int, indent_new: int
+    ) -> None:
+        self._stream.write(f'{value.__class__.__name__}(\n')
+        for field, v in fields:
+            self._stream.write(indent_new * self._c)
+            if field:  # field is falsy sometimes for odd things like call_args
+                self._stream.write(f'{field}=')
+            self._format(v, indent_new, False)
+            self._stream.write(',\n')
+        self._stream.write(indent_current * self._c + ')')
+
 
 pformat = PrettyFormat()
 force_highlight = env_true('PY_DEVTOOLS_HIGHLIGHT', None)
 
 
-def pprint(s, file=None):
+def pprint(s: 'Any', file: 'Any' = None) -> None:
     highlight = isatty(file) if force_highlight is None else force_highlight
     print(pformat(s, highlight=highlight), file=file, flush=True)
