@@ -1,6 +1,5 @@
 return {
-  "echasnovski/mini.files",
-  enabled = false,
+  "nvim-mini/mini.files",
   keys = {
     {
       "<leader>e",
