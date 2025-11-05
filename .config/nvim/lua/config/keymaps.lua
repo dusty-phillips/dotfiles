@@ -2,6 +2,14 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- Tell Neovim what Ctrl+Alt+Arrows look like from kitty
+vim.cmd([[
+  set <C-A-Left>=\e[1;7D
+  set <C-A-Right>=\e[1;7C
+  set <C-A-Up>=\e[1;7A
+  set <C-A-Down>=\e[1;7B
+]])
+
 vim.keymap.set("n", "<C-w>N", "<cmd>enew<cr>", { desc = "New File in Current Window" })
 vim.keymap.set("n", "<leader>wN", "<cmd>enew<cr>", { desc = "New File in Current Window" })
 vim.keymap.set("n", "<leader>r", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })

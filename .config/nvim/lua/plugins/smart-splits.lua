@@ -3,7 +3,7 @@ return {
   build = "./kitty/install-kittens.bash",
   keys = {
     {
-      "<A-Left>",
+      "<C-A-Left>",
       mode = { "n", "v" },
       function()
         require("smart-splits").move_cursor_left()
@@ -11,7 +11,7 @@ return {
       desc = "Move to left window",
     },
     {
-      "<A-Right>",
+      "<C-A-Right>",
       mode = { "n", "v" },
       function()
         require("smart-splits").move_cursor_right()
@@ -19,7 +19,7 @@ return {
       desc = "Move to right window",
     },
     {
-      "<A-j>",
+      "<C-A-j>",
       mode = { "n", "v" },
       function()
         require("smart-splits").move_cursor_down()
@@ -27,7 +27,7 @@ return {
       desc = "Move to below window",
     },
     {
-      "<A-k>",
+      "<C-A-k>",
       mode = { "n", "v" },
       function()
         require("smart-splits").move_cursor_up()
