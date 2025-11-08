@@ -3,7 +3,7 @@
 -- Add any additional options here
 
 vim.opt.backupcopy = "yes"
-vim.opt.shell = "/usr/local/bin/fish"
+vim.opt.shell = "/opt/homebrew/bin/fish"
 vim.opt.ignorecase = false
 -- vim.opt.cursorcolumn = true
 vim.opt.background = "dark"
