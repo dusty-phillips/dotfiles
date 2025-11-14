@@ -26,5 +26,10 @@ if status is-interactive
         ggrep --color=auto $argv
     end
 
+    if test -f ~/.config/fish/config.local.fish
+        source ~/.config/fish/config.local.fish
+    end
+
     starship init fish | source
+
 end
