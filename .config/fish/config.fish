@@ -18,6 +18,11 @@ if status is-interactive
         bind --mode insert \er 'z -I . ; commandline -f repaint'
     end
 
+    function multicd
+        echo cd (string repeat -n (math (string length -- $argv[1]) - 1) ../)
+    end
+    abbr --add dotdot --regex '^\.\.+$' --function multicd
+
     alias lg='lazygit'
     alias rm=grm
     alias cp=gcp
