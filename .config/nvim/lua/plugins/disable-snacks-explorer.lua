@@ -2,7 +2,6 @@ return {
   {
     "folke/snacks.nvim",
     keys = {
-      { "<leader>.", false },
       { "<leader>e", false },
       { "<leader>E", false },
     },

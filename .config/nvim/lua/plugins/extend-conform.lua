@@ -8,6 +8,7 @@ return {
         ["yaml"] = { "prettier" },
         ["svelte"] = { "prettier" },
         ["html"] = { "prettier" },
+        ["sql"] = { "sql_formatter" },
       },
     },
   },
