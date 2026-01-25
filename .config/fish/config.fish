@@ -27,6 +27,7 @@ if status is-interactive
     alias rm=grm
     alias cp=gcp
     alias sed=gsed
+    alias mvim='NVIM_APPNAME=nvim-minimax nvim'
     function grep # Needs to be function or fish overrules it
         ggrep --color=auto $argv
     end
