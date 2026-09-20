@@ -9,7 +9,6 @@ vim.cmd([[
   set <C-A-Up>=\e[1;7A
   set <C-A-Down>=\e[1;7B
 ]])
-
 vim.keymap.set("n", "<C-w>N", "<cmd>enew<cr>", { desc = "New File in Current Window" })
 vim.keymap.set("n", "<leader>wN", "<cmd>enew<cr>", { desc = "New File in Current Window" })
 vim.keymap.set("n", "<leader>r", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
@@ -21,5 +20,10 @@ vim.keymap.set("n", "<leader><delete>", function()
   Snacks.bufdelete()
 end, { desc = "Close Buffer" })
 vim.keymap.set("n", "<leader><CR>", "<cmd>%bd<cr>", { desc = "Close All Buffers" })
-vim.keymap.set("n", "<leader>bo", Snacks.bufdelete.other, { desc = "Close Other Buffers" })
 vim.keymap.set("n", "<leader><leader>", Snacks.picker.files, { desc = "Find files (cwd)" })
+
+vim.keymap.del("n", "<C-l>")
+vim.keymap.set("n", "<C-l>", function()
+  local mc_ns = vim.api.nvim_create_namespace("nvim.multicursor")
+  vim.api.nvim_buf_clear_namespace(0, mc_ns, 0, -1)
+end, { desc = "Clear multicursors" })
